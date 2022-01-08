@@ -22,9 +22,6 @@ using namespace::std;
 
 class InputData{
 public:
-    vector<double>                                                                         sts           = {};
-    long                                                                                   length        = 0;
-    double                                                                                 t_step        = 0; 
     vector<tuple<int, int, int>>                                                           nodes         = {}; 
     vector<tuple<int, int, int, vector<double>, vector<double>>>                           v_nets        = {};
     vector<tuple<int, int, int>>                                                           t_nets        = {};
@@ -52,7 +49,7 @@ public:
 class CalcStatus{
 public:
     long length      = 0;
-    double t_step    = 0;
+    double t_step    = 3600;
     int solve        = SOLVE_LU;
     double step_p    = STEP_P, 
            vent_err  = VENT_ERR, 
@@ -61,34 +58,34 @@ public:
            conv_err  = CONV_ERR, 
            sor_ratio = SOR_RATIO, 
            sor_err   = SOR_ERR;
-}
+};
 
 class VTSim{
 public:
     vector<Node> sn;                                        //ノード
     vector<Vent_Net> vn;                                    //換気回路網
     vector<Thrm_Net> tn;                                    //熱回路網
-    Calc_Status sts;
+    CalcStatus sts;
 
     vector<int> v_idc, c_idc, t_idc, ac_idc;
     double t_step;
     int i_vn_ac = -1, i_tn_ac = -1;
 
     void set_calc_status(CalcStatus sts_){
-        sts         = sts_
+        sts         = sts_;
     }
 
     void set_inp(InputData inp){
 
         for(int i = 0; i < inp.nodes.size(); i++){    
-            sn.push_back(Node(length, i, inp.nodes[i]));
+            sn.push_back(Node(sts.length, i, inp.nodes[i]));
             if(get<0>(sn[i].flag) == SN_CALC)     v_idc.push_back(sn[i].i);
             if(get<1>(sn[i].flag) == SN_CALC)     c_idc.push_back(sn[i].i);
             if(get<2>(sn[i].flag) == SN_CALC)     t_idc.push_back(sn[i].i);
         }
 
-        for(int i = 0; i < inp.v_nets.size(); i++)    vn.push_back(Vent_Net(length, i, inp.v_nets[i]));
-        for(int i = 0; i < inp.t_nets.size(); i++)    tn.push_back(Thrm_Net(length, i, inp.t_nets[i]));
+        for(int i = 0; i < inp.v_nets.size(); i++)    vn.push_back(Vent_Net(sts.length, i, inp.v_nets[i]));
+        for(int i = 0; i < inp.t_nets.size(); i++)    tn.push_back(Thrm_Net(sts.length, i, inp.t_nets[i]));
 
         for(tuple<int, vector<double>> tp: inp.sn_P_set)                                                    sn[get<0>(tp)].set_P(get<1>(tp));
         for(tuple<int, vector<double>> tp: inp.sn_C_set)                                                    sn[get<0>(tp)].set_C(get<1>(tp));
@@ -309,7 +306,7 @@ public:
 
         LOG_PRINT("start calc");     
 
-        for(long ts = 1; ts < length; ts++){
+        for(long ts = 1; ts < sts.length; ts++){
             if(v_idc.size() > 0){
                 for(int i = 0; i < sn.size(); i++)
                     if(get<0>(sn[i].flag) == SN_CALC)   sn[i].p[ts] = sn[i].p[ts - 1];
