@@ -114,7 +114,7 @@ public:
         for(int i = 0; i < tn.size(); i++)  if(tn[i].tn_type == TN_AIRCON)  i_tn_ac = i;                    //当面、airconは1台のみ
     }
 
-    void sn_add(int i, vector<tuple<int, int, int>> flag){
+    void sn_add(int i, tuple<int, int, int> flag){
         sn.push_back(Node(sts.length, i, flag));
     }
 
