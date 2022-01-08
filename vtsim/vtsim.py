@@ -18,17 +18,6 @@ OPT_DF:    int  = 0              #DataFrameを出力
 OPT_CSV:   int  = 1              #上記に加え、csvファイルを出力
 OPT_GRAPH: int  = 2              #上記に加えグラフを描画
 
-SOLVE_LU:   int = vt.SOLVE_LU
-SOLVE_SOR:  int = vt.SOLVE_SOR
-    
-STEP_P:     int = vt.STEP_P
-VENT_ERR:   int = vt.VENT_ERR
-STEP_T:     int = vt.STEP_T
-THRM_ERR:   int = vt.THRM_ERR
-CONV_ERR:   int = vt.CONV_ERR
-SOR_RATIO:  int = vt.SOR_RATIO
-SOR_ERR:    int = vt.SOR_ERR
-
 SN_NONE:    int = vt.SN_NONE
 SN_CALC:    int = vt.SN_CALC
 SN_FIX:     int = vt.SN_FIX
@@ -72,8 +61,10 @@ d_node  = lambda name:                      name + '_c'                         
 to_list_f = lambda v, length:           [float(v)] * length if type(v) != list and type(v) != np.ndarray else v  
 to_list_i = lambda v, length:           [int(v)]   * length if type(v) != list and type(v) != np.ndarray else v  
 
-inp = vt.InputData()
 calc = vt.VTSim()
+sts  = vt.CalcStatus()
+inp = vt.InputData()
+
 node = {}
 
 ###############################################################################
@@ -95,11 +86,21 @@ def run_calc(ix, sn, **kwargs):                                                 
     return output_calc(calc.result(), ix, opt)
 
 def make_inp(ix, sn, **kwargs):
-    inp.sts    = kwargs['sts']    if 'sts' in kwargs else [SOLVE_LU, STEP_P, VENT_ERR, 
-                                                           STEP_T, THRM_ERR, CONV_ERR,
-                                                           SOR_RATIO, SOR_ERR]                             #計算ステータスの読み込み
-    inp.length = len(ix)
-    inp.t_step = (ix[1] - ix[0]).seconds + (ix[1] - ix[0]).microseconds / 1000000                          #t_stepの読み込み
+
+    sts.length = len(ix)
+    sts.t_step = (ix[1] - ix[0]).seconds + (ix[1] - ix[0]).microseconds / 1000000                          #t_stepの読み込み    
+
+    if 'solve'     in kwargs:   sts.solve     = kwargs['solve']
+    if 'step_p'    in kwargs:   sts.step_pe   = kwargs['step_p']
+    if 'vent_err'  in kwargs:   sts.vent_err  = kwargs['vent_err']
+    if 'step_t'    in kwargs:   sts.step_t    = kwargs['step_t']
+    if 'thrm_err'  in kwargs:   sts.thrm_err  = kwargs['thrm_err']
+    if 'conv_err'  in kwargs:   sts.conv_err  = kwargs['conv_err']
+    if 'sor_ratio' in kwargs:   sts.sor_ratio = kwargs['sor_ratio']
+    if 'sor_err'   in kwargs:   sts.sor_err   = kwargs['sor_err']
+
+
+
 
     vn         = kwargs['vn']     if 'vn'  in kwargs else []                                               #vnの読み込み
     tn         = kwargs['tn']     if 'tn'  in kwargs else []                                               #tnの読み込み
