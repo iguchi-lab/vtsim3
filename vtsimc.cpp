@@ -46,19 +46,19 @@ PYBIND11_MODULE(vtsimc, m) {
     m.attr("AC_HEATING") = AC_HEATING;
     m.attr("AC_COOLING") = AC_COOLING;
     m.attr("AC_STOP")    = AC_STOP;
-
+    
     py::class_<CalcStatus>(m, "CalcStatus")
         .def(py::init<>())
-        .def_read_write("length",    &CalcStatus::length)
-        .def_read_write("t_step",    &CalcStatus::t_step)
-        .def_read_write("solve",     &CalcStatus::solve)
-        .def_read_write("step_p",    &CalcStatus::step_p) 
-        .def_read_write("vent_err",  &CalcStatus::vent_err) 
-        .def_read_write("step_t",    &CalcStatus::step_t) 
-        .def_read_write("thrm_err",  &CalcStatus::thrm_err)
-        .def_read_write("conv_err",  &CalcStatus::conv_err) 
-        .def_read_write("sor_ratio", &CalcStatus::sor_ratio) 
-        .def_read_write("sor_err",   &CalcStatus::sor_err);
+        .def_readwrite("length",    &CalcStatus::length)
+        .def_readwrite("t_step",    &CalcStatus::t_step)
+        .def_readwrite("solve",     &CalcStatus::solve)
+        .def_readwrite("step_p",    &CalcStatus::step_p) 
+        .def_readwrite("vent_err",  &CalcStatus::vent_err) 
+        .def_readwrite("step_t",    &CalcStatus::step_t) 
+        .def_readwrite("thrm_err",  &CalcStatus::thrm_err)
+        .def_readwrite("conv_err",  &CalcStatus::conv_err) 
+        .def_readwrite("sor_ratio", &CalcStatus::sor_ratio) 
+        .def_readwrite("sor_err",   &CalcStatus::sor_err);
     
     py::class_<InputData>(m, "InputData")
         .def(py::init<>())
