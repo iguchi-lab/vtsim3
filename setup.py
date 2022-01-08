@@ -96,17 +96,6 @@ class BuildExt(build_ext):
             ext.extra_link_args = link_opts
         build_ext.build_extensions(self)
 
-
-setup(
-   name='vtsim',
-   version='1.0',
-   description='ventilation and thrmal simulation',
-   author='IGUCHI Masato',
-   author_email='iguchi.masato@gmail.com',
-   packages=['vtsim']
-)
-
-""""
 setup( 
     name='vtsim',
     version=__version__,
@@ -122,4 +111,3 @@ setup(
     zip_safe=False,
     packages=['vtsim']
 )
-"""
