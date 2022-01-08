@@ -25,17 +25,6 @@ tuple<vector<vector<double>>, vector<vector<double>>, vector<vector<double>>,
 PYBIND11_MODULE(vtsimc, m) {
     m.def("calc", &calc, "");
 
-    m.attr("SOLVE_LU")   = SOLVE_LU;
-    m.attr("SOLVE_SOR")  = SOLVE_SOR;
-    
-    m.attr("STEP_P")     = STEP_P;
-    m.attr("VENT_ERR")   = VENT_ERR;
-    m.attr("STEP_T")     = STEP_T;
-    m.attr("THRM_ERR")   = THRM_ERR;
-    m.attr("CONV_ERR")   = CONV_ERR;
-    m.attr("SOR_RATIO")  = SOR_RATIO;
-    m.attr("SOR_ERR")    = SOR_ERR;
-
     m.attr("SN_NONE")    = SN_NONE;
     m.attr("SN_CALC")    = SN_CALC;
     m.attr("SN_FIX")     = SN_FIX;
@@ -57,6 +46,19 @@ PYBIND11_MODULE(vtsimc, m) {
     m.attr("AC_HEATING") = AC_HEATING;
     m.attr("AC_COOLING") = AC_COOLING;
     m.attr("AC_STOP")    = AC_STOP;
+
+    py::class_<CalcStatus>(m, "CalcStatus")
+        .def(py::init<>())
+        .def_read_write("length",    &CalcStatus::length)
+        .def_read_write("t_step",    &CalcStatus::t_step)
+        .def_read_write("solve",     &CalcStatus::solve)
+        .def_read_write("step_p",    &CalcStatus::step_p) 
+        .def_read_write("vent_err",  &CalcStatus::vent_err) 
+        .def_read_write("step_t",    &CalcStatus::step_t) 
+        .def_read_write("thrm_err",  &CalcStatus::thrm_err)
+        .def_read_write("conv_err",  &CalcStatus::conv_err) 
+        .def_read_write("sor_ratio", &calcStatus::sor_ratio) 
+        .def_read_write("sor_err",   &CalcStasus::sor_err);
 
     py::class_<InputData>(m, "InputData")
         .def(py::init<>())
@@ -84,9 +86,14 @@ PYBIND11_MODULE(vtsimc, m) {
         .def_readwrite("tn_aircon_set", &InputData::tn_aircon_set)
         .def_readwrite("tn_solar_set",  &InputData::tn_solar_set)
         .def_readwrite("tn_ground_set", &InputData::tn_ground_set);
+
     py::class_<VTSim>(m, "VTSim")
         .def(py::init<>())
-        .def("set_inp", &VTSim::set_inp, "")
-        .def("calc",    &VTSim::calc,    "")
-        .def("result",  &VTSim::result,  "");
+        .def("set_calc_status", &VTSim::set_calc_status, "")
+        .def("set_inp",         &VTSim::set_inp, "")
+        .def("calc",            &VTSim::calc,    "")
+        .def("result",          &VTSim::result,  "")
+        .def_readwrite("sn",    &VTSim::sn, "")
+        .def_readwrite("vn",    &VTSim::vn, "")
+        .def_readwrite("tn",    &VTSim::tn, "");
 }
