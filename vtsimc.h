@@ -61,7 +61,7 @@ public:
     double t_step;
     int i_vn_ac = -1, i_tn_ac = -1;
 
-    set_inp(InputData inp)
+    void set_inp(InputData inp){
         solve     = inp.sts[0];                                                
         step_p    = inp.sts[1];                                                //偏微分時の圧力変化
         vent_err  = inp.sts[2];                                                //換気回路網の許容残差
