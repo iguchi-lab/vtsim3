@@ -57,9 +57,7 @@ ix   = lambda length:                       pd.date_range(datetime(2021, 1, 1, 0
                                                           freq='1s')                                    #長さlength、1s毎の時刻
 d_node  = lambda name:                      name + '_c'                                                 #遅延ノードの名前作成
 
-#リストかnp.ndarrayでなければlength分の長さのリストにする
-to_list_f = lambda v, length:           [float(v)] * length if type(v) != list and type(v) != np.ndarray else v  
-to_list_i = lambda v, length:           [int(v)]   * length if type(v) != list and type(v) != np.ndarray else v  
+
 
 calc = vt.VTSim()
 sts  = vt.CalcStatus()
@@ -111,6 +109,11 @@ def set_node_net(sn, **kwargs):
     vn_simple_set, vn_gap_set, vn_fix_set, vn_fan_set, vn_eta_set = [], [], [], [], []
     tn_simple_set, tn_aircon_set, tn_solar_set, tn_ground_set     = [], [], [], []
 
+    #リストかnp.ndarrayでなければlength分の長さのリストにする
+    to_list_f = lambda v    [float(v)] * sts.length if type(v) != list and type(v) != np.ndarray else v  
+    to_list_i = lambda v    [int(v)]   * sts.length if type(v) != list and type(v) != np.ndarray else v  
+
+
     for i, n in enumerate(sn):                                                                              #sn
         node[n['name']] = i                                                                                 #ノード番号
         
@@ -118,8 +121,17 @@ def set_node_net(sn, **kwargs):
         c_flag = n['c_flag'] if 'c_flag' in n else SN_NONE
         t_flag = n['t_flag'] if 't_flag' in n else SN_NONE
 
-        
+        calc.sn[i] = vt.Node(sts.length, i, [v_flag, c_flag, t_flag])
+        if 'p'     in n:    sn[i].p     = to_list_f(n['p'])
+        if 'c'     in n:    sn[i].c     = to_list_f(n['c'])
+        if 't'     in n:    sn[i].t     = to_list_f(n['t'])
+        if 'h_sr'  in n:    sn[i].h_sr  = to_list_f(n['h_sr'])
+        if 'h_inp' in n:    sn[i].h_inp = to_list_f(n['h_inp'])
+        if 'v'     in n:    sn[i].v     = to_list_f(n['v'])
+        if 'm'     in n:    sn[i].m     = to_list_f(n['m'])
+        if 'beta'  in n:    sn[i].beta  = to_list_f(n['beta'])
 
+        """"
         nodes.append([v_flag, c_flag, t_flag])                                                              #計算フラグ
 
         if 'p' in n:            sn_P_set.append([i, to_list_f(n['p'],     sts.length)])                     #圧力、行列で設定可能                                                 
@@ -130,7 +142,8 @@ def set_node_net(sn, **kwargs):
         if 'v' in n:            sn_v_set.append([i, to_list_f(n['v'],     sts.length)])                     #気積、行列で設定可能
         if 'm' in n:            sn_m_set.append([i, to_list_f(n['m'],     sts.length)])                     #発生量、行列で設定可能
         if 'beta' in n:      sn_beta_set.append([i, to_list_f(n['beta'],  sts.length)])                     #濃度減少率、行列で設定可能
-
+        """
+        
     for i, nt in enumerate(vn):                                                                             #vn
         h1 = to_list_f(nt['h1'], sts.length) if 'h1' in nt else to_list_f(0.0, sts.length)                  #高さ1、行列設定不可
         h2 = to_list_f(nt['h2'], sts.length) if 'h2' in nt else to_list_f(0.0, sts.length)                  #高さ2、行列設定不可
