@@ -85,7 +85,7 @@ PYBIND11_MODULE(vtsimc, m) {
         .def_readwrite("tn_ground_set", &InputData::tn_ground_set);
     
     py::class_<VTSim>(m, "VTSim")
-        .def(py::init<>())
+        //.def(py::init<>())
         .def("set_inp", &VTSim::set_inp, "")
         .def("calc",    &VTSim::calc,    "")
         .def("result",  &VTSim::result,  "");
