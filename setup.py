@@ -98,12 +98,12 @@ class BuildExt(build_ext):
 
 
 setup(
-   name='vtsim3',
+   name='vtsim',
    version='1.0',
    description='ventilation and thrmal simulation',
    author='IGUCHI Masato',
    author_email='iguchi.masato@gmail.com',
-   packages=['vtsim3']
+   packages=['vtsim']
 )
 
 """"
