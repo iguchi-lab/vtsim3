@@ -121,7 +121,7 @@ def set_node_net(sn, **kwargs):
         c_flag = n['c_flag'] if 'c_flag' in n else SN_NONE
         t_flag = n['t_flag'] if 't_flag' in n else SN_NONE                                                  #計算フラグ
 
-        calc.sn_add(vt.Node(i, [v_flag, c_flag, t_flag]))
+        calc.sn_add(i, [v_flag, c_flag, t_flag])
         
         if 'p'     in n:    calc.sn[i].p     = to_list_f(n['p'])                                            #圧力、行列で設定可能
         if 'c'     in n:    calc.sn[i].c     = to_list_f(n['c'])                                            #濃度、行列で設定可能
