@@ -28,8 +28,9 @@ PYBIND11_MODULE(vtsimc, m) {
     m.attr("SOLVE_SOR")  = SOLVE_SOR;
     m.attr("STEP_P")     = STEP_P;
     m.attr("VENT_ERR")   = VENT_ERR;
-    /*
+    
     m.atrr("STEP_T")     = STEP_T;
+    /*
     m.atrr("THRM_ERR")   = THRM_ERR;
     m.atrr("CONV_ERR")   = CONV_ERR;
     m.atrr("SOR_RATIO")  = SOR_RATIO;
