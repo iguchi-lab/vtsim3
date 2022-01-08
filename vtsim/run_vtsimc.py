@@ -88,11 +88,9 @@ def run_calc(ix, sn, **kwargs):                                                 
     print('Finish vtsim calc.')
     print("calc time = {0}".format(e_time * 1000) + "[ms]")
 
-    return output_calc(node, inp, res, ix, opt)
+    return output_calc(node, res, ix, opt)
 
 def make_inp(ix, sn, **kwargs):
-    inp = vtc.InputData()
-
     inp.sts    = kwargs['sts']    if 'sts' in kwargs else [SOLVE_LU, STEP_P, VENT_ERR, 
                                                            STEP_T, THRM_ERR, CONV_ERR,
                                                            SOR_RATIO, SOR_ERR]                             #計算ステータスの読み込み
@@ -171,7 +169,7 @@ def make_inp(ix, sn, **kwargs):
     
     return inp, node, opt
 
-def output_calc(node, inp, res, ix, opt):
+def output_calc(node, res, ix, opt):
     print('Create pd.DataFrames')
 
     node_swap = {v: k for k, v in node.items()}
