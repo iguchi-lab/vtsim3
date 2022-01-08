@@ -23,7 +23,7 @@ tuple<vector<vector<double>>, vector<vector<double>>, vector<vector<double>>,
 
 PYBIND11_MODULE(vtsimc, m) {
     m.def("calc", &calc, "");
-/*
+
     m.attr("SOLVE_LU")   = SOLVE_LU;
     m.attr("SOLVE_SOR")  = SOLVE_SOR;
 
@@ -39,7 +39,7 @@ PYBIND11_MODULE(vtsimc, m) {
     m.atrr("SN_CALC")    = SN_CALC;         //計算する
     m.atrr("SN_FIX")     = SN_FIX;          //固定値（計算には利用するが、更新しない）
     m.atrr("SN_DLY")     = SN_DLY;          //遅延（熱容量計算用）
-
+/*
     m.atrr("VN_SIMPLE")  = VN_SIMPLE;       //換気回路網：単純開口
     m.atrr("VN_GAP")     = VN_GAP;          //換気回路網：隙間
     m.atrr("VN_FIX")     = VN_FIX;          //換気回路網：風量固定
