@@ -46,7 +46,7 @@ PYBIND11_MODULE(vtsimc, m) {
     m.attr("AC_HEATING") = AC_HEATING;
     m.attr("AC_COOLING") = AC_COOLING;
     m.attr("AC_STOP")    = AC_STOP;
-    /*
+
     py::class_<CalcStatus>(m, "CalcStatus")
         .def(py::init<>())
         .def_read_write("length",    &CalcStatus::length)
@@ -57,9 +57,9 @@ PYBIND11_MODULE(vtsimc, m) {
         .def_read_write("step_t",    &CalcStatus::step_t) 
         .def_read_write("thrm_err",  &CalcStatus::thrm_err)
         .def_read_write("conv_err",  &CalcStatus::conv_err) 
-        .def_read_write("sor_ratio", &calcStatus::sor_ratio) 
+        .def_read_write("sor_ratio", &CalcStatus::sor_ratio) 
         .def_read_write("sor_err",   &CalcStasus::sor_err);
-    */
+    
     py::class_<InputData>(m, "InputData")
         .def(py::init<>())
         .def_readwrite("nodes",         &InputData::nodes)
