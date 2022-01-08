@@ -80,6 +80,9 @@ inp = vt.InputData()
 
 def run_calc(ix, sn, **kwargs):                                                                            #はじめに呼び出される関数
     inp, node, opt = make_inp(ix, sn, **kwargs)
+    
+    
+    
     print('Start vtsim calc.')
     s_time = time.time()
     res = vt.calc(inp)
