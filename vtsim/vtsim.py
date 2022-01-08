@@ -9,48 +9,14 @@ import time
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 
-import vtsimc as vtc
+import vtsimc as vt
 
 ###############################################################################
 # define const
 ###############################################################################
-
-STEP_P         = 1e-6           #偏微分時の圧力変化
-VENT_ERR       = 1e-6           #換気回路網の許容残差
-STEP_T         = 1e-6           #偏微分時の温度変化
-THRM_ERR       = 1e-6           #熱回路網の許容残差
-CONV_ERR       = 1e-6           #収束の許容誤差
-SOR_RATIO      = 0.9            #SOR法の緩和係数
-SOR_ERR        = 1e-6           #SOR法の許容残差
-
-SOLVE_LU:  int = vtc.SOLVE_LU   #LU分解法で計算  
-SOLVE_SOR: int = vtc.SOLVE_SOR  #SOR法で計算
-
-SN_NONE:   int = 0              #計算しない
-SN_CALC:   int = 1              #計算する
-SN_FIX:    int = 2              #固定値（計算には利用するが、更新しない）
-SN_DLY:    int = 3              #遅延（熱容量計算用）
-
-VN_SIMPLE: int = 0              #換気回路網：単純開口
-VN_GAP:    int = 1              #換気回路網：隙間
-VN_FIX:    int = 2              #換気回路網：風量固定
-VN_AIRCON: int = 3              #換気回路網：エアコン=風量固定、換気による熱移動=0
-VN_FAN:    int = 4              #換気回路網：送風ファン、PQ特性
-
-TN_SIMPLE: int = 0              #熱回路網：単純熱回路
-TN_AIRCON: int = 1              #熱回路網：エアコン、熱量収支付け替え
-TN_SOLAR:  int = 2              #熱回路網：日射取得
-TN_GROUND: int = 3              #熱回路網：地盤
-TN_HEATER: int = 4              #熱回路網：発熱
-
 OPT_DF:    int = 0              #DataFrameを出力
 OPT_CSV:   int = 1              #上記に加え、csvファイルを出力
 OPT_GRAPH: int = 2              #上記に加えグラフを描画
-
-AC_AUTO:    int = 0
-AC_HEATING: int = 1
-AC_COOLING: int = 2
-AC_STOP:    int = 3    
 
 ###############################################################################
 # define lambda
@@ -73,7 +39,7 @@ d_node  = lambda name:                      name + '_c'                         
 to_list_f = lambda v, length:           [float(v)] * length if type(v) != list and type(v) != np.ndarray else v  
 to_list_i = lambda v, length:           [int(v)]   * length if type(v) != list and type(v) != np.ndarray else v  
 
-inp = vtc.InputData()
+inp = vt.InputData()
 
 ###############################################################################
 # define function
@@ -83,7 +49,7 @@ def run_calc(ix, sn, **kwargs):                                                 
     inp, node, opt = make_inp(ix, sn, **kwargs)
     print('Start vtsim calc.')
     s_time = time.time()
-    res = vtc.calc(inp)
+    res = vt.calc(inp)
     e_time = time.time() - s_time    
     print('Finish vtsim calc.')
     print("calc time = {0}".format(e_time * 1000) + "[ms]")
@@ -91,9 +57,9 @@ def run_calc(ix, sn, **kwargs):                                                 
     return output_calc(node, res, ix, opt)
 
 def make_inp(ix, sn, **kwargs):
-    inp.sts    = kwargs['sts']    if 'sts' in kwargs else [SOLVE_LU, STEP_P, VENT_ERR, 
-                                                           STEP_T, THRM_ERR, CONV_ERR,
-                                                           SOR_RATIO, SOR_ERR]                             #計算ステータスの読み込み
+    inp.sts    = kwargs['sts']    if 'sts' in kwargs else [vt.SOLVE_LU, vt.STEP_P, vt.VENT_ERR, 
+                                                           vt.STEP_T, vt.THRM_ERR, vt.CONV_ERR,
+                                                           vt.SOR_RATIO, vt.SOR_ERR]                             #計算ステータスの読み込み
     inp.length = len(ix)
     inp.t_step = (ix[1] - ix[0]).seconds + (ix[1] - ix[0]).microseconds / 1000000                          #t_stepの読み込み
 
@@ -111,9 +77,9 @@ def make_inp(ix, sn, **kwargs):
     for i, n in enumerate(sn):                                                                              #sn
         node[n['name']] = i                                                                                 #ノード番号
         
-        v_flag = n['v_flag'] if 'v_flag' in n else SN_NONE
-        c_flag = n['c_flag'] if 'c_flag' in n else SN_NONE
-        t_flag = n['t_flag'] if 't_flag' in n else SN_NONE
+        v_flag = n['v_flag'] if 'v_flag' in n else vt.SN_NONE
+        c_flag = n['c_flag'] if 'c_flag' in n else vt.SN_NONE
+        t_flag = n['t_flag'] if 't_flag' in n else vt.SN_NONE
         nodes.append([v_flag, c_flag, t_flag])                                                              #計算フラグ
 
         if 'p' in n:            sn_P_set.append([i, to_list_f(n['p'],     inp.length)])                     #圧力、行列で設定可能                                                 
@@ -130,14 +96,14 @@ def make_inp(ix, sn, **kwargs):
         h2 = to_list_f(nt['h2'], inp.length) if 'h2' in nt else to_list_f(0.0, inp.length)                  #高さ2、行列設定不可
         v_nets.append([node[nt['name1']], node[nt['name2']], nt['type'], h1, h2])                           #ネットワークタイプ＆高さ
         
-        if nt['type'] == VN_SIMPLE:     vn_simple_set.append([i, to_list_f(nt['alpha'], inp.length), 
-                                                                 to_list_f(nt['area'],  inp.length)])       #単純開口、行列で設定可能
-        if nt['type'] == VN_GAP:           vn_gap_set.append([i, to_list_f(nt['a'],     inp.length), 
-                                                                 to_list_f(nt['n'],     inp.length)])       #隙間、行列で設定可能
-        if nt['type'] == VN_FAN:           vn_fan_set.append([i, to_list_f(nt['qmax'],  inp.length), 
-                                                                 to_list_f(nt['pmax'],  inp.length), 
-                                                                 to_list_f(nt['q1'],    inp.length),
-                                                                 to_list_f(nt['p1'],    inp.length)])       #ファン、行列で設定可能
+        if nt['type'] == vt.VN_SIMPLE:     vn_simple_set.append([i, to_list_f(nt['alpha'], inp.length), 
+                                                                    to_list_f(nt['area'],  inp.length)])       #単純開口、行列で設定可能
+        if nt['type'] == vt.VN_GAP:           vn_gap_set.append([i, to_list_f(nt['a'],     inp.length), 
+                                                                    to_list_f(nt['n'],     inp.length)])       #隙間、行列で設定可能
+        if nt['type'] == vt.VN_FAN:           vn_fan_set.append([i, to_list_f(nt['qmax'],  inp.length), 
+                                                                    to_list_f(nt['pmax'],  inp.length), 
+                                                                    to_list_f(nt['q1'],    inp.length),
+                                                                    to_list_f(nt['p1'],    inp.length)])       #ファン、行列で設定可能
 
         if 'vol' in nt:                    vn_fix_set.append([i, to_list_f(nt['vol'],   inp.length)])       #風量固定値、行列で設定可能
         if 'eta' in nt:                    vn_eta_set.append([i, to_list_f(nt['eta'],   inp.length)])               
@@ -145,20 +111,20 @@ def make_inp(ix, sn, **kwargs):
 
     for i, nt in enumerate(tn):                                                                             #tn
         t_nets.append([node[nt['name1']], node[nt['name2']], nt['type']])                                   #ネットワークタイプ
-        if nt['type'] == TN_SIMPLE:     tn_simple_set.append([i, to_list_f(nt['cdtc'],    inp.length)])     #コンダクタンス、行列設定可能
-        if nt['type'] == TN_AIRCON:     tn_aircon_set.append([i, to_list_i(nt['ac_mode'], inp.length), 
-                                                                 to_list_f(nt['pre_tmp'], inp.length)])     #エアコン運転モード
-        if nt['type'] == TN_SOLAR:       tn_solar_set.append([i, to_list_f(nt['ms'],      inp.length)])     #日射熱取得率、行列設定可能
-        if nt['type'] == TN_GROUND:     tn_ground_set.append([i, to_list_f(nt['area'],    inp.length),           
-                                                                 to_list_f(nt['rg'],      inp.length), 
-                                                                 nt['phi_0'], nt['cof_r'], nt['cof_phi']])  #地盤熱応答、行列設定不可（面積と断熱性能はOK）
+        if nt['type'] == vt.TN_SIMPLE:     tn_simple_set.append([i, to_list_f(nt['cdtc'],    inp.length)])     #コンダクタンス、行列設定可能
+        if nt['type'] == vt.TN_AIRCON:     tn_aircon_set.append([i, to_list_i(nt['ac_mode'], inp.length), 
+                                                                    to_list_f(nt['pre_tmp'], inp.length)])     #エアコン運転モード
+        if nt['type'] == vt.TN_SOLAR:       tn_solar_set.append([i, to_list_f(nt['ms'],      inp.length)])     #日射熱取得率、行列設定可能
+        if nt['type'] == vt.TN_GROUND:     tn_ground_set.append([i, to_list_f(nt['area'],    inp.length),           
+                                                                    to_list_f(nt['rg'],      inp.length), 
+                                                                    nt['phi_0'], nt['cof_r'], nt['cof_phi']])  #地盤熱応答、行列設定不可（面積と断熱性能はOK）
         
     for i, n in enumerate([n for n in sn if 'capa' in n]):                                                  #熱容量の設定のあるノード
         node[d_node(n['name'])] = len(sn) + i                                                               #時間遅れノードのノード番号
-        nodes.append([SN_NONE, SN_NONE, SN_DLY])                                                            #計算フラグ
+        nodes.append([vt.SN_NONE, vt.SN_NONE, vt.SN_DLY])                                                            #計算フラグ
         sn_capa_set.append([node[d_node(n['name'])], node[n['name']]])                                      #熱容量の設定
         if 't' in n:    sn_T_set.append([len(sn) + i, to_list_f(n['t'], inp.length)])
-        t_nets.append([node[n['name']], node[d_node(n['name'])], TN_SIMPLE])                                #ネットワークの設定
+        t_nets.append([node[n['name']], node[d_node(n['name'])], vt.TN_SIMPLE])                                #ネットワークの設定
         tn_simple_set.append([len(tn) + i, to_list_f(n['capa'] / inp.t_step, inp.length)])                  #コンダクタンス（熱容量）
 
     inp.nodes, inp.v_nets, inp.t_nets                                                 = nodes, v_nets, t_nets
