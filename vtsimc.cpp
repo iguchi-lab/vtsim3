@@ -96,6 +96,6 @@ PYBIND11_MODULE(vtsimc, m) {
         .def_readwrite("tn",    &VTSim::tn, "");
     
     py::class_<Node>(m, "Node")
-        .def(py::init<long, int, tuple<int, int, int>>());
+        .def(py::init<long, int, tuple<int, int, int>>())
         .def_readwrite("i", &Node::i, "");
 }
