@@ -73,6 +73,8 @@ d_node  = lambda name:                      name + '_c'                         
 to_list_f = lambda v, length:           [float(v)] * length if type(v) != list and type(v) != np.ndarray else v  
 to_list_i = lambda v, length:           [int(v)]   * length if type(v) != list and type(v) != np.ndarray else v  
 
+inp = vtc.InputData()
+
 ###############################################################################
 # define function
 ###############################################################################
