@@ -119,9 +119,9 @@ def set_node_net(sn, **kwargs):
         
         v_flag = n['v_flag'] if 'v_flag' in n else SN_NONE
         c_flag = n['c_flag'] if 'c_flag' in n else SN_NONE
-        t_flag = n['t_flag'] if 't_flag' in n else SN_NONE
+        t_flag = n['t_flag'] if 't_flag' in n else SN_NONE                                                  #計算フラグ
 
-        calc.sn[i] = vt.Node(sts.length, i, [v_flag, c_flag, t_flag])
+        calc.append(vt.Node(sts.length, i, [v_flag, c_flag, t_flag]))
         if 'p'     in n:    sn[i].p     = to_list_f(n['p'])
         if 'c'     in n:    sn[i].c     = to_list_f(n['c'])
         if 't'     in n:    sn[i].t     = to_list_f(n['t'])
