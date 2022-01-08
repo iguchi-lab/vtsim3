@@ -86,6 +86,6 @@ PYBIND11_MODULE(vtsimc, m) {
     
     py::class_<VTSim>(m, "VTSim")
         .def(py::init<InputData &>())
-        .def("calc", &calc, "");
-        .def("result", &result, "");
+        .def("calc", &calc, &VTSim::calc);
+        .def("result", &result, &VTSim::result);
 }
