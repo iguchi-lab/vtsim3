@@ -10,14 +10,18 @@
 using namespace std;
 
 void calc_01(void){
+    CalcStatus sts;
     InputData inp;
-    inp.length        = 2;
-    vector<double> vol(inp.length, 100.0 / 3600.0),
-                   alpha(inp.length, 0.6),
-                   area(inp.length, 1.0),
-                   h(inp.length, 0.0);
+    VTSim calc;
 
-    inp.sts           = {SOLVE_LU, STEP_P, VENT_ERR, STEP_T, THRM_ERR, CONV_ERR, SOR_RATIO, SOR_ERR};
+    sts.length = 2;
+    calc.set_calc_status(sts);
+
+    vector<double> vol(sts.length, 100.0 / 3600.0),
+                   alpha(sts.length, 0.6),
+                   area(sts.length, 1.0),
+                   h(sts.length, 0.0);
+
     inp.nodes         = {{SN_FIX, SN_NONE, SN_NONE},
                          {SN_CALC, SN_NONE, SN_NONE},
                          {SN_CALC, SN_NONE, SN_NONE}};
@@ -28,27 +32,31 @@ void calc_01(void){
                          {2, alpha, area}}; 
     inp.vn_fix_set    = {{0, vol}};
 
-    VTSim calc;
+    
     calc.set_inp(inp);
     calc.calc();
 }
 
 void calc_02(void){
+    CalcStatus sts;
     InputData inp;
-    inp.length = 2;
-    vector<double> t1(inp.length, 20.0),              
-                   t2(inp.length,  0.0),
-                   vol1(inp.length, 1000.0 / 3600.0), 
-                   vol2(inp.length,  500.0 / 3600.0),
-                   h_sr(inp.length, 4000.0),             
-                   h_inp(inp.length, 2000.0),
-                   cdtc1(inp.length, 100.0 * 0.87),
-                   cdtc2(inp.length, 200.0 * 0.87),
-                   ms(inp.length, 1.0),
-                   h(inp.length, 0.0);
-    vector<int>    ac_mode(inp.length, AC_COOLING);
+    VTSim calc;
 
-    inp.sts           = {SOLVE_LU, STEP_P, VENT_ERR, STEP_T, THRM_ERR, CONV_ERR, SOR_RATIO, SOR_ERR};
+    sts.length = 2;
+    calc.set_calc_status(sts);
+
+    vector<double> t1(sts.length, 20.0),              
+                   t2(sts.length,  0.0),
+                   vol1(sts.length, 1000.0 / 3600.0), 
+                   vol2(sts.length,  500.0 / 3600.0),
+                   h_sr(sts.length, 4000.0),             
+                   h_inp(sts.length, 2000.0),
+                   cdtc1(sts.length, 100.0 * 0.87),
+                   cdtc2(sts.length, 200.0 * 0.87),
+                   ms(sts.length, 1.0),
+                   h(sts.length, 0.0);
+    vector<int>    ac_mode(sts.length, AC_COOLING);
+
     inp.nodes         = {{SN_NONE, SN_NONE, SN_CALC},                                                     //0: AC-out
                          {SN_NONE, SN_NONE, SN_CALC},                                                     //1: Room1
                          {SN_NONE, SN_NONE, SN_CALC},                                                     //2: Room2
@@ -81,37 +89,42 @@ void calc_02(void){
     inp.tn_aircon_set = {{2, ac_mode, t1}};
     inp.tn_solar_set  = {{3, ms}};
 
-    VTSim calc;
     calc.set_inp(inp);
     calc.calc();
 }
 
 void calc_03(void){
+    CalcStatus sts;
     InputData inp;
-    inp.length        = 3;
-    vector<double> alpha(inp.length, 0.6),
-                   area(inp.length, 0.21),
-                   a1(inp.length, 0.005516666666666667),
-                   a2(inp.length, 0.018633333333333335),
-                   a3(inp.length, 0.005516666666666667),
-                   a4(inp.length, 0.006208333333333334),
-                   a5(inp.length, 0.004141666666666667),
-                   n(inp.length, 1.5),
-                   cdtc01(inp.length, 15.292200000000001),
-                   cdtc02(inp.length, 51.6516),
-                   cdtc03(inp.length, 15.292200000000001),
-                   cdtc04(inp.length, 17.209500000000002),
-                   cdtc05(inp.length, 11.4807),
-                   cdtc06(inp.length, 1.7745),
-                   cdtc07(inp.length, 3.549),
-                   cdtc08(inp.length, 2.4843),
-                   cdtc09(inp.length, 2.4843),
-                   cdtc10(inp.length, 1.2441),
-                   h(inp.length, 0.0),
-                   g_area(inp.length, 6.62),
-                   rg(inp.length, 1.85);
+    VTSim calc;
 
-    inp.sts           = {SOLVE_SOR, STEP_P, VENT_ERR, STEP_T, THRM_ERR, CONV_ERR, SOR_RATIO, 0.01};
+    sts.length  = 3;
+    sts.sor_err = 0.01;
+    calc.set_calc_status(sts);
+
+    vector<double> alpha(sts.length, 0.6),
+                   area(sts.length, 0.21),
+                   a1(sts.length, 0.005516666666666667),
+                   a2(sts.length, 0.018633333333333335),
+                   a3(sts.length, 0.005516666666666667),
+                   a4(sts.length, 0.006208333333333334),
+                   a5(sts.length, 0.004141666666666667),
+                   n(sts.length, 1.5),
+                   cdtc01(sts.length, 15.292200000000001),
+                   cdtc02(sts.length, 51.6516),
+                   cdtc03(sts.length, 15.292200000000001),
+                   cdtc04(sts.length, 17.209500000000002),
+                   cdtc05(sts.length, 11.4807),
+                   cdtc06(sts.length, 1.7745),
+                   cdtc07(sts.length, 3.549),
+                   cdtc08(sts.length, 2.4843),
+                   cdtc09(sts.length, 2.4843),
+                   cdtc10(sts.length, 1.2441),
+                   h(sts.length, 0.0),
+                   g_area(sts.length, 6.62),
+                   rg(sts.length, 1.85);
+
+
     inp.nodes         = {{2, 0, 2}, {2, 0, 2}, {2, 0, 2}, 
                          {1, 0, 1}, {1, 0, 1}, {1, 0, 1}, {1, 0, 1}, {1, 0, 1}, 
                          {0, 0, 2}, {0, 0, 2}};
@@ -190,7 +203,7 @@ void calc_03(void){
                          {0.99999618, 0.99998474, 0.99993896, 0.99975593, 0.99902388, 0.99610162, 0.98449151, 0.93941063, 0.77880078, 0.36787944}, 
                          {-3.7393300e-08,  7.3357800e-07, -9.9402100e-06,  5.8429900e-04, 3.8443500e-04,  
                            6.1867900e-04,  2.7429050e-03,  8.7726000e-04,  1.1610039e-02,  1.5655690e-03}}};
-    VTSim calc;
+
     calc.set_inp(inp);
     calc.calc();
 }
@@ -200,22 +213,26 @@ int get_xyz(int x, int y, int z){
 }
 
 void calc_04(void){
+    CalcStatus sts;
     InputData inp;
+    VTSim calc;
+
     int X = 3, Y = 3, Z = 5;
     double cx[3]   = {1.52, 1.52, 1.52}, cy[3] = {1.02, 1.60, 1.02}, cz[5] = {0.48, 0.48, 0.48, 0.48, 0.48};
     double hcz[5]  = {0.24, 0.72, 1.20, 1.68, 2.16};
     double htz[5]  = {0.48, 0.96, 1.44, 1.92};
     double cdtc[6] = {0.4, 0.5, 0.94, 1.88, 3.49, 5.59};
 
-    inp.length = 4;
-    vector<double> Ti(inp.length, 20.0), 
-                   To(inp.length, 6.0), 
-                   H_inp(inp.length, 462.3),
-                   alpha(inp.length, 1.0);
+    sts.length    = 4;
+    sts.t_step    = 0.1;
+    sts.sor_ratio = 0.8;
+    sts.sor_err   = 1.0e-6;
+    calc.set_calc_status(sts);
 
-    inp.t_step = 0.1;
-
-    inp.sts = {SOLVE_SOR, STEP_P, 1e-3, STEP_T, THRM_ERR, CONV_ERR, 0.8, 1.0e-6};
+    vector<double> Ti(sts.length, 20.0), 
+                   To(sts.length, 6.0), 
+                   H_inp(sts.length, 462.3),
+                   alpha(sts.length, 1.0);
 
     for(int x = 0; x < X; x++){
         for(int y = 0; y < Y; y++){
@@ -249,21 +266,21 @@ void calc_04(void){
         for(int y = 0; y < Y; y++){
             for(int z = 0; z < Z; z++){
                 if(x != X - 1){
-                    vector<double> h(inp.length, hcz[z]);
+                    vector<double> h(sts.length, hcz[z]);
                     inp.v_nets.push_back({get_xyz(x, y, z), get_xyz(x + 1, y, z), VN_SIMPLE, h, h});
                     double area = cy[y] * cz[z];
                     inp.vn_simple_set.push_back({v_n, alpha, {area, area, area, area}});
                     v_n++;
                 }
                 if(y != Y - 1){
-                    vector<double> h(inp.length, hcz[z]);   
+                    vector<double> h(sts.length, hcz[z]);   
                     inp.v_nets.push_back({get_xyz(x, y, z), get_xyz(x, y + 1, z), VN_SIMPLE, h, h});
                     double area = cx[x] * cz[z];
                     inp.vn_simple_set.push_back({v_n, alpha, {area, area, area, area}});
                     v_n++;
                 }
                 if(z != Z - 1){
-                    vector<double> h(inp.length, htz[z]);   
+                    vector<double> h(sts.length, htz[z]);   
                     inp.v_nets.push_back({get_xyz(x, y, z), get_xyz(x, y, z + 1), VN_SIMPLE, h, h});
                     double area = cx[x] * cy[y];
                     inp.vn_simple_set.push_back({v_n, alpha, {area, area, area, area}});
@@ -302,7 +319,7 @@ void calc_04(void){
                     t_n++;
                 }
                 inp.t_nets.push_back({get_xyz(x, y, z), get_xyz(x, y, z) + 48, TN_SIMPLE});
-                double c = cx[x] * cy[y] * cz[z] * 1.205 * 1006 / inp.t_step;
+                double c = cx[x] * cy[y] * cz[z] * 1.205 * 1006 / sts.t_step;
                 inp.tn_simple_set.push_back({t_n, {c, c, c, c}});
                 t_n++;                
             }
@@ -310,45 +327,47 @@ void calc_04(void){
     }
     inp.t_nets.push_back({get_xyz(2, 1, 0), 47, TN_HEATER});
 
-    VTSim calc;
     calc.set_inp(inp);
     calc.calc();
 }
 
 void calc_05(void){
+    CalcStatus sts;
     InputData inp;
-    inp.length        = 3;
+    VTSim calc;
 
-    vector<double>    c0(inp.length, 40000.0), 
-                       m(inp.length, 28470.0),
-                      v1(inp.length,  13.66),
-                      v2(inp.length,   6.00),
-                      v3(inp.length,  40.25),
-                      v4(inp.length, 126.49),
-                      v5(inp.length,  16.56),
-                      v6(inp.length,   9.94),
-                      v7(inp.length, 100.46),
-                   beta0(inp.length, 0.00005),
-                   vol00(inp.length,  320.0 / 3600),
-                   vol01(inp.length, 1206.0 / 3600),
-                   vol02(inp.length,  155.0 / 3600),
-                   vol03(inp.length,  313.0 / 3600),
-                   vol04(inp.length,  108.0 / 3600),
-                   vol05(inp.length,  176.0 / 3600),
-                   vol06(inp.length,  454.0 / 3600),
-                   vol07(inp.length,  155.0 / 3600),
-                   vol08(inp.length,  313.0 / 3600),
-                   vol09(inp.length,  108.0 / 3600),
-                   vol10(inp.length,  100.0 / 3600),
-                   vol11(inp.length,   76.0 / 3600),
-                   vol12(inp.length,  220.0 / 3600),
-                   vol13(inp.length,  886.0 / 3600),              
-                    eta0(inp.length,    1.0),
-                    eta1(inp.length,    0.9),
-                       h(inp.length,    0.0);
+    sts.length        = 3;
+    sts.t_step        = 10;
+    calc.set_calc_status(sts);
 
-    inp.t_step        = 10;
-    inp.sts           = {SOLVE_LU, STEP_P, VENT_ERR, STEP_T, THRM_ERR, CONV_ERR, SOR_RATIO, SOR_ERR};
+    vector<double>    c0(sts.length, 40000.0), 
+                       m(sts.length, 28470.0),
+                      v1(sts.length,  13.66),
+                      v2(sts.length,   6.00),
+                      v3(sts.length,  40.25),
+                      v4(sts.length, 126.49),
+                      v5(sts.length,  16.56),
+                      v6(sts.length,   9.94),
+                      v7(sts.length, 100.46),
+                   beta0(sts.length, 0.00005),
+                   vol00(sts.length,  320.0 / 3600),
+                   vol01(sts.length, 1206.0 / 3600),
+                   vol02(sts.length,  155.0 / 3600),
+                   vol03(sts.length,  313.0 / 3600),
+                   vol04(sts.length,  108.0 / 3600),
+                   vol05(sts.length,  176.0 / 3600),
+                   vol06(sts.length,  454.0 / 3600),
+                   vol07(sts.length,  155.0 / 3600),
+                   vol08(sts.length,  313.0 / 3600),
+                   vol09(sts.length,  108.0 / 3600),
+                   vol10(sts.length,  100.0 / 3600),
+                   vol11(sts.length,   76.0 / 3600),
+                   vol12(sts.length,  220.0 / 3600),
+                   vol13(sts.length,  886.0 / 3600),              
+                    eta0(sts.length,    1.0),
+                    eta1(sts.length,    0.9),
+                       h(sts.length,    0.0);
+
     inp.nodes         = {{2, 2, 0}, {2, 1, 0}, {2, 1, 0}, {2, 1, 0}, {2, 1, 0}, {2, 1, 0}, {2, 1, 0}, {2, 1, 0}};   
     inp.v_nets        = {{0, 1, 2, h, h},
                          {1, 2, 2, h, h},
@@ -415,37 +434,39 @@ void calc_05(void){
                          {11, eta0},
                          {12, eta0},
                          {13, eta0}};
-    VTSim calc;
+
     calc.set_inp(inp);
     calc.calc();
 }
 
 void calc_06(void){
+    CalcStatus sts;
     InputData inp;
 
-    inp.length = 5;
+    VTSim calc;
+    sts.length        = 5;
+    calc.set_calc_status(sts);
 
-    vector<double> h(inp.length,    0.0);
-    vector<double> pre_tmp(inp.length, 26.0),
-                   t_ex(inp.length, 15.2);
-    vector<double> v1(inp.length, 339.57 / 3600),
-                   v2(inp.length,  44.07 / 3600),
-                   v3(inp.length,  53.46 / 3600),
-                   v4(inp.length, 172.26 / 3600),
-                   v5(inp.length, 127.64 / 3600),
-                   v6(inp.length,  42.90 / 3600),
-                   v7(inp.length, 781.90 / 3600);
-    vector<double> cdtc01(inp.length, 58.82),
-                   cdtc02(inp.length,  9.69),
-                   cdtc03(inp.length, 22.69),
-                   cdtc04(inp.length, 27.23),
-                   cdtc05(inp.length, 10.30),
-                   cdtc06(inp.length, 19.15);
-    vector<double> h_sr(inp.length, 0.0);
-    vector<double> ms(inp.length, 2.699);
-    vector<int>    ac_mode(inp.length, AC_COOLING);
+    vector<double> h(sts.length,    0.0);
+    vector<double> pre_tmp(sts.length, 26.0),
+                   t_ex(sts.length, 15.2);
+    vector<double> v1(sts.length, 339.57 / 3600),
+                   v2(sts.length,  44.07 / 3600),
+                   v3(sts.length,  53.46 / 3600),
+                   v4(sts.length, 172.26 / 3600),
+                   v5(sts.length, 127.64 / 3600),
+                   v6(sts.length,  42.90 / 3600),
+                   v7(sts.length, 781.90 / 3600);
+    vector<double> cdtc01(sts.length, 58.82),
+                   cdtc02(sts.length,  9.69),
+                   cdtc03(sts.length, 22.69),
+                   cdtc04(sts.length, 27.23),
+                   cdtc05(sts.length, 10.30),
+                   cdtc06(sts.length, 19.15);
+    vector<double> h_sr(sts.length, 0.0);
+    vector<double> ms(sts.length, 2.699);
+    vector<int>    ac_mode(sts.length, AC_COOLING);
 
-    inp.sts    = {SOLVE_LU, STEP_P, VENT_ERR, STEP_T, THRM_ERR, CONV_ERR, SOR_RATIO, SOR_ERR};
     inp.nodes  = {{SN_NONE, SN_NONE, SN_CALC},          //0  建築ダクト
                   {SN_NONE, SN_NONE, SN_CALC},          //1  LDK
                   {SN_NONE, SN_NONE, SN_CALC},          //2  洗面所
@@ -501,7 +522,6 @@ void calc_06(void){
     inp.tn_solar_set  = {{6, ms}};
     inp.tn_aircon_set = {{7, ac_mode, pre_tmp}};
 
-    VTSim calc;
     calc.set_inp(inp);
     calc.calc();
 
@@ -513,7 +533,7 @@ void calc_06(void){
     r_t = get<2>(res);
 
     cout << endl;
-    for(int i = 0; i < inp.length; i++){
+    for(int i = 0; i < sts.length; i++){
         for(int j = 0; j < r_t.size(); j ++)    cout << r_t[j][i] << ",";
         cout << endl;
     }
