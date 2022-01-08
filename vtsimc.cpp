@@ -26,31 +26,31 @@ PYBIND11_MODULE(vtsimc, m) {
 
     m.attr("SOLVE_LU")   = SOLVE_LU;
     m.attr("SOLVE_SOR")  = SOLVE_SOR;
-    m.attr("STEP_P")     = STEP_P;          //偏微分時の圧力変化
-    m.attr("VENT_ERR")   = VENT_ERR;        //換気回路網の許容残差
-    m.atrr("STEP_T")     = STEP_T;          //偏微分時の温度変化
-    m.atrr("THRM_ERR")   = THRM_ERR;        //熱回路網の許容残差
-    m.atrr("CONV_ERR")   = CONV_ERR;        //収束許容誤差
-    m.atrr("SOR_RATIO")  = SOR_RATIO;       //SOR法の緩和係数
-    m.atrr("SOR_ERR")    = SOR_ERR;         //SOR法の許容残差
-    m.atrr("SN_NONE")    = SN_NONE;         //計算しない
-    m.atrr("SN_CALC")    = SN_CALC;         //計算する
-    m.atrr("SN_FIX")     = SN_FIX;          //固定値（計算には利用するが、更新しない）
-    m.atrr("SN_DLY")     = SN_DLY;          //遅延（熱容量計算用）
-    m.atrr("VN_SIMPLE")  = VN_SIMPLE;       //換気回路網：単純開口
-    m.atrr("VN_GAP")     = VN_GAP;          //換気回路網：隙間
-    m.atrr("VN_FIX")     = VN_FIX;          //換気回路網：風量固定
-    m.atrr("VN_AIRCON")  = VN_AIRCON;       //換気回路網：エアコン=風量固定、換気による熱移動=0
-    m.atrr("VN_FAN")     = VN_FAN;          //換気回路網：送風ファン、PQ特性
-    m.atrr("TN_SIMPLE")  = TN_SIMPLE;       //熱回路網：単純熱回路
-    m.atrr("TN_AIRCON")  = TN_AIRCON;       //熱回路網：エアコン、熱量収支付け替え
-    m.atrr("TN_SOLAR")   = TN_SOLAR;        //熱回路網：日射取得
-    m.atrr("TN_GROUND")  = TN_GROUND;       //熱回路網：地盤
-    m.atrr("TN_HEATER")  = TN_HEATER;       //熱回路網：発熱
-    m.atrr("AC_AUTO")    = AC_AUTO;         //エアコン：自動
-    m.atrr("AC_HEATING") = AC_HEATING;      //エアコン：暖房
-    m.atrr("AC_COOLING") = AC_COOLING;      //エアコン：冷房
-    m.atrr("AC_STOP")    = AC_STOP;         //エアコン：停止
+    m.attr("STEP_P")     = STEP_P;
+    m.attr("VENT_ERR")   = VENT_ERR;
+    m.atrr("STEP_T")     = STEP_T;
+    m.atrr("THRM_ERR")   = THRM_ERR;
+    m.atrr("CONV_ERR")   = CONV_ERR;
+    m.atrr("SOR_RATIO")  = SOR_RATIO;
+    m.atrr("SOR_ERR")    = SOR_ERR;
+    m.atrr("SN_NONE")    = SN_NONE;
+    m.atrr("SN_CALC")    = SN_CALC;
+    m.atrr("SN_FIX")     = SN_FIX;
+    m.atrr("SN_DLY")     = SN_DLY;
+    m.atrr("VN_SIMPLE")  = VN_SIMPLE;
+    m.atrr("VN_GAP")     = VN_GAP;
+    m.atrr("VN_FIX")     = VN_FIX;
+    m.atrr("VN_AIRCON")  = VN_AIRCON;
+    m.atrr("VN_FAN")     = VN_FAN;
+    m.atrr("TN_SIMPLE")  = TN_SIMPLE;
+    m.atrr("TN_AIRCON")  = TN_AIRCON;
+    m.atrr("TN_SOLAR")   = TN_SOLAR;
+    m.atrr("TN_GROUND")  = TN_GROUND;
+    m.atrr("TN_HEATER")  = TN_HEATER;
+    m.atrr("AC_AUTO")    = AC_AUTO;
+    m.atrr("AC_HEATING") = AC_HEATING;
+    m.atrr("AC_COOLING") = AC_COOLING;
+    m.atrr("AC_STOP")    = AC_STOP;
 
     py::class_<InputData>(m, "InputData")
         .def(py::init<>())
