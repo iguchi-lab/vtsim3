@@ -61,7 +61,7 @@ public:
     double t_step;
     int i_vn_ac = -1, i_tn_ac = -1;
 
-    VTSim(InputData inp){
+    set_inp(InputData inp)
         solve     = inp.sts[0];                                                
         step_p    = inp.sts[1];                                                //偏微分時の圧力変化
         vent_err  = inp.sts[2];                                                //換気回路網の許容残差
@@ -108,7 +108,7 @@ public:
     
         for(int i = 0; i < vn.size(); i++)  if(vn[i].vn_type == VN_AIRCON)  i_vn_ac = i;
         for(int i = 0; i < tn.size(); i++)  if(tn[i].tn_type == TN_AIRCON)  i_tn_ac = i;                    //当面、airconは1台のみ
-    }                       
+    }
 
     void change_sn_t_flag(int i, int flag_){
         get<2>(sn[i].flag) = flag_;
