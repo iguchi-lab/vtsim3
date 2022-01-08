@@ -20,32 +20,6 @@ ofstream ofs(logfileName);
 
 using namespace::std;
 
-class InputData{
-public:
-    vector<tuple<int, int, int>>                                                           nodes         = {}; 
-    vector<tuple<int, int, int, vector<double>, vector<double>>>                           v_nets        = {};
-    vector<tuple<int, int, int>>                                                           t_nets        = {};
-    vector<tuple<int, vector<double>>>                                                     sn_P_set      = {};
-    vector<tuple<int, vector<double>>>                                                     sn_C_set      = {};
-    vector<tuple<int, vector<double>>>                                                     sn_T_set      = {};
-    vector<tuple<int, vector<double>>>                                                     sn_h_sr_set   = {};
-    vector<tuple<int, vector<double>>>                                                     sn_h_inp_set  = {};
-    vector<tuple<int, vector<double>>>                                                     sn_v_set      = {};
-    vector<tuple<int, int>>                                                                sn_capa_set   = {};
-    vector<tuple<int, vector<double>>>                                                     sn_m_set      = {};
-    vector<tuple<int, vector<double>>>                                                     sn_beta_set   = {};
-    vector<tuple<int, vector<double>, vector<double>>>                                     vn_simple_set = {};
-    vector<tuple<int, vector<double>, vector<double>>>                                     vn_gap_set    = {};
-    vector<tuple<int, vector<double>>>                                                     vn_fix_set    = {};
-    vector<tuple<int, vector<double>, vector<double>, vector<double>, vector<double>>>     vn_fan_set    = {};
-    vector<tuple<int, vector<double>>>                                                     vn_eta_set    = {};         
-    vector<tuple<int, vector<double>>>                                                     tn_simple_set = {};
-    vector<tuple<int, vector<int>, vector<double>>>                                        tn_aircon_set = {};
-    vector<tuple<int, vector<double>>>                                                     tn_solar_set  = {};
-    vector<tuple<int, vector<double>, vector<double>, 
-                 double, vector<double>, vector<double>>>                                  tn_ground_set = {};
-};
-
 class CalcStatus{
 public:
     long length      = 0;
@@ -67,22 +41,8 @@ public:
     vector<Node> sn;                                        //ノード
     vector<Vent_Net> vn;                                    //換気回路網
     vector<Thrm_Net> tn;                                    //熱回路網
-
     vector<int> v_idc, c_idc, t_idc, ac_idc;
-
     int i_vn_ac = -1, i_tn_ac = -1;
-
-    void set_inp(InputData inp){
-
-        for(tuple<int, vector<double>> tp: inp.tn_simple_set)                                               tn[get<0>(tp)].set_Simple(get<1>(tp));
-        for(tuple<int, vector<int>, vector<double>> tp: inp.tn_aircon_set)                                  tn[get<0>(tp)].set_Aircon(get<1>(tp), get<2>(tp));
-        for(tuple<int, vector<double>> tp: inp.tn_solar_set)                                                tn[get<0>(tp)].set_Solar(get<1>(tp));
-        for(tuple<int, vector<double>, vector<double>, 
-                  double, vector<double>, vector<double>> tp: inp.tn_ground_set)                            tn[get<0>(tp)].set_Ground(get<1>(tp), get<2>(tp), get<3>(tp), get<4>(tp), get<5>(tp));
-    
-        for(int i = 0; i < vn.size(); i++)  if(vn[i].vn_type == VN_AIRCON)  i_vn_ac = i;
-        for(int i = 0; i < tn.size(); i++)  if(tn[i].tn_type == TN_AIRCON)  i_tn_ac = i;                    //当面、airconは1台のみ
-    }
 
     void sn_add(int i, tuple<int, int, int> flag){
         sn.push_back(Node(sts.length, i, flag));
