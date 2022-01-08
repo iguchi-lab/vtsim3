@@ -8,7 +8,7 @@ public:
     vector<double>      ms;                                                                 //日射取得率
     vector<double>      area, rg;                                                           //面積、表面熱抵抗
     double              phi_0;                                                              //応答係数                                                        
-    vector<double>      cof_r, cof_phi, t_dash_gs;
+    vector<double>      cof_r, cof_phi, t_dash_gs_(10, 0.0);
     vector<double>      qt;                                                                 //熱流
     vector<int>         aircon_on, ac_mode;                                                 //エアコンのON/OFF、エアコン運転モード
     vector<double>      pre_tmp;                                                            //エアコン設定温度
@@ -19,26 +19,6 @@ public:
         qt.assign(length, 0.0);
         aircon_on.assign(length, 0);                                                        //熱量を0に初期化        
     }              
-
-    void set_Simple(vector<double> cdtc_)   {cdtc = cdtc_;}                                 //コンダクタンス
-
-    void set_Aircon(vector<int> ac_mode_, vector<double> pre_tmp_){
-        ac_mode = ac_mode_;                                                                 //エアコンの運転モード
-        pre_tmp = pre_tmp_;                                                                 //設定温度
-    }                           
-
-    void set_Solar(vector<double> ms_)      {ms = ms_;}                                     //日射取得率
-
-    void set_Ground(vector<double> area_, vector<double> rg_, 
-                    double phi_0_, vector<double> cof_r_, vector<double> cof_phi_){
-        area    = area_;                                                                    //面積
-        rg      = rg_;                                                                      //表面熱抵抗
-        phi_0   = phi_0_;
-        cof_r   = cof_r_;
-        cof_phi = cof_phi_;
-        vector<double> t_dash_gs_(10, 0.0);
-        t_dash_gs = t_dash_gs_;
-    }
 
     double get_qt(double dt, long ts){
         double sum_t_dash_gs = 0.0;                                                         //項別成分の合計
