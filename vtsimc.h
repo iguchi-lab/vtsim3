@@ -62,17 +62,18 @@ public:
 
 class VTSim{
 public:
+    CalcStatus sts;
+
     vector<Node> sn;                                        //ノード
     vector<Vent_Net> vn;                                    //換気回路網
     vector<Thrm_Net> tn;                                    //熱回路網
-    CalcStatus sts;
 
     vector<int> v_idc, c_idc, t_idc, ac_idc;
     double t_step;
     int i_vn_ac = -1, i_tn_ac = -1;
 
     void set_calc_status(CalcStatus sts_){
-        sts         = sts_;
+        sts = sts_;
     }
 
     void set_inp(InputData inp){
