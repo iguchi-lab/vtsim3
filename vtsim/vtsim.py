@@ -176,9 +176,9 @@ def make_inp(ix, sn, **kwargs):
     inp.vn_simple_set, inp.vn_gap_set, inp.vn_fix_set, inp.vn_fan_set, inp.vn_eta_set = vn_simple_set, vn_gap_set, vn_fix_set, vn_fan_set, vn_eta_set
     inp.tn_simple_set, inp.tn_aircon_set, inp.tn_solar_set, inp.tn_ground_set         = tn_simple_set, tn_aircon_set, tn_solar_set, tn_ground_set      
     
-    return inp, node, opt
+    return inp, opt
 
-def output_calc(node, res, ix, opt):
+def output_calc(res, ix, opt):
     print('Create pd.DataFrames')
 
     node_swap = {v: k for k, v in node.items()}
