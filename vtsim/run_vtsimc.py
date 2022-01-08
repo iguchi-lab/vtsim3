@@ -111,9 +111,9 @@ def make_inp(ix, sn, **kwargs):
     for i, n in enumerate(sn):                                                                              #sn
         node[n['name']] = i                                                                                 #ノード番号
         
-        v_flag = n['v_flag'] if 'v_flag' in kwargs else SN_NONE
-        c_flag = n['c_flag'] if 'c_flag' in kwargs else SN_NONE
-        t_flag = n['t_flag'] if 't_flag' in kwargs else SN_NONE
+        v_flag = n['v_flag'] if 'v_flag' in n else SN_NONE
+        c_flag = n['c_flag'] if 'c_flag' in n else SN_NONE
+        t_flag = n['t_flag'] if 't_flag' in n else SN_NONE
         nodes.append([v_flag, c_flag, t_flag])                                                              #計算フラグ
 
         if 'p' in n:            sn_P_set.append([i, to_list_f(n['p'],     inp.length)])                     #圧力、行列で設定可能                                                 
