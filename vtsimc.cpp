@@ -27,6 +27,7 @@ PYBIND11_MODULE(vtsimc, m) {
     m.attr("SOLVE_LU")   = SOLVE_LU;
     m.attr("SOLVE_SOR")  = SOLVE_SOR;
     m.attr("STEP_P")     = STEP_P;
+    /*
     m.attr("VENT_ERR")   = VENT_ERR;
     m.atrr("STEP_T")     = STEP_T;
     m.atrr("THRM_ERR")   = THRM_ERR;
@@ -51,7 +52,7 @@ PYBIND11_MODULE(vtsimc, m) {
     m.atrr("AC_HEATING") = AC_HEATING;
     m.atrr("AC_COOLING") = AC_COOLING;
     m.atrr("AC_STOP")    = AC_STOP;
-
+    */
     py::class_<InputData>(m, "InputData")
         .def(py::init<>())
         .def_readwrite("sts",           &InputData::sts)
