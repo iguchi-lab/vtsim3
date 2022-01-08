@@ -62,9 +62,6 @@ PYBIND11_MODULE(vtsimc, m) {
 
     py::class_<InputData>(m, "InputData")
         .def(py::init<>())
-        .def_readwrite("sts",           &InputData::sts)
-        .def_readwrite("length",        &InputData::length)
-        .def_readwrite("t_step",        &InputData::t_step)
         .def_readwrite("nodes",         &InputData::nodes)
         .def_readwrite("v_nets",        &InputData::v_nets)
         .def_readwrite("t_nets",        &InputData::t_nets)
