@@ -58,7 +58,7 @@ PYBIND11_MODULE(vtsimc, m) {
         .def_read_write("thrm_err",  &CalcStatus::thrm_err)
         .def_read_write("conv_err",  &CalcStatus::conv_err) 
         .def_read_write("sor_ratio", &CalcStatus::sor_ratio) 
-        .def_read_write("sor_err",   &CalcStasus::sor_err);
+        .def_read_write("sor_err",   &CalcStatus::sor_err);
     
     py::class_<InputData>(m, "InputData")
         .def(py::init<>())
