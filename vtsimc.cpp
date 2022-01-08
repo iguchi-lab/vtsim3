@@ -83,4 +83,7 @@ PYBIND11_MODULE(vtsimc, m) {
         .def_readwrite("tn_aircon_set", &InputData::tn_aircon_set)
         .def_readwrite("tn_solar_set",  &InputData::tn_solar_set)
         .def_readwrite("tn_ground_set", &InputData::tn_ground_set);
+    
+    py::class_<VTSim>(m, "VTSim")
+        .def(py::init<InputData inp>());
 }
