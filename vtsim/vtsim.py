@@ -122,14 +122,15 @@ def set_node_net(sn, **kwargs):
         t_flag = n['t_flag'] if 't_flag' in n else SN_NONE                                                  #計算フラグ
 
         calc.sn.append(vt.Node(sts.length, i, [v_flag, c_flag, t_flag]))
-        if 'p'     in n:    sn[i].p     = to_list_f(n['p'])                                                 #圧力、行列で設定可能
-        if 'c'     in n:    sn[i].c     = to_list_f(n['c'])
-        if 't'     in n:    sn[i].t     = to_list_f(n['t'])
-        if 'h_sr'  in n:    sn[i].h_sr  = to_list_f(n['h_sr'])
-        if 'h_inp' in n:    sn[i].h_inp = to_list_f(n['h_inp'])
-        if 'v'     in n:    sn[i].v     = to_list_f(n['v'])
-        if 'm'     in n:    sn[i].m     = to_list_f(n['m'])
-        if 'beta'  in n:    sn[i].beta  = to_list_f(n['beta'])
+        
+        if 'p'     in n:    calc.sn[i].p     = to_list_f(n['p'])                                            #圧力、行列で設定可能
+        if 'c'     in n:    calc.sn[i].c     = to_list_f(n['c'])                                            #濃度、行列で設定可能
+        if 't'     in n:    calc.sn[i].t     = to_list_f(n['t'])                                            #温度、行列で設定可能
+        if 'h_sr'  in n:    calc.sn[i].h_sr  = to_list_f(n['h_sr'])                                         #日射量、行列で設定可能
+        if 'h_inp' in n:    calc.sn[i].h_inp = to_list_f(n['h_inp'])                                        #発熱、行列で設定可能
+        if 'v'     in n:    calc.sn[i].v     = to_list_f(n['v'])                                            #気積、行列で設定可能
+        if 'm'     in n:    calc.sn[i].m     = to_list_f(n['m'])                                            #発生量、行列で設定可能
+        if 'beta'  in n:    calc.sn[i].beta  = to_list_f(n['beta'])                                         #濃度減少率、行列で設定可能
 
         """"
         nodes.append([v_flag, c_flag, t_flag])                                                              #計算フラグ
