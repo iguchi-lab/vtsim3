@@ -90,6 +90,7 @@ PYBIND11_MODULE(vtsimc, m) {
         .def("set_inp",         &VTSim::set_inp, "")
         .def("calc",            &VTSim::calc,    "")
         .def("result",          &VTSim::result,  "")
+        .def_readwrite("sts",   &VTSim::sts, "")
         .def_readwrite("sn",    &VTSim::sn, "")
         .def_readwrite("vn",    &VTSim::vn, "")
         .def_readwrite("tn",    &VTSim::tn, "");
