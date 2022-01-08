@@ -97,5 +97,16 @@ PYBIND11_MODULE(vtsimc, m) {
     
     py::class_<Node>(m, "Node")
         .def(py::init<long, int, tuple<int, int, int>>())
-        .def_readwrite("i", &Node::i, "");
+        .def_readwrite("i",     &Node::i, "")
+        .def_readwrite("s_i",   &Node::s_i, "")
+        .def_readwrite("flag",  &Node::flag, "")
+        .def_readwrite("p",     &Node::p, "")
+        .def_readwrite("c",     &Node::c, "")
+        .def_readwrite("t",     &Node::t, "")
+        .def_readwrite("m",     &Node::m, "")
+        .def_readwrite("h_sr",  &Node::h_sr, "")
+        .def_readwrite("h_inp", &Node::h_inp, "")
+        .def_readwrite("v",     &Node::v, "")
+        .def_readwrite("beta",  &Node::veta, "");
+
 }
