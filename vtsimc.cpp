@@ -88,6 +88,7 @@ PYBIND11_MODULE(vtsimc, m) {
         .def(py::init<>())
         .def("set_calc_status", &VTSim::set_calc_status, "")
         .def("set_inp",         &VTSim::set_inp,         "")
+        .def("sn_add",          &VTSim::sn_add,          "")
         .def("calc",            &VTSim::calc,            "")
         .def("result",          &VTSim::result,          "")
         .def_readwrite("sts",   &VTSim::sts,             "")
