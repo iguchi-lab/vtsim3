@@ -10,37 +10,15 @@ public:
     vector<double> eta;                                             //粉塵除去率
     vector<double> q_max, p_max, q1, p1;                            //送風ファンの風量・圧力
 
-    Vent_Net(long length, int i_, tuple<int, int, int, vector<double>, vector<double>> v_nets){
+    Vent_Net(long length, int i_, i1_, i2_, vn_type_, h1_, h2_){
         i       = i_;
-        forward_as_tuple(i1, i2, vn_type, h1, h2) = v_nets; 
+        i1      = i1_;
+        i2      = i2_;
+        vn_type = vn_type_;
+        h1      = h1_;
+        h2      = h2_; 
         qv.assign(length, 0.0);                                     //風量を0に初期化
         qt.assign(length, 0.0);                                     //熱量を0に初期化
-    }
-
-    void set_Simple(vector<double> alpha_, vector<double> area_){
-        alpha = alpha_;                                             //開口率
-        area  = area_;                                              //面積
-    }
-
-    void set_Gap(vector<double> a_, vector<double> n_){
-        a = a_;                                                     //隙間量
-        n = n_;                                                     //隙間特性値
-    }
-
-    void set_Fix(vector<double> vol_){                                             
-        qv = vol_;                                                  //風量固定値
-    }
-
-    void set_Fan(vector<double> q_max_, vector<double> p_max_, 
-                 vector<double> q1_,    vector<double> p1_){
-        q_max = q_max_;                                             //最大風量
-        p_max = p_max_;                                             //最大静圧
-        q1 = q1_;                                                   //中間の風量
-        p1 = p1_;                                                   //中間の静圧
-    }
-
-    void set_Eta(vector<double> eta_){
-        eta = eta_;
     }
 
     double get_qv(double dp, long ts){
