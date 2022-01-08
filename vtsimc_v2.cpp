@@ -28,7 +28,8 @@ void calc_01(void){
                          {2, alpha, area}}; 
     inp.vn_fix_set    = {{0, vol}};
 
-    VTSim calc(inp);
+    VTSim calc;
+    calc.set_inp(inp);
     calc.calc();
 }
 
@@ -80,7 +81,8 @@ void calc_02(void){
     inp.tn_aircon_set = {{2, ac_mode, t1}};
     inp.tn_solar_set  = {{3, ms}};
 
-    VTSim calc(inp);
+    VTSim calc;
+    calc.set_inp(inp);
     calc.calc();
 }
 
@@ -188,7 +190,8 @@ void calc_03(void){
                          {0.99999618, 0.99998474, 0.99993896, 0.99975593, 0.99902388, 0.99610162, 0.98449151, 0.93941063, 0.77880078, 0.36787944}, 
                          {-3.7393300e-08,  7.3357800e-07, -9.9402100e-06,  5.8429900e-04, 3.8443500e-04,  
                            6.1867900e-04,  2.7429050e-03,  8.7726000e-04,  1.1610039e-02,  1.5655690e-03}}};
-    VTSim calc(inp);
+    VTSim calc;
+    calc.set_inp(inp);
     calc.calc();
 }
 
@@ -307,7 +310,8 @@ void calc_04(void){
     }
     inp.t_nets.push_back({get_xyz(2, 1, 0), 47, TN_HEATER});
 
-    VTSim calc(inp);
+    VTSim calc;
+    calc.set_inp(inp);
     calc.calc();
 }
 
@@ -411,7 +415,8 @@ void calc_05(void){
                          {11, eta0},
                          {12, eta0},
                          {13, eta0}};
-    VTSim calc(inp);
+    VTSim calc;
+    calc.set_inp(inp);
     calc.calc();
 }
 
@@ -496,7 +501,8 @@ void calc_06(void){
     inp.tn_solar_set  = {{6, ms}};
     inp.tn_aircon_set = {{7, ac_mode, pre_tmp}};
 
-    VTSim calc(inp);
+    VTSim calc;
+    calc.set_inp(inp);
     calc.calc();
 
     tuple<vector<vector<double>>, vector<vector<double>>, vector<vector<double>>, 
