@@ -26,7 +26,7 @@ PYBIND11_MODULE(vtsimc, m) {
 
     m.attr("SOLVE_LU")   = SOLVE_LU;
     m.attr("SOLVE_SOR")  = SOLVE_SOR;
-/*
+
     m.attr("STEP_P")     = STEP_P;          //偏微分時の圧力変化
     m.attr("VENT_ERR")   = VENT_ERR;        //換気回路網の許容残差
     m.atrr("STEP_T")     = STEP_T;          //偏微分時の温度変化
@@ -34,7 +34,7 @@ PYBIND11_MODULE(vtsimc, m) {
     m.atrr("CONV_ERR")   = CONV_ERR;        //収束許容誤差
     m.atrr("SOR_RATIO")  = SOR_RATIO;       //SOR法の緩和係数
     m.atrr("SOR_ERR")    = SOR_ERR;         //SOR法の許容残差
-
+/*
     m.atrr("SN_NONE")    = SN_NONE;         //計算しない
     m.atrr("SN_CALC")    = SN_CALC;         //計算する
     m.atrr("SN_FIX")     = SN_FIX;          //固定値（計算には利用するが、更新しない）
