@@ -10,9 +10,9 @@ public:
     vector<double> v;                                       //気積     
     vector<double> beta;                                    //沈着率
 
-    Node(long length, int i_, tuple<int, int, int> SN_){
+    Node(long length, int i_, tuple<int, int, int> flag_){
         i = i_;
-        flag = SN_;
+        flag = flag_;
         p.assign(length, 0.0);
         c.assign(length, 0.0);
         t.assign(length, 20.0);
