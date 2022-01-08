@@ -26,34 +26,37 @@ PYBIND11_MODULE(vtsimc, m) {
 
     m.attr("SOLVE_LU")   = SOLVE_LU;
     m.attr("SOLVE_SOR")  = SOLVE_SOR;
+    
     m.attr("STEP_P")     = STEP_P;
     m.attr("VENT_ERR")   = VENT_ERR;
+    m.attr("STEP_T")     = STEP_T;
+    m.attr("THRM_ERR")   = THRM_ERR;
+    m.attr("CONV_ERR")   = CONV_ERR;
+    m.attr("SOR_RATIO")  = SOR_RATIO;
+    m.attr("SOR_ERR")    = SOR_ERR;
+
+    m.attr("SN_NONE")    = SN_NONE;
+    m.attr("SN_CALC")    = SN_CALC;
+    m.attr("SN_FIX")     = SN_FIX;
+    m.attr("SN_DLY")     = SN_DLY;
     
-    m.atrr("STEP_T")     = STEP_T;
-    /*
-    m.atrr("THRM_ERR")   = THRM_ERR;
-    m.atrr("CONV_ERR")   = CONV_ERR;
-    m.atrr("SOR_RATIO")  = SOR_RATIO;
-    m.atrr("SOR_ERR")    = SOR_ERR;
-    m.atrr("SN_NONE")    = SN_NONE;
-    m.atrr("SN_CALC")    = SN_CALC;
-    m.atrr("SN_FIX")     = SN_FIX;
-    m.atrr("SN_DLY")     = SN_DLY;
-    m.atrr("VN_SIMPLE")  = VN_SIMPLE;
-    m.atrr("VN_GAP")     = VN_GAP;
-    m.atrr("VN_FIX")     = VN_FIX;
-    m.atrr("VN_AIRCON")  = VN_AIRCON;
-    m.atrr("VN_FAN")     = VN_FAN;
-    m.atrr("TN_SIMPLE")  = TN_SIMPLE;
-    m.atrr("TN_AIRCON")  = TN_AIRCON;
-    m.atrr("TN_SOLAR")   = TN_SOLAR;
-    m.atrr("TN_GROUND")  = TN_GROUND;
-    m.atrr("TN_HEATER")  = TN_HEATER;
-    m.atrr("AC_AUTO")    = AC_AUTO;
-    m.atrr("AC_HEATING") = AC_HEATING;
-    m.atrr("AC_COOLING") = AC_COOLING;
-    m.atrr("AC_STOP")    = AC_STOP;
-    */
+    m.attr("VN_SIMPLE")  = VN_SIMPLE;
+    m.attr("VN_GAP")     = VN_GAP;
+    m.attr("VN_FIX")     = VN_FIX;
+    m.attr("VN_AIRCON")  = VN_AIRCON;
+    m.attr("VN_FAN")     = VN_FAN;
+    
+    m.attr("TN_SIMPLE")  = TN_SIMPLE;
+    m.attr("TN_AIRCON")  = TN_AIRCON;
+    m.attr("TN_SOLAR")   = TN_SOLAR;
+    m.attr("TN_GROUND")  = TN_GROUND;
+    m.attr("TN_HEATER")  = TN_HEATER;
+    
+    m.attr("AC_AUTO")    = AC_AUTO;
+    m.attr("AC_HEATING") = AC_HEATING;
+    m.attr("AC_COOLING") = AC_COOLING;
+    m.attr("AC_STOP")    = AC_STOP;
+
     py::class_<InputData>(m, "InputData")
         .def(py::init<>())
         .def_readwrite("sts",           &InputData::sts)
