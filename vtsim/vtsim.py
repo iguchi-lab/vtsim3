@@ -72,9 +72,9 @@ node = {}
 ###############################################################################
 
 def run_calc(ix, sn, **kwargs):                                                                            #はじめに呼び出される関数
-    inp, opt = make_inp(ix, sn, **kwargs)
     
-    calc.set_inp(inp)
+    set_calc_status(ix, **kwargs)
+    set_node_net(sn, **kwargs)
     
     print('Start vtsim calc.')
     s_time = time.time()
@@ -82,11 +82,11 @@ def run_calc(ix, sn, **kwargs):                                                 
     e_time = time.time() - s_time    
     print('Finish vtsim calc.')
     print("calc time = {0}".format(e_time * 1000) + "[ms]")
-
+    
+    opt = kwargs['output'] if 'output' in kwargs else OPT_GRAPH                                     #出力フラグ
     return output_calc(calc.result(), ix, opt)
 
-def make_inp(ix, sn, **kwargs):
-
+def set_calc_status(ix, **kwargs):
     sts.length = len(ix)
     sts.t_step = (ix[1] - ix[0]).seconds + (ix[1] - ix[0]).microseconds / 1000000                          #t_stepの読み込み    
 
@@ -101,9 +101,9 @@ def make_inp(ix, sn, **kwargs):
 
     calc.set_calc_status(sts)
 
+def set_node_net(sn, **kwargs):
     vn         = kwargs['vn']     if 'vn'  in kwargs else []                                               #vnの読み込み
     tn         = kwargs['tn']     if 'tn'  in kwargs else []                                               #tnの読み込み
-    opt        = kwargs['output'] if 'output' in kwargs else OPT_GRAPH                                     #出力フラグ                        
 
     nodes, v_nets, t_nets                                         = [], [], []
     sn_P_set, sn_C_set, sn_T_set, sn_h_sr_set, sn_h_inp_set       = [], [], [], [], []
@@ -174,8 +174,8 @@ def make_inp(ix, sn, **kwargs):
     inp.sn_v_set, inp.sn_capa_set, inp.sn_m_set, inp.sn_beta_set                      = sn_v_set, sn_capa_set, sn_m_set, sn_beta_set
     inp.vn_simple_set, inp.vn_gap_set, inp.vn_fix_set, inp.vn_fan_set, inp.vn_eta_set = vn_simple_set, vn_gap_set, vn_fix_set, vn_fan_set, vn_eta_set
     inp.tn_simple_set, inp.tn_aircon_set, inp.tn_solar_set, inp.tn_ground_set         = tn_simple_set, tn_aircon_set, tn_solar_set, tn_ground_set      
-    
-    return inp, opt
+
+    calc.set_inp(inp)
 
 def output_calc(res, ix, opt):
     print('Create pd.DataFrames')
