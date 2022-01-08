@@ -146,45 +146,45 @@ def set_node_net(sn, **kwargs):
         """
 
     for i, nt in enumerate(vn):                                                                             #vn
-        h1 = to_list_f(nt['h1'], sts.length) if 'h1' in nt else to_list_f(0.0, sts.length)                  #高さ1、行列設定不可
-        h2 = to_list_f(nt['h2'], sts.length) if 'h2' in nt else to_list_f(0.0, sts.length)                  #高さ2、行列設定不可
+        h1 = to_list_f(nt['h1'], sts.length) if 'h1' in nt else to_list_f(0.0)                  #高さ1、行列設定不可
+        h2 = to_list_f(nt['h2'], sts.length) if 'h2' in nt else to_list_f(0.0)                  #高さ2、行列設定不可
         
         vn_type = nt['type'] if 'type' in nt else VN_FIX
         v_nets.append([node[nt['name1']], node[nt['name2']], vn_type, h1, h2])                           #ネットワークタイプ＆高さ
         
-        if vn_type == VN_FIX:           vn_fix_set.append([i, to_list_f(nt['vol'],   sts.length)])       #風量固定値、行列で設定可能
-        if vn_type == VN_AIRCON:        vn_fix_set.append([i, to_list_f(nt['vol'],   sts.length)])       #風量固定値、行列で設定可能
-        if vn_type == VN_SIMPLE:     vn_simple_set.append([i, to_list_f(nt['alpha'], sts.length), 
-                                                              to_list_f(nt['area'],  sts.length)])       #単純開口、行列で設定可能
-        if vn_type == VN_GAP:           vn_gap_set.append([i, to_list_f(nt['a'],     sts.length), 
-                                                              to_list_f(nt['n'],     sts.length)])       #隙間、行列で設定可能
-        if vn_type == VN_FAN:           vn_fan_set.append([i, to_list_f(nt['qmax'],  sts.length), 
-                                                              to_list_f(nt['pmax'],  sts.length), 
-                                                              to_list_f(nt['q1'],    sts.length),
-                                                              to_list_f(nt['p1'],    sts.length)])       #ファン、行列で設定可能
+        if vn_type == VN_FIX:           vn_fix_set.append([i, to_list_f(nt['vol'])])       #風量固定値、行列で設定可能
+        if vn_type == VN_AIRCON:        vn_fix_set.append([i, to_list_f(nt['vol'])])       #風量固定値、行列で設定可能
+        if vn_type == VN_SIMPLE:     vn_simple_set.append([i, to_list_f(nt['alpha']), 
+                                                              to_list_f(nt['area'])])       #単純開口、行列で設定可能
+        if vn_type == VN_GAP:           vn_gap_set.append([i, to_list_f(nt['a']), 
+                                                              to_list_f(nt['n'])])       #隙間、行列で設定可能
+        if vn_type == VN_FAN:           vn_fan_set.append([i, to_list_f(nt['qmax']), 
+                                                              to_list_f(nt['pmax']), 
+                                                              to_list_f(nt['q1']),
+                                                              to_list_f(nt['p1'])])       #ファン、行列で設定可能
 
-        if 'eta' in nt:                    vn_eta_set.append([i, to_list_f(nt['eta'],   sts.length)])               
-        else:                              vn_eta_set.append([i, to_list_f(0.0,         sts.length)])       #粉じん除去率、行列で設定可能
+        if 'eta' in nt:                    vn_eta_set.append([i, to_list_f(nt['eta'])])               
+        else:                              vn_eta_set.append([i, to_list_f(0.0)])       #粉じん除去率、行列で設定可能
 
     for i, nt in enumerate(tn):                                                                             #tn
         tn_type = nt['type'] if 'type' in nt else TN_SIMPLE
         t_nets.append([node[nt['name1']], node[nt['name2']], tn_type])                                   #ネットワークタイプ
         
-        if tn_type == TN_SIMPLE:     tn_simple_set.append([i, to_list_f(nt['cdtc'],    sts.length)])     #コンダクタンス、行列設定可能
-        if tn_type == TN_AIRCON:     tn_aircon_set.append([i, to_list_i(nt['ac_mode'], sts.length), 
-                                                              to_list_f(nt['pre_tmp'], sts.length)])     #エアコン運転モード
-        if tn_type == TN_SOLAR:       tn_solar_set.append([i, to_list_f(nt['ms'],      sts.length)])     #日射熱取得率、行列設定可能
-        if tn_type == TN_GROUND:     tn_ground_set.append([i, to_list_f(nt['area'],    sts.length),           
-                                                              to_list_f(nt['rg'],      sts.length), 
+        if tn_type == TN_SIMPLE:     tn_simple_set.append([i, to_list_f(nt['cdtc'])])     #コンダクタンス、行列設定可能
+        if tn_type == TN_AIRCON:     tn_aircon_set.append([i, to_list_i(nt['ac_mode']), 
+                                                              to_list_f(nt['pre_tmp'])])     #エアコン運転モード
+        if tn_type == TN_SOLAR:       tn_solar_set.append([i, to_list_f(nt['ms'])])     #日射熱取得率、行列設定可能
+        if tn_type == TN_GROUND:     tn_ground_set.append([i, to_list_f(nt['area']),           
+                                                              to_list_f(nt['rg']), 
                                                               nt['phi_0'], nt['cof_r'], nt['cof_phi']])  #地盤熱応答、行列設定不可（面積と断熱性能はOK）
         
     for i, n in enumerate([n for n in sn if 'capa' in n]):                                                  #熱容量の設定のあるノード
         node[d_node(n['name'])] = len(sn) + i                                                               #時間遅れノードのノード番号
         nodes.append([SN_NONE, SN_NONE, SN_DLY])                                                            #計算フラグ
         sn_capa_set.append([node[d_node(n['name'])], node[n['name']]])                                      #熱容量の設定
-        if 't' in n:    sn_T_set.append([len(sn) + i, to_list_f(n['t'], sts.length)])
+        if 't' in n:    sn_T_set.append([len(sn) + i, to_list_f(n['t'])])
         t_nets.append([node[n['name']], node[d_node(n['name'])], TN_SIMPLE])                                #ネットワークの設定
-        tn_simple_set.append([len(tn) + i, to_list_f(n['capa'] / sts.t_step, sts.length)])                  #コンダクタンス（熱容量）
+        tn_simple_set.append([len(tn) + i, to_list_f(n['capa'] / sts.t_step)])                  #コンダクタンス（熱容量）
 
     inp.nodes, inp.v_nets, inp.t_nets                                                 = nodes, v_nets, t_nets
     inp.sn_P_set, inp.sn_C_set, inp.sn_T_set, inp.sn_h_sr_set, inp.sn_h_inp_set       = sn_P_set, sn_C_set, sn_T_set, sn_h_sr_set, sn_h_inp_set  
