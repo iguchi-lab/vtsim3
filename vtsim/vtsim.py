@@ -47,6 +47,7 @@ AC_STOP:    int = vt.AC_STOP
 node = lambda name, v_flag, c_flag, t_flag: {'name':   name, 
                                              'v_flag': v_flag, 'c_flag': c_flag, 't_flag': t_flag}      #ノードの設定
 net  = lambda name1, name2, tp:             {'name1': name1, 'name2': name2, 'type': tp}                #ネットワークの設定
+
 r_df = lambda fn:                           pd.read_csv(fn, index_col = 0, 
                                                         parse_dates = True).fillna(method = 'bfill')\
                                                                            .fillna(method = 'ffill')     #csvファイルの読み込み
@@ -157,7 +158,8 @@ def set_vent_net(**kwargs):
             calc.vn[i].pmax = to_list_f(nt['pmax']) 
             calc.vn[i].q1   = to_list_f(nt['q1'])
             calc.vn[i].p1   = to_list_f(nt['p1'])                                       #ファン、行列で設定可能
-
+        if vn_type == VN_AIRCON:
+            calc.i_vn_ac = i
         calc.sn[i].eta = to_list_f(nt['eta']) if 'eta' in nt else to_list_f(0.0)        #粉じん除去率、行列で設定可能
 
 def set_thrm_net(**kwargs):
@@ -172,6 +174,7 @@ def set_thrm_net(**kwargs):
         if tn_type == TN_AIRCON:     
             calc.tn[i].ac_mode = to_list_i(nt['ac_mode']) 
             calc.tn[i].pre_tmp = to_list_f(nt['pre_tmp'])                               #エアコン運転モード
+            calc.tn_ac = i
         if tn_type == TN_SOLAR:       
             calc.tn[i].ms      = to_list_f(nt['ms'])                                    #日射熱取得率、行列設定可能
         if tn_type == TN_GROUND:     
@@ -179,9 +182,9 @@ def set_thrm_net(**kwargs):
             calc.tn[i].rg      = to_list_f(nt['rg']) 
             calc.tn[i].phi_0   = nt['phi_0']
             calc.tn[i].cof_r   = nt['cof_r']
-            calc.tn[i].cof_phi = nt['cof_phi']])                                        #地盤熱応答、行列設定不可（面積と断熱性能はOK）
+            calc.tn[i].cof_phi = nt['cof_phi']                                          #地盤熱応答、行列設定不可（面積と断熱性能はOK）
 
-def add_capa(sn, **kwargs):  
+def add_capa(sn):  
     for i, n in enumerate([n for n in calc.sn if 'capa' in n]):                         #熱容量の設定のあるノード
         node[d_node(n['name'])] = len(sn) + i                                           #時間遅れノードのノード番号
         
