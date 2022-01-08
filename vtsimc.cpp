@@ -34,11 +34,12 @@ PYBIND11_MODULE(vtsimc, m) {
     m.atrr("CONV_ERR")   = CONV_ERR;        //収束許容誤差
     m.atrr("SOR_RATIO")  = SOR_RATIO;       //SOR法の緩和係数
     m.atrr("SOR_ERR")    = SOR_ERR;         //SOR法の許容残差
-
+/*
     m.atrr("SN_NONE")    = SN_NONE;         //計算しない
     m.atrr("SN_CALC")    = SN_CALC;         //計算する
     m.atrr("SN_FIX")     = SN_FIX;          //固定値（計算には利用するが、更新しない）
     m.atrr("SN_DLY")     = SN_DLY;          //遅延（熱容量計算用）
+*/
 /*
     m.atrr("VN_SIMPLE")  = VN_SIMPLE;       //換気回路網：単純開口
     m.atrr("VN_GAP")     = VN_GAP;          //換気回路網：隙間
