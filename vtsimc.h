@@ -49,30 +49,36 @@ public:
                  double, vector<double>, vector<double>>>                                  tn_ground_set = {};
 };
 
+class CalcStatus{
+public:
+    long length      = 0;
+    double t_step    = 0;
+    int solve        = SOLVE_LU;
+    double step_p    = STEP_P, 
+           vent_err  = VENT_ERR, 
+           step_t    = STEP_T, 
+           thrm_err  = THRM_ERR, 
+           conv_err  = CONV_ERR, 
+           sor_ratio = SOR_RATIO, 
+           sor_err   = SOR_ERR;
+}
+
 class VTSim{
 public:
     vector<Node> sn;                                        //ノード
     vector<Vent_Net> vn;                                    //換気回路網
     vector<Thrm_Net> tn;                                    //熱回路網
-    int solve;
-    double step_p, vent_err, step_t, thrm_err, conv_err, sor_ratio, sor_err;
-    long length;
+    Calc_Status sts;
+
     vector<int> v_idc, c_idc, t_idc, ac_idc;
     double t_step;
     int i_vn_ac = -1, i_tn_ac = -1;
 
-    void set_inp(InputData inp){
-        solve     = inp.sts[0];                                                
-        step_p    = inp.sts[1];                                                //偏微分時の圧力変化
-        vent_err  = inp.sts[2];                                                //換気回路網の許容残差
-        step_t    = inp.sts[3];                                                //偏微分時の温度変化
-        thrm_err  = inp.sts[4];                                                //熱回路網の許容残差
-        conv_err  = inp.sts[5];                                                //収束の許容誤差 
-        sor_ratio = inp.sts[6];                                                //SOR法の許容残差
-        sor_err   = inp.sts[7];                                                //SOR法の緩和係数
+    void set_calc_status(CalcStatus sts_){
+        sts         = sts_
+    }
 
-        length    = inp.length;
-        t_step    = inp.t_step;
+    void set_inp(InputData inp){
 
         for(int i = 0; i < inp.nodes.size(); i++){    
             sn.push_back(Node(length, i, inp.nodes[i]));
@@ -154,21 +160,21 @@ public:
             qvsum_0 = qv_sum(p0, ts);
             
             for(int j = 0; j < v_idc.size(); j++){
-                p0[v_idc[j]] += step_p;                                                                                 //ダミー圧力の作成       
+                p0[v_idc[j]] += sts.step_p;                                                                             //ダミー圧力の作成       
                 qvsum_d = qv_sum(p0, ts);                                                                               //ダ三－風量収支の計算
-                for(int i = 0; i < v_idc.size(); i++)  a[i][j] = (qvsum_d[v_idc[i]] - qvsum_0[v_idc[i]]) / step_p;      //aの計算
+                for(int i = 0; i < v_idc.size(); i++)  a[i][j] = (qvsum_d[v_idc[i]] - qvsum_0[v_idc[i]]) / sts.step_p;  //aの計算
                 b[j] = -qvsum_0[v_idc[j]];
-                p0[v_idc[j]] -= step_p; 
+                p0[v_idc[j]] -= sts.step_p; 
             }
 
-            if(solve == SOLVE_SOR)  dp = SOR(a, b, v_idc.size(), sor_ratio, sor_err);                                   //SOR法による計算     
+            if(sts.solve == SOLVE_SOR)  dp = SOR(a, b, v_idc.size(), sts.sor_ratio, sts.sor_err);                                   //SOR法による計算     
             else                    dp = LU(a, b, v_idc.size()); 
 
             for(int i = 0; i < v_idc.size(); i++)   p0[v_idc[i]] += dp[i];                                              //圧力の更新
             qvsum_0 = qv_sum(p0, ts);    
             for(int i = 0; i < v_idc.size(); i++)   rmse += pow(qvsum_0[v_idc[i]], 2.0) / v_idc.size();
 
-        }while(vent_err < sqrt(rmse));
+        }while(sts.vent_err < sqrt(rmse));
         for(int i = 0; i < v_idc.size(); i++)   sn[v_idc[i]].p[ts] = p0[v_idc[i]];                                      //圧力の計算                                                               
         return rmse;
     }
@@ -233,14 +239,14 @@ public:
             qtsum_0 = qt_sum(t0, ts);                                                                                   //熱量収支の計算
 
             for(int j = 0; j < t_idc.size(); j++){
-                t0[t_idc[j]] += step_t;                                                                                 //ダミー温度の作成
+                t0[t_idc[j]] += sts.step_t;                                                                             //ダミー温度の作成
                 qtsum_d = qt_sum(t0, ts);                                                                               //ダミー熱量の計算
-                for(int i = 0; i < t_idc.size(); i++)  a[i][j] = (qtsum_d[t_idc[i]] - qtsum_0[t_idc[i]]) / step_t;      //aの計算
+                for(int i = 0; i < t_idc.size(); i++)  a[i][j] = (qtsum_d[t_idc[i]] - qtsum_0[t_idc[i]]) / sts.step_t;  //aの計算
                 b[j] = -qtsum_0[t_idc[j]];                                                                              //bの計算
-                t0[t_idc[j]] -= step_t;                                                                                 //ダミー温度を戻す
+                t0[t_idc[j]] -= sts.step_t;                                                                             //ダミー温度を戻す
             }
 
-            if(solve == SOLVE_SOR)  dt = SOR(a, b, t_idc.size(), sor_ratio, sor_err);                                   //SOR法による計算
+            if(sts.solve == SOLVE_SOR)  dt = SOR(a, b, t_idc.size(), sts.sor_ratio, sts.sor_err);                                   //SOR法による計算
             else                    dt = LU(a, b, t_idc.size());
 
             for(int i = 0; i < t_idc.size(); i++)   t0[t_idc[i]] += dt[i];                                              //温度の更新
@@ -249,7 +255,7 @@ public:
 
             if(i_tn_ac != -1){
                 switch(tn[i_tn_ac].ac_mode[ts]){
-                    case AC_AUTO:       if(abs(t0[tn[i_tn_ac].i1] - tn[i_tn_ac].pre_tmp[ts]) > thrm_err){
+                    case AC_AUTO:       if(abs(t0[tn[i_tn_ac].i1] - tn[i_tn_ac].pre_tmp[ts]) > sts.thrm_err){
                                             t0[tn[i_tn_ac].i1] = tn[i_tn_ac].pre_tmp[ts];
                                             rmse = 999;
                                         }
@@ -267,7 +273,7 @@ public:
                 }       
             }
             itr++;
-        }while(thrm_err < sqrt(rmse));
+        }while(sts.thrm_err < sqrt(rmse));
 
         for(int i = 0; i < t_idc.size(); i++)   sn[t_idc[i]].t[ts] = t0[t_idc[i]];                                          //温度の計算
         return rmse;
@@ -339,7 +345,7 @@ public:
                 }
                 LOG_PRINT("ts = " << ts << " delta_p = " << delta_p << ", delta_t = " << delta_t << " >>>>> " << sqrt((delta_p + delta_t)/ 2) << endl);
 
-            }while(conv_err < sqrt((delta_p + delta_t)/ 2));
+            }while(sts.conv_err < sqrt((delta_p + delta_t)/ 2));
             
             if(v_idc.size() > 0){
                 calc_qv(ts, ts);
