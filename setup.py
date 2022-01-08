@@ -97,6 +97,16 @@ class BuildExt(build_ext):
         build_ext.build_extensions(self)
 
 
+setup(
+   name='vtsim',
+   version='1.0',
+   description='ventilation and thrmal simulation',
+   author='IGUCHI Masato',
+   author_email='iguchi.masato@gmail.com',
+   packages=['vtsim']
+)
+
+""""
 setup( 
     name='vtsim',
     version=__version__,
@@ -105,10 +115,11 @@ setup(
     url='',
     description='sample',
     long_description='',
-    #ext_modules=ext_modules,
-    #install_requires=['pybind11>=2.4'],
-    #setup_requires=['pybind11>=2.4'],
-    #cmdclass={'build_ext': BuildExt},
-    #zip_safe=False,
+    ext_modules=ext_modules,
+    install_requires=['pybind11>=2.4'],
+    setup_requires=['pybind11>=2.4'],
+    cmdclass={'build_ext': BuildExt},
+    zip_safe=False,
     packages=['vtsim']
 )
+"""
