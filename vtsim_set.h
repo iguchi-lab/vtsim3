@@ -54,7 +54,7 @@ double get_rho(double sita){return 353.25 / (sita + 273.15);}
 #define AC_OFF      0
 #define AC_ON       1
 
-#define AC_AUTO     0
-#define AC_HEATING  1
-#define AC_COOLING  2
-#define AC_STOP     3
+#define AC_AUTO     0           //エアコン：自動
+#define AC_HEATING  1           //エアコン：暖房
+#define AC_COOLING  2           //エアコン：冷房
+#define AC_STOP     3           //エアコン：停止
