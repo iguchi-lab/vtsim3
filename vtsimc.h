@@ -69,40 +69,10 @@ public:
     vector<Thrm_Net> tn;                                    //熱回路網
 
     vector<int> v_idc, c_idc, t_idc, ac_idc;
-    double t_step;
+
     int i_vn_ac = -1, i_tn_ac = -1;
 
-    void set_calc_status(CalcStatus sts_){
-        sts = sts_;
-    }
-
     void set_inp(InputData inp){
-
-        for(int i = 0; i < inp.nodes.size(); i++){    
-            sn.push_back(Node(sts.length, i, inp.nodes[i]));
-            if(get<0>(sn[i].flag) == SN_CALC)     v_idc.push_back(sn[i].i);
-            if(get<1>(sn[i].flag) == SN_CALC)     c_idc.push_back(sn[i].i);
-            if(get<2>(sn[i].flag) == SN_CALC)     t_idc.push_back(sn[i].i);
-        }
-
-        for(int i = 0; i < inp.v_nets.size(); i++)    vn.push_back(Vent_Net(sts.length, i, inp.v_nets[i]));
-        for(int i = 0; i < inp.t_nets.size(); i++)    tn.push_back(Thrm_Net(sts.length, i, inp.t_nets[i]));
-
-        for(tuple<int, vector<double>> tp: inp.sn_P_set)                                                    sn[get<0>(tp)].set_P(get<1>(tp));
-        for(tuple<int, vector<double>> tp: inp.sn_C_set)                                                    sn[get<0>(tp)].set_C(get<1>(tp));
-        for(tuple<int, vector<double>> tp: inp.sn_T_set)                                                    sn[get<0>(tp)].set_T(get<1>(tp));
-        for(tuple<int, vector<double>> tp: inp.sn_h_sr_set)                                                 sn[get<0>(tp)].set_h_sr(get<1>(tp));
-        for(tuple<int, vector<double>> tp: inp.sn_h_inp_set)                                                sn[get<0>(tp)].set_h_inp(get<1>(tp));
-        for(tuple<int, vector<double>> tp: inp.sn_v_set)                                                    sn[get<0>(tp)].set_v(get<1>(tp));
-        for(tuple<int, int> tp: inp.sn_capa_set)                                                            sn[get<0>(tp)].set_capa(get<1>(tp));
-        for(tuple<int, vector<double>> tp: inp.sn_m_set)                                                    sn[get<0>(tp)].set_m(get<1>(tp));
-        for(tuple<int, vector<double>> tp: inp.sn_beta_set)                                                 sn[get<0>(tp)].set_beta(get<1>(tp));
-        
-        for(tuple<int, vector<double>, vector<double>> tp: inp.vn_simple_set)                               vn[get<0>(tp)].set_Simple(get<1>(tp), get<2>(tp));
-        for(tuple<int, vector<double>, vector<double>> tp: inp.vn_gap_set)                                  vn[get<0>(tp)].set_Gap(get<1>(tp), get<2>(tp));
-        for(tuple<int, vector<double>> tp: inp.vn_fix_set)                                                  vn[get<0>(tp)].set_Fix(get<1>(tp));
-        for(tuple<int, vector<double>, vector<double>, vector<double>, vector<double>> tp: inp.vn_fan_set)  vn[get<0>(tp)].set_Fan(get<1>(tp), get<2>(tp), get<3>(tp), get<4>(tp));
-        for(tuple<int, vector<double>> tp: inp.vn_eta_set)                                                  vn[get<0>(tp)].set_Eta(get<1>(tp));
 
         for(tuple<int, vector<double>> tp: inp.tn_simple_set)                                               tn[get<0>(tp)].set_Simple(get<1>(tp));
         for(tuple<int, vector<int>, vector<double>> tp: inp.tn_aircon_set)                                  tn[get<0>(tp)].set_Aircon(get<1>(tp), get<2>(tp));
@@ -116,6 +86,14 @@ public:
 
     void sn_add(int i, tuple<int, int, int> flag){
         sn.push_back(Node(sts.length, i, flag));
+    }
+
+    void vn_add(int i, int i1, int i2, int vn_type, vector<double> h1, vector<double> h2){
+        vn.push_back(Vent_Net(sts.length, i, i1, i2, vn_type, h1, h2));
+    }
+
+    void tn_add(int i, int i1, int i2, int tn_type){
+        tn.push_back(Vent_Net(sts.length, i, i1, i2, tn_type));
     }
 
     void change_sn_t_flag(int i, int flag_){
@@ -371,14 +349,14 @@ public:
 
             if(c_idc.size() > 0){
                 for(int i = 0; i < c_idc.size(); i++){
-                    sn[c_idc[i]].c[ts] =  sn[c_idc[i]].c[ts - 1] * exp(-sn[c_idc[i]].beta[ts] * t_step);
-                    sn[c_idc[i]].c[ts] += sn[c_idc[i]].m[ts] / (sn[c_idc[i]].beta[ts] * sn[c_idc[i]].v[ts]) * (1 - exp(-sn[c_idc[i]].beta[ts] * t_step));
+                    sn[c_idc[i]].c[ts] =  sn[c_idc[i]].c[ts - 1] * exp(-sn[c_idc[i]].beta[ts] * sts.t_step);
+                    sn[c_idc[i]].c[ts] += sn[c_idc[i]].m[ts] / (sn[c_idc[i]].beta[ts] * sn[c_idc[i]].v[ts]) * (1 - exp(-sn[c_idc[i]].beta[ts] * sts.t_step));
                 }
                 for(int i = 0; i < vn.size(); i++){
                     if(vn[i].qv[ts] > 0 && get<1>(sn[vn[i].i2].flag) == SN_CALC)    
-                        sn[vn[i].i2].c[ts] += vn[i].qv[ts] * (sn[vn[i].i1].c[ts] * (1 - vn[i].eta[ts]) - sn[vn[i].i2].c[ts]) * t_step / sn[vn[i].i2].v[ts];
+                        sn[vn[i].i2].c[ts] += vn[i].qv[ts] * (sn[vn[i].i1].c[ts] * (1 - vn[i].eta[ts]) - sn[vn[i].i2].c[ts]) * sts.t_step / sn[vn[i].i2].v[ts];
                     if(vn[i].qv[ts] < 0 && get<1>(sn[vn[i].i1].flag) == SN_CALC)    
-                        sn[vn[i].i1].c[ts] += vn[i].qv[ts] * (sn[vn[i].i2].c[ts] * (1 - vn[i].eta[ts]) - sn[vn[i].i1].c[ts]) * t_step / sn[vn[i].i1].v[ts];
+                        sn[vn[i].i1].c[ts] += vn[i].qv[ts] * (sn[vn[i].i2].c[ts] * (1 - vn[i].eta[ts]) - sn[vn[i].i1].c[ts]) * sts.t_step / sn[vn[i].i1].v[ts];
                 }
                 for(int i = 0; i < sn.size(); i++)    LOG_CONTENTS("c" << sn[i].i << ": " << sn[i].c[ts] << "num/L, ");
                 LOG_CONTENTS(endl << endl);
