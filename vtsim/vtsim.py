@@ -63,7 +63,7 @@ to_list_i = lambda v, length:           [int(v)]   * length if type(v) != list a
 
 calc = vt.VTSim()
 sts  = vt.CalcStatus()
-inp = vt.InputData()
+inp  = vt.InputData()
 
 node = {}
 
@@ -99,11 +99,12 @@ def make_inp(ix, sn, **kwargs):
     if 'sor_ratio' in kwargs:   sts.sor_ratio = kwargs['sor_ratio']
     if 'sor_err'   in kwargs:   sts.sor_err   = kwargs['sor_err']
 
+    calc.set_calc_status(sts)
+
     vn         = kwargs['vn']     if 'vn'  in kwargs else []                                               #vnの読み込み
     tn         = kwargs['tn']     if 'tn'  in kwargs else []                                               #tnの読み込み
     opt        = kwargs['output'] if 'output' in kwargs else OPT_GRAPH                                     #出力フラグ                        
 
-    
     nodes, v_nets, t_nets                                         = [], [], []
     sn_P_set, sn_C_set, sn_T_set, sn_h_sr_set, sn_h_inp_set       = [], [], [], [], []
     sn_v_set, sn_capa_set, sn_m_set, sn_beta_set                  = [], [], [], []
