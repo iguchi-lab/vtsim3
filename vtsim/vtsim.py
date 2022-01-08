@@ -73,25 +73,26 @@ to_list_f = lambda v, length:           [float(v)] * length if type(v) != list a
 to_list_i = lambda v, length:           [int(v)]   * length if type(v) != list and type(v) != np.ndarray else v  
 
 inp = vt.InputData()
+calc = vt.VTSim()
+node = {}
 
 ###############################################################################
 # define function
 ###############################################################################
 
 def run_calc(ix, sn, **kwargs):                                                                            #はじめに呼び出される関数
-    inp, node, opt = make_inp(ix, sn, **kwargs)
+    inp, opt = make_inp(ix, sn, **kwargs)
     
-    calc = vt.VTSim(inp)
+    calc.set_inp(inp)
     
     print('Start vtsim calc.')
     s_time = time.time()
     calc.calc()
-    #res = vt.calc(inp)
     e_time = time.time() - s_time    
     print('Finish vtsim calc.')
     print("calc time = {0}".format(e_time * 1000) + "[ms]")
-    res = calc.result()
-    return output_calc(node, res, ix, opt)
+
+    return output_calc(calc.result(), ix, opt)
 
 def make_inp(ix, sn, **kwargs):
     inp.sts    = kwargs['sts']    if 'sts' in kwargs else [SOLVE_LU, STEP_P, VENT_ERR, 
@@ -104,7 +105,7 @@ def make_inp(ix, sn, **kwargs):
     tn         = kwargs['tn']     if 'tn'  in kwargs else []                                               #tnの読み込み
     opt        = kwargs['output'] if 'output' in kwargs else OPT_GRAPH                                     #出力フラグ                        
 
-    node = {}
+    
     nodes, v_nets, t_nets                                         = [], [], []
     sn_P_set, sn_C_set, sn_T_set, sn_h_sr_set, sn_h_inp_set       = [], [], [], [], []
     sn_v_set, sn_capa_set, sn_m_set, sn_beta_set                  = [], [], [], []
