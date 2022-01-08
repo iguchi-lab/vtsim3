@@ -84,7 +84,7 @@ public:
             if(get<1>(sn[i].flag) == SN_CALC)     c_idc.push_back(sn[i].i);
             if(get<2>(sn[i].flag) == SN_CALC)     t_idc.push_back(sn[i].i);
         }
-        
+
         for(int i = 0; i < inp.v_nets.size(); i++)    vn.push_back(Vent_Net(sts.length, i, inp.v_nets[i]));
         for(int i = 0; i < inp.t_nets.size(); i++)    tn.push_back(Thrm_Net(sts.length, i, inp.t_nets[i]));
 
@@ -112,6 +112,10 @@ public:
     
         for(int i = 0; i < vn.size(); i++)  if(vn[i].vn_type == VN_AIRCON)  i_vn_ac = i;
         for(int i = 0; i < tn.size(); i++)  if(tn[i].tn_type == TN_AIRCON)  i_tn_ac = i;                    //当面、airconは1台のみ
+    }
+
+    void sn_add(int i, vector<tuple<int, int, int>> flag){
+        sn.push_back(Node(sts.length, i, flag));
     }
 
     void change_sn_t_flag(int i, int flag_){
