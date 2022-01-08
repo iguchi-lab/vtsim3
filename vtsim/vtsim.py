@@ -110,8 +110,8 @@ def set_node_net(sn, **kwargs):
     tn_simple_set, tn_aircon_set, tn_solar_set, tn_ground_set     = [], [], [], []
 
     #リストかnp.ndarrayでなければlength分の長さのリストにする
-    to_list_f = lambda v    [float(v)] * sts.length if type(v) != list and type(v) != np.ndarray else v  
-    to_list_i = lambda v    [int(v)]   * sts.length if type(v) != list and type(v) != np.ndarray else v  
+    to_list_f = lambda v:   [float(v)] * sts.length if type(v) != list and type(v) != np.ndarray else v  
+    to_list_i = lambda v:   [int(v)]   * sts.length if type(v) != list and type(v) != np.ndarray else v  
 
 
     for i, n in enumerate(sn):                                                                              #sn
@@ -143,7 +143,7 @@ def set_node_net(sn, **kwargs):
         if 'm' in n:            sn_m_set.append([i, to_list_f(n['m'],     sts.length)])                     #発生量、行列で設定可能
         if 'beta' in n:      sn_beta_set.append([i, to_list_f(n['beta'],  sts.length)])                     #濃度減少率、行列で設定可能
         """
-        
+
     for i, nt in enumerate(vn):                                                                             #vn
         h1 = to_list_f(nt['h1'], sts.length) if 'h1' in nt else to_list_f(0.0, sts.length)                  #高さ1、行列設定不可
         h2 = to_list_f(nt['h2'], sts.length) if 'h2' in nt else to_list_f(0.0, sts.length)                  #高さ2、行列設定不可
