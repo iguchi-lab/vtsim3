@@ -84,7 +84,7 @@ public:
             if(get<1>(sn[i].flag) == SN_CALC)     c_idc.push_back(sn[i].i);
             if(get<2>(sn[i].flag) == SN_CALC)     t_idc.push_back(sn[i].i);
         }
-
+        
         for(int i = 0; i < inp.v_nets.size(); i++)    vn.push_back(Vent_Net(sts.length, i, inp.v_nets[i]));
         for(int i = 0; i < inp.t_nets.size(); i++)    tn.push_back(Thrm_Net(sts.length, i, inp.t_nets[i]));
 
