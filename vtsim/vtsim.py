@@ -14,9 +14,42 @@ import vtsimc as vt
 ###############################################################################
 # define const
 ###############################################################################
-OPT_DF:    int = 0              #DataFrameを出力
-OPT_CSV:   int = 1              #上記に加え、csvファイルを出力
-OPT_GRAPH: int = 2              #上記に加えグラフを描画
+OPT_DF:    int  = 0              #DataFrameを出力
+OPT_CSV:   int  = 1              #上記に加え、csvファイルを出力
+OPT_GRAPH: int  = 2              #上記に加えグラフを描画
+
+SOLVE_LU: int   = vt.SOLVE_LU
+SOLVE_SOR: int  = vt.SOLVE_SOR
+    
+STEP_P: int     = vt.STEP_P
+VENT_ERR: int   = vt.VENT_ERR
+STEP_T: int     = vt.STEP_T
+THRM_ERR: int   = vt.THRM_ERR
+CONV_ERR: int   = vt.CONV_ERR
+SOR_RATIO: int  = vt.SOR_RATIO
+SOR_ERR: int    = vt.SOR_ERR
+
+SN_NONE: int    = vt.SN_NONE
+SN_CALC: int    = vt.SN_CALC
+SN_FIX: int     = vt.SN_FIX
+SN_DLY: int     = vt.SN_DLY
+    
+VN_SIMPLE: int  = vt.VN_SIMPLE
+VN_GAP: int     = vt.VN_GAP
+VN_FIX: int     = vt.VN_FIX
+VN_AIRCON: int  = vt.VN_AIRCON
+VN_FAN: int     = vt.VN_FAN
+    
+TN_SIMPLE: int  = vt.TN_SIMPLE
+TN_AIRCON: int  = vt.TN_AIRCON
+TN_SOLAR: int   = vt.TN_SOLAR
+TN_GROUND: int  = vt.TN_GROUND
+TN_HEATER: int  = vt.TN_HEATER
+    
+AC_AUTO: int    = vt.AC_AUTO
+AC_HEATING: int = vt.AC_HEATING
+AC_COOLING: int = vt.AC_COOLING
+AC_STOP: int    = vt.AC_STOP
 
 ###############################################################################
 # define lambda
@@ -52,7 +85,7 @@ def run_calc(ix, sn, **kwargs):                                                 
     res = vt.calc(inp)
     e_time = time.time() - s_time    
     print('Finish vtsim calc.')
-    print("calc time = {0}".format(e_time * 1000) + "[ms]")
+    print("calc time = {0}".format(e_time * 1000) + "[ms]: int =
 
     return output_calc(node, res, ix, opt)
 
