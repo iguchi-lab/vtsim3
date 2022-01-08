@@ -23,7 +23,7 @@ tuple<vector<vector<double>>, vector<vector<double>>, vector<vector<double>>,
 
 PYBIND11_MODULE(vtsimc, m) {
     m.def("calc", &calc, "");
-
+/*
     m.attr("SOLVE_LU")   = SOLVE_LU;
     m.attr("SOLVE_SOR")  = SOLVE_SOR;
 
@@ -56,7 +56,7 @@ PYBIND11_MODULE(vtsimc, m) {
     m.atrr("AC_HEATING") = AC_HEATING;      //エアコン：暖房
     m.atrr("AC_COOLING") = AC_COOLING;      //エアコン：冷房
     m.atrr("AC_STOP")    = AC_STOP;         //エアコン：停止
-
+*/
     py::class_<InputData>(m, "InputData")
         .def(py::init<>())
         .def_readwrite("sts",           &InputData::sts)
