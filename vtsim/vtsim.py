@@ -87,7 +87,7 @@ def run_calc(ix, sn, **kwargs):                                                 
 
     print('Start vtsim calc.')
     s_time = time.time()
-    #calc.calc()
+    calc.calc()
     e_time = time.time() - s_time    
     print('Finish vtsim calc.')
     print("calc time = {0}".format(e_time * 1000) + "[ms]")
