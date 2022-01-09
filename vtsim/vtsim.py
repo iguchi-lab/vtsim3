@@ -85,9 +85,6 @@ def run_calc(ix, sn, **kwargs):                                                 
     print('Set ThrmNet')
     set_thrm_net(**kwargs)
 
-    print('Add Capacity')
-    add_capa(sn)
-
     print('Start vtsim calc.')
     s_time = time.time()
     calc.calc()
@@ -169,6 +166,7 @@ def set_vent_net(**kwargs):
         calc.vn[i].eta = to_list_f(nt['eta']) if 'eta' in nt else to_list_f(0.0)        #粉じん除去率、行列で設定可能
 
 def set_thrm_net(**kwargs):
+
     tn         = kwargs['tn']     if 'tn'  in kwargs else []                            #tnの読み込み
     for i, nt in enumerate(tn):                                                         #tn
         tn_type = nt['type'] if 'type' in nt else TN_SIMPLE
@@ -190,15 +188,16 @@ def set_thrm_net(**kwargs):
             calc.tn[i].cof_r   = nt['cof_r']
             calc.tn[i].cof_phi = nt['cof_phi']                                          #地盤熱応答、行列設定不可（面積と断熱性能はOK）
 
-def add_capa(sn):  
+    print('Add Capacity')
+
     for i, n in enumerate([n for n in sn if 'capa' in n]):                                      #熱容量の設定のあるノード
         node[d_node(n['name'])] = len(sn) + i                                                   #時間遅れノードのノード番号
         
         calc.sn_add(len(calc.sn) + i, [SN_NONE, SN_NONE, SN_DLY])                               #計算フラグ
         if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
-        calc.tn_add(len(calc.tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)      #熱容量の設定
-        calc.tn[len(calc.tn) + i].cdtc = to_list_f(n['capa'] / sts.t_step)                      #コンダクタンス（熱容量）            
+        calc.tn_add(len(tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)      #熱容量の設定
+        calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / sts.t_step)                      #コンダクタンス（熱容量）            
 
 def output_calc(res, ix, opt):
     print('Create pd.DataFrames')
