@@ -15,7 +15,6 @@ using namespace::std;
 namespace py = pybind11;
 
 PYBIND11_MODULE(vtsimc, m){
-/*
     m.attr("SN_NONE")    = SN_NONE;
     m.attr("SN_CALC")    = SN_CALC;
     m.attr("SN_FIX")     = SN_FIX;
@@ -114,5 +113,5 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("ac_mode",   &Thrm_Net::ac_mode,   "")
         .def_readwrite("pre_tmp",   &Thrm_Net::pre_tmp,   "")
         .def_readwrite("p1",        &Thrm_Net::p1,        "");        
-*/
+
 }
