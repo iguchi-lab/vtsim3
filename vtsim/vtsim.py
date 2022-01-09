@@ -83,7 +83,7 @@ def run_calc(ix, sn, **kwargs):                                                 
     set_vent_net(**kwargs)
     
     print('Set ThrmNet')
-    set_thrm_net(**kwargs)
+    set_thrm_net(sn, **kwargs)
 
     print('Start vtsim calc.')
     s_time = time.time()
@@ -165,7 +165,7 @@ def set_vent_net(**kwargs):
             calc.i_vn_ac = i
         calc.vn[i].eta = to_list_f(nt['eta']) if 'eta' in nt else to_list_f(0.0)        #粉じん除去率、行列で設定可能
 
-def set_thrm_net(**kwargs):
+def set_thrm_net(sn, **kwargs):
 
     tn         = kwargs['tn']     if 'tn'  in kwargs else []                            #tnの読み込み
     for i, nt in enumerate(tn):                                                         #tn
