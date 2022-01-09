@@ -53,7 +53,7 @@ public:
     }
 
     void tn_add(int i, int i1, int i2, int tn_type){
-        tn.push_back(Vent_Net(sts.length, i, i1, i2, tn_type));
+        tn.push_back(Thrm_Net(sts.length, i, i1, i2, tn_type));
     }
 
     void change_sn_t_flag(int i, int flag_){
