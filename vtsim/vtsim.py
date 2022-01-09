@@ -193,8 +193,8 @@ def set_thrm_net(sn, **kwargs):
         print(i, len(sn) + i, len(tn) + i)
         node[d_node(n['name'])] = len(sn) + i                                               #時間遅れノードのノード番号
         
-        #calc.sn_add(len(sn) + i, [SN_NONE, SN_NONE, SN_DLY])                                #計算フラグ
-        if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
+        calc.sn_add(len(sn) + i, [SN_NONE, SN_NONE, SN_DLY])                                #計算フラグ
+        #if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
         calc.tn_add(len(tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)       #熱容量の設定
         calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / sts.t_step)                       #コンダクタンス（熱容量）            
