@@ -73,16 +73,16 @@ node = {}
 
 def run_calc(ix, sn, **kwargs):                                                     #はじめに呼び出される関数
     
-    print('Set calc status')
+    print('Set calc status.')
     set_calc_status(ix, **kwargs)
     
-    print('Set SimNode')
+    print('Set SimNode.')
     set_sim_node(sn, **kwargs)
     
-    print('Set VentNet')
+    print('Set VentNet.')
     set_vent_net(**kwargs)
     
-    print('Set ThrmNet')
+    print('Set ThrmNet.')
     set_thrm_net(sn, **kwargs)
 
     print('Start vtsim calc.')
@@ -140,7 +140,7 @@ def set_sim_node(sn, **kwargs):
     calc.t_idc = t_idc  
 
 def set_vent_net(**kwargs):
-    vn         = kwargs['vn']     if 'vn'  in kwargs else []                        #vnの読み込み
+    vn = kwargs['vn']     if 'vn'  in kwargs else []                                #vnの読み込み
     for i, nt in enumerate(vn):
         h1 = to_list_f(nt['h1']) if 'h1' in nt else to_list_f(0.0)                  #高さ1、行列設定不可
         h2 = to_list_f(nt['h2']) if 'h2' in nt else to_list_f(0.0)                  #高さ2、行列設定不可
@@ -167,7 +167,7 @@ def set_vent_net(**kwargs):
 
 def set_thrm_net(sn, **kwargs):
 
-    tn         = kwargs['tn']     if 'tn'  in kwargs else []                            #tnの読み込み
+    tn = kwargs['tn']     if 'tn'  in kwargs else []                                    #tnの読み込み
     for i, nt in enumerate(tn):                                                         #tn
         tn_type = nt['type'] if 'type' in nt else TN_SIMPLE
 
