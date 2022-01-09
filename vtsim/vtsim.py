@@ -87,7 +87,7 @@ def run_calc(ix, sn, **kwargs):                                                 
 
     print('Start vtsim calc.')
     s_time = time.time()
-    calc.calc()
+    #calc.calc()
     e_time = time.time() - s_time    
     print('Finish vtsim calc.')
     print("calc time = {0}".format(e_time * 1000) + "[ms]")
@@ -195,7 +195,7 @@ def set_thrm_net(sn, **kwargs):
         calc.sn_add(len(sn) + i, [SN_NONE, SN_NONE, SN_DLY])                                #計算フラグ
         if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
-        calc.tn_add(len(tn) + i, node[node(n['name'])], d_node[n['name']], TN_SIMPLE)       #熱容量の設定
+        calc.tn_add(len(tn) + i, node[n['name']], node[d_node(n['name'])], TN_SIMPLE)       #熱容量の設定
         calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / sts.t_step)                       #コンダクタンス（熱容量）            
 
 def output_calc(res, ix, opt):
