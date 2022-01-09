@@ -15,6 +15,7 @@ using namespace::std;
 namespace py = pybind11;
 
 PYBIND11_MODULE(vtsimc, m){
+/*
     m.attr("SN_NONE")    = SN_NONE;
     m.attr("SN_CALC")    = SN_CALC;
     m.attr("SN_FIX")     = SN_FIX;
@@ -36,7 +37,7 @@ PYBIND11_MODULE(vtsimc, m){
     m.attr("AC_HEATING") = AC_HEATING;
     m.attr("AC_COOLING") = AC_COOLING;
     m.attr("AC_STOP")    = AC_STOP;
-/*    
+    
     py::class_<CalcStatus>(m, "CalcStatus")
         .def(py::init<>())
         .def_readwrite("length",    &CalcStatus::length)
