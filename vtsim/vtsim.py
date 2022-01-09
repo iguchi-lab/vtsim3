@@ -185,7 +185,7 @@ def set_thrm_net(**kwargs):
 
 def add_capa(sn):  
     for i, n in enumerate([n for n in calc.sn if 'capa' in n]):                         #熱容量の設定のあるノード
-        node[d_node(n['name'])] = len(sn) + i                                           #時間遅れノードのノード番号
+        node[d_node(n['name'])] = len(calc.sn) + i                                      #時間遅れノードのノード番号
         
         calc.sn_add(len(calc.sn) + i, [SN_NONE, SN_NONE, SN_DLY])                       #計算フラグ
         if 't' in n:    sn[len(calc.sn) + i] = to_list_f(n['t'])
