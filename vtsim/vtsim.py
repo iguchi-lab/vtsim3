@@ -79,7 +79,7 @@ def run_calc(ix, sn, **kwargs):                                                 
     set_vent_net(**kwargs)
     set_thrm_net(**kwargs)
 
-    add_capa(sn, **kwargs)
+    add_capa(sn)
 
     print('Start vtsim calc.')
     s_time = time.time()
