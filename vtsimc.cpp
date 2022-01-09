@@ -52,13 +52,18 @@ PYBIND11_MODULE(vtsimc, m){
     
     py::class_<VTSim>(m, "VTSim")
         .def(py::init<>())
-        .def("sn_add",          &VTSim::sn_add,  "")
-        .def("calc",            &VTSim::calc,    "")
-        .def("result",          &VTSim::result,  "")
-        .def_readwrite("sts",   &VTSim::sts,     "")
-        .def_readwrite("sn",    &VTSim::sn,      "")
-        .def_readwrite("vn",    &VTSim::vn,      "")
-        .def_readwrite("tn",    &VTSim::tn,      "");
+        .def("sn_add",            &VTSim::sn_add,  "")
+        .def("calc",              &VTSim::calc,    "")
+        .def("result",            &VTSim::result,  "")
+        .def_readwrite("sts",     &VTSim::sts,     "")
+        .def_readwrite("sn",      &VTSim::sn,      "")
+        .def_readwrite("vn",      &VTSim::vn,      "")
+        .def_readwrite("tn",      &VTSim::tn,      "")
+        .def_readwrite("v_idc",   &VTSim::v_idc,   "")
+        .def_readwrite("c_idc",   &VTSim::c_idc,   "")
+        .def_readwrite("t_idc",   &VTSim::t_idc,   "")
+        .def_readwrite("i_vn_ac", &VTSim::i_vn_ac, "")
+        .def_readwrite("i_tn_ac", &VTSim::i_tn_ac, "");
 
     py::class_<Node>(m, "Node")
         .def(py::init<long, int, tuple<int, int, int>>())
