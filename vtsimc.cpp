@@ -15,6 +15,7 @@ using namespace::std;
 namespace py = pybind11;
 
 PYBIND11_MODULE(vtsimc, m){
+/* 
     m.def("calc", &calc, "");
 
     m.attr("SN_NONE")    = SN_NONE;
@@ -51,7 +52,7 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("conv_err",  &CalcStatus::conv_err) 
         .def_readwrite("sor_ratio", &CalcStatus::sor_ratio) 
         .def_readwrite("sor_err",   &CalcStatus::sor_err);
-/*    
+    
     py::class_<VTSim>(m, "VTSim")
         .def(py::init<>())
         .def("sn_add",          &VTSim::sn_add,  "")
