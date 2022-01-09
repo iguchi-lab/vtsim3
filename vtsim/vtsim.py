@@ -194,19 +194,19 @@ def add_capa(sn):
     for i, n in enumerate([n for n in sn if 'capa' in n]):                              #熱容量の設定のあるノード
         node[d_node(n['name'])] = len(sn) + i                                           #時間遅れノードのノード番号
         
-        calc.sn_add(len(calc.sn) + i, [SN_NONE, SN_NONE, SN_DLY])                       #計算フラグ
-        if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
+        #calc.sn_add(len(calc.sn) + i, [SN_NONE, SN_NONE, SN_DLY])                       #計算フラグ
+        #if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
-        calc.tn_add(len(calc.tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)    #熱容量の設定
-        calc.tn[i].cdtc = to_list_f(n['capa'] / sts.t_step)                             #コンダクタンス（熱容量）            
+        #calc.tn_add(len(calc.tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)    #熱容量の設定
+        #calc.tn[i].cdtc = to_list_f(n['capa'] / sts.t_step)                             #コンダクタンス（熱容量）            
 
 def output_calc(res, ix, opt):
     print('Create pd.DataFrames')
 
     node_swap = {v: k for k, v in node.items()}
-    n_columns = [node_swap[i] for i in range(len(inp.nodes))]                                                                           #出力用カラムの作成（ノード）
-    v_columns = [str(i) + " " + node_swap[inp.v_nets[i][0]] + "->" + node_swap[inp.v_nets[i][1]] for i in range(len(inp.v_nets))]       #出力用カラムの作成（換気回路網）
-    t_columns = [str(i) + " " + node_swap[inp.t_nets[i][0]] + "->" + node_swap[inp.t_nets[i][1]] for i in range(len(inp.t_nets))]       #出力用カラムの作成（熱回路網）
+    n_columns = [node_swap[i] for i in range(len(calc.sn))]                                                                    #出力用カラムの作成（ノード）
+    v_columns = [str(i) + " " + node_swap[calc.vn[i].i1] + "->" + node_swap[calc.vn[i].i2] for i in range(len(calc.vn))]       #出力用カラムの作成（換気回路網）
+    t_columns = [str(i) + " " + node_swap[calc.tn[i].i1] + "->" + node_swap[calc.tn[i].i2] for i in range(len(calc.tn))]       #出力用カラムの作成（熱回路網）
     
     dat_list  = [{'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'vent_p.csv',   'title': '圧力',  'unit': '[Pa]'},
                  {'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'vent_c.csv',   'title': '濃度',  'unit': '[個/L]'},
