@@ -8,15 +8,18 @@ public:
     vector<double>      ms;                                                                 //日射取得率
     vector<double>      area, rg;                                                           //面積、表面熱抵抗
     double              phi_0;                                                              //応答係数                                                        
-    vector<double>      cof_r, cof_phi, t_dash_gs_(10, 0.0);
+    vector<double>      cof_r, cof_phi, t_dash_gs;
     vector<double>      qt;                                                                 //熱流
     vector<int>         aircon_on, ac_mode;                                                 //エアコンのON/OFF、エアコン運転モード
     vector<double>      pre_tmp;                                                            //エアコン設定温度
 
-    Thrm_Net(long length, int i_, tuple<int, int, int> t_nets){
-        i = i_;
-        tie(i1, i2, tn_type) = t_nets;
+    Thrm_Net(long length, int i_, int i1_ , int i2_, int tn_type_){
+        i       = i_;
+        i1      = i1_;
+        i2      = i2_;
+        tn_type = tn_type_;
         qt.assign(length, 0.0);
+        t_dash_gs.assign(10, 0.0);
         aircon_on.assign(length, 0);                                                        //熱量を0に初期化        
     }              
 
