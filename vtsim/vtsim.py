@@ -73,12 +73,19 @@ node = {}
 
 def run_calc(ix, sn, **kwargs):                                                     #はじめに呼び出される関数
     
+    print('Set calc status')
     set_calc_status(ix, **kwargs)
     
+    print('Set SimNode')
     set_sim_node(sn, **kwargs)
+    
+    print('Set VentNet')
     set_vent_net(**kwargs)
+    
+    print('Set ThrmNet')
     set_thrm_net(**kwargs)
 
+    print('Add Capacity')
     add_capa(sn)
 
     print('Start vtsim calc.')
