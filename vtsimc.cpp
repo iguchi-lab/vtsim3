@@ -99,7 +99,7 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("i",         &Thrm_Net::i,         "")
         .def_readwrite("i1",        &Thrm_Net::i1,        "")
         .def_readwrite("i2",        &Thrm_Net::i2,        "")
-        .def_readwrite("tn_type",   &Thrm_Net::vn_type,   "")
+        .def_readwrite("tn_type",   &Thrm_Net::tn_type,   "")
         .def_readwrite("cdtc",      &Thrm_Net::cdtc,      "")
         .def_readwrite("ms",        &Thrm_Net::ms,        "")
         .def_readwrite("area",      &Thrm_Net::area,      "")
@@ -111,7 +111,6 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("qt",        &Thrm_Net::qt,        "")
         .def_readwrite("aircon_on", &Thrm_Net::aircon_on, "")
         .def_readwrite("ac_mode",   &Thrm_Net::ac_mode,   "")
-        .def_readwrite("pre_tmp",   &Thrm_Net::pre_tmp,   "")
-        .def_readwrite("p1",        &Thrm_Net::p1,        "");        
+        .def_readwrite("pre_tmp",   &Thrm_Net::pre_tmp,   "");        
 
 }
