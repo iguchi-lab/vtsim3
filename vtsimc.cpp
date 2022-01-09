@@ -90,7 +90,7 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("qt",      &Vent_Net::qt,      "")
         .def_readwrite("eta",     &Vent_Net::eta,     "")
         .def_readwrite("q_max",   &Vent_Net::q_max,   "")
-        .def_readwrite("p_max",   &Vent_Net::pmax,    "")
+        .def_readwrite("p_max",   &Vent_Net::p_max,   "")
         .def_readwrite("q1",      &Vent_Net::q1,      "")
         .def_readwrite("p1",      &Vent_Net::p1,      "");
 /*
