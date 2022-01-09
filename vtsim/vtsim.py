@@ -193,6 +193,8 @@ def set_thrm_net(sn, **kwargs):
         node[d_node(n['name'])] = len(sn) + i                                               #時間遅れノードのノード番号
         
         calc.sn_add(len(sn) + i, [SN_NONE, SN_NONE, SN_DLY])                                #計算フラグ
+        calc.sn[len(sn) + i].s_i = i
+
         if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
         calc.tn_add(len(tn) + i, node[n['name']], node[d_node(n['name'])], TN_SIMPLE)       #熱容量の設定
