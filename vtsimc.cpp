@@ -14,17 +14,9 @@
 using namespace::std;
 namespace py = pybind11;
 
-tuple<vector<vector<double>>, vector<vector<double>>, vector<vector<double>>, 
-      vector<vector<double>>, vector<vector<double>>, vector<vector<double>>> calc(InputData inp){
-    VTSim calc;
-    calc.set_inp(inp);
-    calc.calc();
-    return calc.result();
-}
-
-PYBIND11_MODULE(vtsimc, m) {
+PYBIND11_MODULE(vtsimc, m){
     m.def("calc", &calc, "");
-
+    t
     m.attr("SN_NONE")    = SN_NONE;
     m.attr("SN_CALC")    = SN_CALC;
     m.attr("SN_FIX")     = SN_FIX;
@@ -60,40 +52,16 @@ PYBIND11_MODULE(vtsimc, m) {
         .def_readwrite("sor_ratio", &CalcStatus::sor_ratio) 
         .def_readwrite("sor_err",   &CalcStatus::sor_err);
     
-    py::class_<InputData>(m, "InputData")
-        .def(py::init<>())
-        .def_readwrite("nodes",         &InputData::nodes)
-        .def_readwrite("v_nets",        &InputData::v_nets)
-        .def_readwrite("t_nets",        &InputData::t_nets)
-        .def_readwrite("sn_P_set",      &InputData::sn_P_set)
-        .def_readwrite("sn_C_set",      &InputData::sn_C_set)
-        .def_readwrite("sn_T_set",      &InputData::sn_T_set)
-        .def_readwrite("sn_h_sr_set",   &InputData::sn_h_sr_set)
-        .def_readwrite("sn_h_inp_set",  &InputData::sn_h_inp_set)
-        .def_readwrite("sn_v_set",      &InputData::sn_v_set)
-        .def_readwrite("sn_capa_set",   &InputData::sn_capa_set)
-        .def_readwrite("sn_m_set",      &InputData::sn_m_set)
-        .def_readwrite("sn_beta_set",   &InputData::sn_beta_set)
-        .def_readwrite("vn_simple_set", &InputData::vn_simple_set)
-        .def_readwrite("vn_gap_set",    &InputData::vn_gap_set)
-        .def_readwrite("vn_fix_set",    &InputData::vn_fix_set)
-        .def_readwrite("vn_fan_set",    &InputData::vn_fan_set)
-        .def_readwrite("vn_eta_set",    &InputData::vn_eta_set)
-        .def_readwrite("tn_simple_set", &InputData::tn_simple_set)
-        .def_readwrite("tn_aircon_set", &InputData::tn_aircon_set)
-        .def_readwrite("tn_solar_set",  &InputData::tn_solar_set)
-        .def_readwrite("tn_ground_set", &InputData::tn_ground_set);
-
     py::class_<VTSim>(m, "VTSim")
         .def(py::init<>())
-        .def("set_inp",         &VTSim::set_inp,         "")
-        .def("sn_add",          &VTSim::sn_add,          "")
-        .def("calc",            &VTSim::calc,            "")
-        .def("result",          &VTSim::result,          "")
-        .def_readwrite("sts",   &VTSim::sts,             "")
-        .def_readwrite("sn",    &VTSim::sn,              "")
-        .def_readwrite("vn",    &VTSim::vn,              "")
-        .def_readwrite("tn",    &VTSim::tn,              "");
+        .def("sn_add",          &VTSim::sn_add,  "")
+
+        .def("calc",            &VTSim::calc,    "")
+        .def("result",          &VTSim::result,  "")
+        .def_readwrite("sts",   &VTSim::sts,     "")
+        .def_readwrite("sn",    &VTSim::sn,      "")
+        .def_readwrite("vn",    &VTSim::vn,      "")
+        .def_readwrite("tn",    &VTSim::tn,      "");
     
     py::class_<Node>(m, "Node")
         .def(py::init<long, int, tuple<int, int, int>>())
@@ -108,5 +76,45 @@ PYBIND11_MODULE(vtsimc, m) {
         .def_readwrite("h_inp", &Node::h_inp, "")
         .def_readwrite("v",     &Node::v,     "")
         .def_readwrite("beta",  &Node::beta,  "");
+
+    py::class_<Vent_Net>(m. "Vent_Net")
+        .def(py::init<long, int, int, int, int, vector<double>, vector<double>>())
+        .def_readwrite("i",       &Vent_Net::i, "")
+        .def_readwrite("i1",      &Vent_Net::i1, "")
+        .def_readwrite("i2",      &Vent_Net::i2, "")
+        .def_readwrite("vn_type", &Vent_Net::vn_type, "")
+        .def_readwrite("h1",      &Vent_Net::h1, "")
+        .def_readwrite("h2",      &Vent_Net::h2, "")
+        .def_readwrite("alpha",   &Vent_Net::alpha, "")
+        .def_readwrite("area",    &Vent_Net::area, "")
+        .def_readwrite("a",       &Vent_Net::a, "")
+        .def_readwrite("n",       &Vent_Net::n, "")
+        .def_readwrite("qv",      &Vent_Net::qv, "")
+        .def_readwrite("qt",      &Vent_Net::qt, "")
+        .def_readwrite("eta",     &Vent_Net::eta, "")
+        .def_readwrite("q_max",   &Vent_Net::q_max, "")
+        .def_readwrite("p_max",   &Vent_Net::pmax, "")
+        .def_readwrite("q1",      &Vent_Net::q1, "")
+        .def_readwrite("p1",      &Vent_Net::p1, "");
+
+    py::class_<Thrm_Net>(m, "Thrm_Net")
+        .def(py::init<long, int, int, int, int>())
+        .def_readwrite("i",         &Thrm_Net::i,         "")
+        .def_readwrite("i1",        &Thrm_Net::i1,        "")
+        .def_readwrite("i2",        &Thrm_Net::i2,        "")
+        .def_readwrite("tn_type",   &Thrm_Net::vn_type,   "")
+        .def_readwrite("cdtc",      &Thrm_Net::cdtc,      "")
+        .def_readwrite("ms",        &Thrm_Net::ms,        "")
+        .def_readwrite("area",      &Thrm_Net::area,      "")
+        .def_readwrite("rg",        &Thrm_Net::rg,        "")
+        .def_readwrite("phi_0",     &Thrm_Net::phi_0,     "")
+        .def_readwrite("cof_r",     &Thrm_Net::cof_r,     "")
+        .def_readwrite("cof_phi",   &Thrm_Net::cof_phi,   "")
+        .def_readwrite("t_dash_gs", &Thrm_Net::t_dash_gs, "")
+        .def_readwrite("qt",        &Thrm_Net::qt,        "")
+        .def_readwrite("aircon_on", &Thrm_Net::aircon_on, "")
+        .def_readwrite("ac_mode",   &Thrm_Net::ac_mode,   "")
+        .def_readwrite("pre_tmp",   &Thrm_Net::pre_tmp,   "")
+        .def_readwrite("p1",        &Thrm_Net::p1,        "");        
 
 }
