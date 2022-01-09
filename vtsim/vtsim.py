@@ -64,7 +64,6 @@ to_list_i = lambda v:   [int(v)]   * sts.length if type(v) != list and type(v) !
 
 calc = vt.VTSim()
 sts  = vt.CalcStatus()
-inp  = vt.InputData()
 
 node = {}
 
