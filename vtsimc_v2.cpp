@@ -243,7 +243,6 @@ void calc_04(void){
         }
     }
 
-
     inp.nodes.push_back({SN_NONE, SN_NONE, SN_FIX});
     inp.sn_T_set.push_back({45, To});
     inp.nodes.push_back({SN_NONE, SN_NONE, SN_FIX});
