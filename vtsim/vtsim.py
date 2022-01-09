@@ -159,7 +159,7 @@ def set_vent_net(**kwargs):
             calc.vn[i].p1   = to_list_f(nt['p1'])                                       #ファン、行列で設定可能
         if vn_type == VN_AIRCON:
             calc.i_vn_ac = i
-        calc.sn[i].eta = to_list_f(nt['eta']) if 'eta' in nt else to_list_f(0.0)        #粉じん除去率、行列で設定可能
+        calc.vn[i].eta = to_list_f(nt['eta']) if 'eta' in nt else to_list_f(0.0)        #粉じん除去率、行列で設定可能
 
 def set_thrm_net(**kwargs):
     tn         = kwargs['tn']     if 'tn'  in kwargs else []                            #tnの読み込み
