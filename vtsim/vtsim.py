@@ -184,7 +184,7 @@ def set_thrm_net(**kwargs):
             calc.tn[i].cof_phi = nt['cof_phi']                                          #地盤熱応答、行列設定不可（面積と断熱性能はOK）
 
 def add_capa(sn):  
-    for i, n in enumerate([n for n in calc.sn if 'capa' in n]):                         #熱容量の設定のあるノード
+    for i, n in enumerate([n for n in sn if 'capa' in n]):                              #熱容量の設定のあるノード
         node[d_node(n['name'])] = len(calc.sn) + i                                      #時間遅れノードのノード番号
         
         calc.sn_add(len(calc.sn) + i, [SN_NONE, SN_NONE, SN_DLY])                       #計算フラグ
