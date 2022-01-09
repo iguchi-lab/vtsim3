@@ -100,7 +100,7 @@ def set_calc_status(ix, **kwargs):
     sts.t_step = (ix[1] - ix[0]).seconds + (ix[1] - ix[0]).microseconds / 1000000   #t_stepの読み込み    
 
     if 'solve'     in kwargs:   sts.solve     = kwargs['solve']
-    if 'step_p'    in kwargs:   sts.step_pe   = kwargs['step_p']
+    if 'step_p'    in kwargs:   sts.step_p    = kwargs['step_p']
     if 'vent_err'  in kwargs:   sts.vent_err  = kwargs['vent_err']
     if 'step_t'    in kwargs:   sts.step_t    = kwargs['step_t']
     if 'thrm_err'  in kwargs:   sts.thrm_err  = kwargs['thrm_err']
