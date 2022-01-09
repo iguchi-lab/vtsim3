@@ -19,7 +19,7 @@ PYBIND11_MODULE(vtsimc, m){
     m.attr("SN_CALC")    = SN_CALC;
     m.attr("SN_FIX")     = SN_FIX;
     m.attr("SN_DLY")     = SN_DLY;
-    
+/*    
     m.attr("VN_SIMPLE")  = VN_SIMPLE;
     m.attr("VN_GAP")     = VN_GAP;
     m.attr("VN_FIX")     = VN_FIX;
@@ -36,7 +36,7 @@ PYBIND11_MODULE(vtsimc, m){
     m.attr("AC_HEATING") = AC_HEATING;
     m.attr("AC_COOLING") = AC_COOLING;
     m.attr("AC_STOP")    = AC_STOP;
-/*    
+    
     py::class_<CalcStatus>(m, "CalcStatus")
         .def(py::init<>())
         .def_readwrite("length",    &CalcStatus::length)
