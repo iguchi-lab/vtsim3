@@ -196,8 +196,8 @@ def set_thrm_net(sn, **kwargs):
         #calc.sn_add(len(sn) + i, [SN_NONE, SN_NONE, SN_DLY])                                #計算フラグ
         #if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
-        #calc.tn_add(len(tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)       #熱容量の設定
-        #calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / sts.t_step)                       #コンダクタンス（熱容量）            
+        calc.tn_add(len(tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)       #熱容量の設定
+        calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / sts.t_step)                       #コンダクタンス（熱容量）            
 
 def output_calc(res, ix, opt):
     print('Create pd.DataFrames')
