@@ -188,7 +188,7 @@ def add_capa(sn):
         node[d_node(n['name'])] = len(calc.sn) + i                                      #時間遅れノードのノード番号
         
         calc.sn_add(len(calc.sn) + i, [SN_NONE, SN_NONE, SN_DLY])                       #計算フラグ
-        if 't' in n:    sn[len(calc.sn) + i] = to_list_f(n['t'])
+        if 't' in n:    calc.sn[len(calc.sn) + i].t = to_list_f(n['t'])
 
         calc.tn_add(len(calc.tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)    #熱容量の設定
         calc.tn[i].cdtc = to_list_f(n['capa'] / sts.t_step)                             #コンダクタンス（熱容量）            
