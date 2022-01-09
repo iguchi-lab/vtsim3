@@ -73,8 +73,8 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("h_inp", &Node::h_inp, "")
         .def_readwrite("v",     &Node::v,     "")
         .def_readwrite("beta",  &Node::beta,  "");
-/*
-    py::class_<Vent_Net>(m. "Vent_Net")
+
+    py::class_<Vent_Net>(m, "Vent_Net")
         .def(py::init<long, int, int, int, int, vector<double>, vector<double>>())
         .def_readwrite("i",       &Vent_Net::i,       "")
         .def_readwrite("i1",      &Vent_Net::i1,      "")
@@ -93,7 +93,7 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("p_max",   &Vent_Net::pmax,    "")
         .def_readwrite("q1",      &Vent_Net::q1,      "")
         .def_readwrite("p1",      &Vent_Net::p1,      "");
-
+/*
     py::class_<Thrm_Net>(m, "Thrm_Net")
         .def(py::init<long, int, int, int, int>())
         .def_readwrite("i",         &Thrm_Net::i,         "")
