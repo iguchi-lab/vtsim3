@@ -173,7 +173,7 @@ def set_thrm_net(**kwargs):
         if tn_type == TN_AIRCON:     
             calc.tn[i].ac_mode = to_list_i(nt['ac_mode']) 
             calc.tn[i].pre_tmp = to_list_f(nt['pre_tmp'])                               #エアコン運転モード
-            calc.tn_ac = i
+            calc.i_tn_ac = i
         if tn_type == TN_SOLAR:       
             calc.tn[i].ms      = to_list_f(nt['ms'])                                    #日射熱取得率、行列設定可能
         if tn_type == TN_GROUND:     
