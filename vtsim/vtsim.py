@@ -142,13 +142,13 @@ def set_vent_net(**kwargs):
         h2 = to_list_f(nt['h2']) if 'h2' in nt else to_list_f(0.0)                  #高さ2、行列設定不可
         vn_type = nt['type'] if 'type' in nt else VN_FIX
 
-        calc.vn_add(i, nt['i1'], nt['i2'], vn_type, h1, h2)
+        calc.vn_add(i, node[nt['name1']], node[nt['name2']], vn_type, h1, h2)
         
         if (vn_type == VN_FIX) or (vn_type == VN_AIRCON):       
             calc.vn[i].qv = to_list_f(nt['vol'])                                       #風量固定値、行列で設定可能
         if vn_type == VN_SIMPLE:    
             calc.vn[i].alpha = to_list_f(nt['alpha'])
-            calc.vn[i].are   = to_list_f(nt['area'])                                     #単純開口、行列で設定可能
+            calc.vn[i].area  = to_list_f(nt['area'])                                     #単純開口、行列で設定可能
         if vn_type == VN_GAP:           
             calc.vn[i].a     = to_list_f(nt['a'])
             calc.vn[i].n     = to_list_f(nt['n'])                                        #隙間、行列で設定可能
@@ -166,7 +166,7 @@ def set_thrm_net(**kwargs):
     for i, nt in enumerate(tn):                                                         #tn
         tn_type = nt['type'] if 'type' in nt else TN_SIMPLE
 
-        calc.tn_add(i, nt['i1'], nt['i2'], tn_type)
+        calc.tn_add(i, node[nt['name1']], node[nt['name2']], tn_type)
         
         if tn_type == TN_SIMPLE:     
             calc.tn[i].cdtc = to_list_f(nt['cdtc'])                                     #コンダクタンス、行列設定可能
