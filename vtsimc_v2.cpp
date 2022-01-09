@@ -11,32 +11,35 @@ using namespace std;
 
 void calc_01(void){
     CalcStatus sts;
-    InputData inp;
     VTSim calc;
 
     sts.length = 2;
-    calc.set_calc_status(sts);
+    calc.sts = sts;
 
     vector<double> vol(sts.length, 100.0 / 3600.0),
                    alpha(sts.length, 0.6),
                    area(sts.length, 1.0),
                    h(sts.length, 0.0);
 
-    inp.nodes         = {{SN_FIX, SN_NONE, SN_NONE},
-                         {SN_CALC, SN_NONE, SN_NONE},
-                         {SN_CALC, SN_NONE, SN_NONE}};
-    inp.v_nets        = {{0, 1, VN_FIX,    h, h}, 
-                         {1, 2, VN_SIMPLE, h, h}, 
-                         {2, 0, VN_SIMPLE, h, h}};                                                          
-    inp.vn_simple_set = {{1, alpha, area},
-                         {2, alpha, area}}; 
-    inp.vn_fix_set    = {{0, vol}};
+    calc.sn_add(0, {SN_FIX, SN_NONE, SN_NONE});
+    calc.sn_add(1, {SN_CALC, SN_NONE, SN_NONE});
+    calc.sn_add(2, {SN_CALC, SN_NONE, SN_NONE});
 
-    
-    calc.set_inp(inp);
+    calc.vn_add(0, 0, 1, VN_FIX, h, h);
+    calc.vn_add(1, 1, 2, VN_SIMPLE, h, h);
+    calc.vn_add(2, 2, 0, VN_SIMPLE, h, h);
+
+    calc.vn[1].alpha = alpha;
+    calc.vn[1].area  = area;
+
+    calc.vn[2].alpha = alpha;
+    calc.vn[2].area  = area;
+
+    calc.vn[0].qv = vol;
+
     calc.calc();
 }
-
+/*
 void calc_02(void){
     CalcStatus sts;
     InputData inp;
@@ -538,10 +541,11 @@ void calc_06(void){
     }
 
 }
-
+*/
 int main(void){
     cout << endl << "calc 1" << endl;
     calc_01();
+    /*
     cout << endl << "calc 2" << endl;
     calc_02();
     cout << endl << "calc 3" << endl;
@@ -552,5 +556,6 @@ int main(void){
     calc_05();
     cout << endl << "calc 6" << endl;
     calc_06();
+    */
     return 0;
 }
