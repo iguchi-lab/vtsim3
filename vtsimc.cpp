@@ -16,7 +16,7 @@ namespace py = pybind11;
 
 PYBIND11_MODULE(vtsimc, m){
     m.def("calc", &calc, "");
-    t
+
     m.attr("SN_NONE")    = SN_NONE;
     m.attr("SN_CALC")    = SN_CALC;
     m.attr("SN_FIX")     = SN_FIX;
