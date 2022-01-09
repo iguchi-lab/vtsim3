@@ -190,7 +190,7 @@ def add_capa(sn):
         calc.sn_add(len(calc.sn) + i, [SN_NONE, SN_NONE, SN_DLY])                       #計算フラグ
         if 't' in n:    sn[len(calc.sn) + i] = to_list_f(n['t'])
 
-        calc.tn_add(len(calc.tn) + i, d_node(n['name']), node[n['name']], TN_SIMPLE)    #熱容量の設定
+        calc.tn_add(len(calc.tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)    #熱容量の設定
         calc.tn[i].cdtc = to_list_f(n['capa'] / sts.t_step)                             #コンダクタンス（熱容量）            
 
 def output_calc(res, ix, opt):
