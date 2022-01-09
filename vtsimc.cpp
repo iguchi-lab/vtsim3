@@ -93,7 +93,7 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("p_max",   &Vent_Net::p_max,   "")
         .def_readwrite("q1",      &Vent_Net::q1,      "")
         .def_readwrite("p1",      &Vent_Net::p1,      "");
-/*
+
     py::class_<Thrm_Net>(m, "Thrm_Net")
         .def(py::init<long, int, int, int, int>())
         .def_readwrite("i",         &Thrm_Net::i,         "")
@@ -113,5 +113,5 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("ac_mode",   &Thrm_Net::ac_mode,   "")
         .def_readwrite("pre_tmp",   &Thrm_Net::pre_tmp,   "")
         .def_readwrite("p1",        &Thrm_Net::p1,        "");        
-*/
+
 }
