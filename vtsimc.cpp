@@ -59,7 +59,7 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("sn",    &VTSim::sn,      "")
         .def_readwrite("vn",    &VTSim::vn,      "")
         .def_readwrite("tn",    &VTSim::tn,      "");
-/*    
+
     py::class_<Node>(m, "Node")
         .def(py::init<long, int, tuple<int, int, int>>())
         .def_readwrite("i",     &Node::i,     "")
@@ -73,7 +73,7 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("h_inp", &Node::h_inp, "")
         .def_readwrite("v",     &Node::v,     "")
         .def_readwrite("beta",  &Node::beta,  "");
-
+/*
     py::class_<Vent_Net>(m. "Vent_Net")
         .def(py::init<long, int, int, int, int, vector<double>, vector<double>>())
         .def_readwrite("i",       &Vent_Net::i,       "")
