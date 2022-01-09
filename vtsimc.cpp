@@ -51,11 +51,10 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("conv_err",  &CalcStatus::conv_err) 
         .def_readwrite("sor_ratio", &CalcStatus::sor_ratio) 
         .def_readwrite("sor_err",   &CalcStatus::sor_err);
-    
+/*    
     py::class_<VTSim>(m, "VTSim")
         .def(py::init<>())
         .def("sn_add",          &VTSim::sn_add,  "")
-
         .def("calc",            &VTSim::calc,    "")
         .def("result",          &VTSim::result,  "")
         .def_readwrite("sts",   &VTSim::sts,     "")
@@ -79,23 +78,23 @@ PYBIND11_MODULE(vtsimc, m){
 
     py::class_<Vent_Net>(m. "Vent_Net")
         .def(py::init<long, int, int, int, int, vector<double>, vector<double>>())
-        .def_readwrite("i",       &Vent_Net::i, "")
-        .def_readwrite("i1",      &Vent_Net::i1, "")
-        .def_readwrite("i2",      &Vent_Net::i2, "")
+        .def_readwrite("i",       &Vent_Net::i,       "")
+        .def_readwrite("i1",      &Vent_Net::i1,      "")
+        .def_readwrite("i2",      &Vent_Net::i2,      "")
         .def_readwrite("vn_type", &Vent_Net::vn_type, "")
-        .def_readwrite("h1",      &Vent_Net::h1, "")
-        .def_readwrite("h2",      &Vent_Net::h2, "")
-        .def_readwrite("alpha",   &Vent_Net::alpha, "")
-        .def_readwrite("area",    &Vent_Net::area, "")
-        .def_readwrite("a",       &Vent_Net::a, "")
-        .def_readwrite("n",       &Vent_Net::n, "")
-        .def_readwrite("qv",      &Vent_Net::qv, "")
-        .def_readwrite("qt",      &Vent_Net::qt, "")
-        .def_readwrite("eta",     &Vent_Net::eta, "")
-        .def_readwrite("q_max",   &Vent_Net::q_max, "")
-        .def_readwrite("p_max",   &Vent_Net::pmax, "")
-        .def_readwrite("q1",      &Vent_Net::q1, "")
-        .def_readwrite("p1",      &Vent_Net::p1, "");
+        .def_readwrite("h1",      &Vent_Net::h1,      "")
+        .def_readwrite("h2",      &Vent_Net::h2,      "")
+        .def_readwrite("alpha",   &Vent_Net::alpha,   "")
+        .def_readwrite("area",    &Vent_Net::area,    "")
+        .def_readwrite("a",       &Vent_Net::a,       "")
+        .def_readwrite("n",       &Vent_Net::n,       "")
+        .def_readwrite("qv",      &Vent_Net::qv,      "")
+        .def_readwrite("qt",      &Vent_Net::qt,      "")
+        .def_readwrite("eta",     &Vent_Net::eta,     "")
+        .def_readwrite("q_max",   &Vent_Net::q_max,   "")
+        .def_readwrite("p_max",   &Vent_Net::pmax,    "")
+        .def_readwrite("q1",      &Vent_Net::q1,      "")
+        .def_readwrite("p1",      &Vent_Net::p1,      "");
 
     py::class_<Thrm_Net>(m, "Thrm_Net")
         .def(py::init<long, int, int, int, int>())
@@ -116,5 +115,5 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("ac_mode",   &Thrm_Net::ac_mode,   "")
         .def_readwrite("pre_tmp",   &Thrm_Net::pre_tmp,   "")
         .def_readwrite("p1",        &Thrm_Net::p1,        "");        
-
+*/
 }
