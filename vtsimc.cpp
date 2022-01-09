@@ -59,7 +59,7 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("sn",    &VTSim::sn,      "")
         .def_readwrite("vn",    &VTSim::vn,      "")
         .def_readwrite("tn",    &VTSim::tn,      "");
-    
+/*    
     py::class_<Node>(m, "Node")
         .def(py::init<long, int, tuple<int, int, int>>())
         .def_readwrite("i",     &Node::i,     "")
@@ -113,5 +113,5 @@ PYBIND11_MODULE(vtsimc, m){
         .def_readwrite("ac_mode",   &Thrm_Net::ac_mode,   "")
         .def_readwrite("pre_tmp",   &Thrm_Net::pre_tmp,   "")
         .def_readwrite("p1",        &Thrm_Net::p1,        "");        
-
+*/
 }
