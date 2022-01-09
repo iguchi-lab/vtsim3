@@ -10,7 +10,7 @@ public:
     vector<double> eta;                                             //粉塵除去率
     vector<double> q_max, p_max, q1, p1;                            //送風ファンの風量・圧力
 
-    Vent_Net(long length, int i_, i1_, i2_, vn_type_, h1_, h2_){
+    Vent_Net(long length, int i_, int i1_, int i2_, int vn_type_, vector<double> h1_, vector<double> h2_){
         i       = i_;
         i1      = i1_;
         i2      = i2_;
