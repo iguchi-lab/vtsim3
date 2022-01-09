@@ -191,14 +191,14 @@ def set_thrm_net(**kwargs):
             calc.tn[i].cof_phi = nt['cof_phi']                                          #地盤熱応答、行列設定不可（面積と断熱性能はOK）
 
 def add_capa(sn):  
-    for i, n in enumerate([n for n in sn if 'capa' in n]):                              #熱容量の設定のあるノード
-        node[d_node(n['name'])] = len(sn) + i                                           #時間遅れノードのノード番号
+    for i, n in enumerate([n for n in sn if 'capa' in n]):                                      #熱容量の設定のあるノード
+        node[d_node(n['name'])] = len(sn) + i                                                   #時間遅れノードのノード番号
         
-        #calc.sn_add(len(calc.sn) + i, [SN_NONE, SN_NONE, SN_DLY])                       #計算フラグ
-        #if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
+        calc.sn_add(len(calc.sn) + i, [SN_NONE, SN_NONE, SN_DLY])                               #計算フラグ
+        if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
-        #calc.tn_add(len(calc.tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)    #熱容量の設定
-        #calc.tn[i].cdtc = to_list_f(n['capa'] / sts.t_step)                             #コンダクタンス（熱容量）            
+        calc.tn_add(len(calc.tn) + i, node[d_node(n['name'])], node[n['name']], TN_SIMPLE)      #熱容量の設定
+        calc.tn[len(calc.tn) + i].cdtc = to_list_f(n['capa'] / sts.t_step)                      #コンダクタンス（熱容量）            
 
 def output_calc(res, ix, opt):
     print('Create pd.DataFrames')
