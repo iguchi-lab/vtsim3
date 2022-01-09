@@ -146,7 +146,7 @@ def set_vent_net(**kwargs):
         calc.vn_add(i, nt['i1'], nt['i2'], vn_type, h1, h2)
         
         if (vn_type == VN_FIX) or (vn_type == VN_AIRCON):       
-            calc.vn[i].qv = to_list_f(nt['vol'])])                                       #風量固定値、行列で設定可能
+            calc.vn[i].qv = to_list_f(nt['vol'])                                       #風量固定値、行列で設定可能
         if vn_type == VN_SIMPLE:    
             calc.vn[i].alpha = to_list_f(nt['alpha'])
             calc.vn[i].are   = to_list_f(nt['area'])                                     #単純開口、行列で設定可能
