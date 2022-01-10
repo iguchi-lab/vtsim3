@@ -64,7 +64,6 @@ to_list_i = lambda v:   [int(v)]   * sts.length if type(v) != list and type(v) !
 
 calc = vt.VTSim()
 sts  = vt.CalcStatus()
-
 node = {}
 
 ###############################################################################
@@ -72,6 +71,7 @@ node = {}
 ###############################################################################
 
 def run_calc(ix, sn, **kwargs):                                                     #はじめに呼び出される関数
+    print('Init calc.')
     calc = vt.VTSim()
     sts  = vt.CalcStatus()
     node = {}
