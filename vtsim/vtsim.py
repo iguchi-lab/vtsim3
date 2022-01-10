@@ -95,7 +95,6 @@ def run_calc(ix, sn, **kwargs):                                                 
 
 def set_calc_status(ix, **kwargs):
     sts  = vt.CalcStatus()
-    node = {}
 
     sts.length = len(ix)
     sts.t_step = (ix[1] - ix[0]).seconds + (ix[1] - ix[0]).microseconds / 1000000   #t_stepの読み込み    
@@ -113,6 +112,7 @@ def set_calc_status(ix, **kwargs):
 
 def set_sim_node(sn, **kwargs):
     v_idc, c_idc, t_idc = [], [], []
+    node = {}
 
     for i, n in enumerate(sn):                                                      #sn
         node[n['name']] = i                                                         #ノード番号
