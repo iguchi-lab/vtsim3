@@ -157,8 +157,8 @@ def set_vent_net(**kwargs):
             calc.vn[i].a     = to_list_f(nt['a'])
             calc.vn[i].n     = to_list_f(nt['n'])                                        #隙間、行列で設定可能
         if vn_type == VN_FAN:           
-            calc.vn[i].qmax = to_list_f(nt['qmax']) 
-            calc.vn[i].pmax = to_list_f(nt['pmax']) 
+            calc.vn[i].q_max = to_list_f(nt['qmax']) 
+            calc.vn[i].p_max = to_list_f(nt['pmax']) 
             calc.vn[i].q1   = to_list_f(nt['q1'])
             calc.vn[i].p1   = to_list_f(nt['p1'])                                       #ファン、行列で設定可能
         if vn_type == VN_AIRCON:
