@@ -37,12 +37,24 @@ public:
 class VTSim{
 public:
     CalcStatus sts;
-
     vector<Node> sn;                                        //ノード
     vector<Vent_Net> vn;                                    //換気回路網
     vector<Thrm_Net> tn;                                    //熱回路網
     vector<int> v_idc, c_idc, t_idc, ac_idc;
     int i_vn_ac = -1, i_tn_ac = -1;
+
+    VTsim(){
+        sts = CalcStatus();
+        sn = [];
+        vn = [];
+        tn = [];
+        v_idc = [];
+        c_idc = [];
+        t_idc = [];
+        ac_idc = [];
+        i_vn_ac = -1;
+        i_tn_ac - -1;
+    }
 
     void sn_add(int i, tuple<int, int, int> flag){
         sn.push_back(Node(sts.length, i, flag));
