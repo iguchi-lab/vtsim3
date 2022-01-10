@@ -72,7 +72,10 @@ node = {}
 ###############################################################################
 
 def run_calc(ix, sn, **kwargs):                                                     #はじめに呼び出される関数
-    
+    calc = vt.VTSim()
+    sts  = vt.CalcStatus()
+    node = {}
+
     print('Set calc status.')
     set_calc_status(ix, **kwargs)
     
