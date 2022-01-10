@@ -59,12 +59,12 @@ ix   = lambda length:                       pd.date_range(datetime(2021, 1, 1, 0
                                                           freq='1s')                                    #長さlength、1s毎の時刻
 d_node  = lambda name:                      name + '_c'                                                 #遅延ノードの名前作成
 
-#リストかnp.ndarrayでなければlength分の長さのリストにする
-to_list_f = lambda v:   [float(v)] * sts.length if type(v) != list and type(v) != np.ndarray else v  
-to_list_i = lambda v:   [int(v)]   * sts.length if type(v) != list and type(v) != np.ndarray else v 
-
 calc = vt.VTSim()
 node = {}
+
+#リストかnp.ndarrayでなければlength分の長さのリストにする
+to_list_f = lambda v:   [float(v)] * calc.sts.length if type(v) != list and type(v) != np.ndarray else v  
+to_list_i = lambda v:   [int(v)]   * calc.sts.length if type(v) != list and type(v) != np.ndarray else v 
 
 ###############################################################################
 # define function
