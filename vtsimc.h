@@ -108,7 +108,7 @@ public:
             }
 
             if(sts.solve == SOLVE_SOR)  dp = SOR(a, b, v_idc.size(), sts.sor_ratio, sts.sor_err);                                   //SOR法による計算     
-            else                    dp = LU(a, b, v_idc.size()); 
+            else                        dp = LU(a, b, v_idc.size()); 
 
             for(int i = 0; i < v_idc.size(); i++)   p0[v_idc[i]] += dp[i];                                              //圧力の更新
             qvsum_0 = qv_sum(p0, ts);    
@@ -187,7 +187,7 @@ public:
             }
 
             if(sts.solve == SOLVE_SOR)  dt = SOR(a, b, t_idc.size(), sts.sor_ratio, sts.sor_err);                                   //SOR法による計算
-            else                    dt = LU(a, b, t_idc.size());
+            else                        dt = LU(a, b, t_idc.size());
 
             for(int i = 0; i < t_idc.size(); i++)   t0[t_idc[i]] += dt[i];                                              //温度の更新
             qtsum_0 = qt_sum(t0, ts);
