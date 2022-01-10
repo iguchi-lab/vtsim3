@@ -43,8 +43,8 @@ public:
     vector<int> v_idc, c_idc, t_idc, ac_idc;
     int i_vn_ac = -1, i_tn_ac = -1;
 
-    VTSim(){
-        sts = CalcStatus();
+    void setup(sts_){
+        sts = sts_;
         sn.clear();
         vn.clear();
         tn.clear();
