@@ -62,13 +62,21 @@ d_node  = lambda name:                      name + '_c'                         
 calc = vt.VTSim()
 node = {}
 
-#リストかnp.ndarrayでなければlength分の長さのリストにする
-to_list_f = lambda v:   [float(v)] * calc.sts.length if type(v) != list and type(v) != np.ndarray else v  
-to_list_i = lambda v:   [int(v)]   * calc.sts.length if type(v) != list and type(v) != np.ndarray else v 
-
 ###############################################################################
 # define function
 ###############################################################################
+
+def to_list_f(v):
+    if   type(v) == list:                   return(v)
+    elif type(v) == np.ndarray:             return(v)
+    elif type(v) == pd.core.series.Series:  return(np.array(v))
+    else:                                   return[float(v)] * calc.sts.length
+
+def to_list_i(v):
+    if   type(v) == list:                   return(v)
+    elif type(v) == np.ndarray:             return(v)
+    elif type(v) == pd.core.series.Series:  return(np.array(v))
+    else:                                   return[int(v)] * calc.sts.length
 
 def run_calc(ix, sn, **kwargs):                                                     #はじめに呼び出される関数    
     print('Set calc status.')
