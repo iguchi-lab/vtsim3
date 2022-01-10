@@ -123,7 +123,7 @@ def set_sim_node(sn):
     node = {}
     for i, n in enumerate(sn):                                                      #sn
         node[n['name']] = i                                                         #ノード番号
-        
+        print(n['name'], " = ", i)
         v_flag = n['v_flag'] if 'v_flag' in n else SN_NONE
         c_flag = n['c_flag'] if 'c_flag' in n else SN_NONE
         t_flag = n['t_flag'] if 't_flag' in n else SN_NONE                          #計算フラグ
