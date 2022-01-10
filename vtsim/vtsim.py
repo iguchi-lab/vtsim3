@@ -167,7 +167,6 @@ def set_vent_net(**kwargs):
         calc.vn[i].eta = to_list_f(nt['eta']) if 'eta' in nt else to_list_f(0.0)        #粉じん除去率、行列で設定可能
 
 def set_thrm_net(sn, **kwargs):
-
     tn = kwargs['tn']     if 'tn'  in kwargs else []                                    #tnの読み込み
     for i, nt in enumerate(tn):                                                         #tn
         tn_type = nt['type'] if 'type' in nt else TN_SIMPLE
