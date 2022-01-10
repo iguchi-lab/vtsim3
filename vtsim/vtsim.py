@@ -14,6 +14,7 @@ import vtsimc as vt
 ###############################################################################
 # define const
 ###############################################################################
+
 OPT_DF:    int  = 0              #DataFrameを出力
 OPT_CSV:   int  = 1              #上記に加え、csvファイルを出力
 OPT_GRAPH: int  = 2              #上記に加えグラフを描画
@@ -44,9 +45,9 @@ AC_STOP:    int = vt.AC_STOP
 # define lambda
 ###############################################################################
 
-node = lambda name, v_flag, c_flag, t_flag: {'name':   name, 
-                                             'v_flag': v_flag, 'c_flag': c_flag, 't_flag': t_flag}      #ノードの設定
-net  = lambda name1, name2, tp:             {'name1': name1, 'name2': name2, 'type': tp}                #ネットワークの設定
+#node = lambda name, v_flag, c_flag, t_flag: {'name':   name, 
+#                                             'v_flag': v_flag, 'c_flag': c_flag, 't_flag': t_flag}      #ノードの設定
+#net  = lambda name1, name2, tp:             {'name1': name1, 'name2': name2, 'type': tp}                #ネットワークの設定
 
 r_df = lambda fn:                           pd.read_csv(fn, index_col = 0, 
                                                         parse_dates = True).fillna(method = 'bfill')\
@@ -63,7 +64,6 @@ to_list_f = lambda v:   [float(v)] * sts.length if type(v) != list and type(v) !
 to_list_i = lambda v:   [int(v)]   * sts.length if type(v) != list and type(v) != np.ndarray else v 
 
 calc = vt.VTSim()
-sts  = vt.CalcStatus()
 node = {}
 
 ###############################################################################
@@ -73,7 +73,6 @@ node = {}
 def run_calc(ix, sn, **kwargs):                                                     #はじめに呼び出される関数
     print('Init calc.')
     calc = vt.VTSim()
-    sts  = vt.CalcStatus()
     node = {}
 
     print('Set calc status.')
@@ -99,6 +98,8 @@ def run_calc(ix, sn, **kwargs):                                                 
     return output_calc(calc.result(), ix, opt)
 
 def set_calc_status(ix, **kwargs):
+    sts  = vt.CalcStatus()
+
     sts.length = len(ix)
     sts.t_step = (ix[1] - ix[0]).seconds + (ix[1] - ix[0]).microseconds / 1000000   #t_stepの読み込み    
 
@@ -200,7 +201,7 @@ def set_thrm_net(sn, **kwargs):
         if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
         calc.tn_add(len(tn) + i, node[n['name']], node[d_node(n['name'])], TN_SIMPLE)       #熱容量の設定
-        calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / sts.t_step)                       #コンダクタンス（熱容量）            
+        calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / calc.sts.t_step)                       #コンダクタンス（熱容量）            
 
 def output_calc(res, ix, opt):
     print('Create pd.DataFrames')
