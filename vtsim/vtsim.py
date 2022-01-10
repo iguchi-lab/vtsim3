@@ -120,9 +120,10 @@ def set_calc_status(ix, **kwargs):
 
 def set_sim_node(sn):
     v_idc, c_idc, t_idc = [], [], []
+    global node 
     node = {}
     for i, n in enumerate(sn):                                                      #sn
-        node[n['name']] = i                                                         #ノード番号
+        node[n['name']] = i                                                  #ノード番号
         print(n['name'], " = ", i)
         v_flag = n['v_flag'] if 'v_flag' in n else SN_NONE
         c_flag = n['c_flag'] if 'c_flag' in n else SN_NONE
