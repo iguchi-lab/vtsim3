@@ -70,12 +70,7 @@ to_list_i = lambda v:   [int(v)]   * calc.sts.length if type(v) != list and type
 # define function
 ###############################################################################
 
-def run_calc(ix, sn, **kwargs):                                                     #はじめに呼び出される関数
-    print('Init calc.')
-    del calc
-    calc = vt.VTSim()
-    node = {}
-
+def run_calc(ix, sn, **kwargs):                                                     #はじめに呼び出される関数    
     print('Set calc status.')
     set_calc_status(ix, **kwargs)
     
@@ -100,6 +95,7 @@ def run_calc(ix, sn, **kwargs):                                                 
 
 def set_calc_status(ix, **kwargs):
     sts  = vt.CalcStatus()
+    node = {}
 
     sts.length = len(ix)
     sts.t_step = (ix[1] - ix[0]).seconds + (ix[1] - ix[0]).microseconds / 1000000   #t_stepの読み込み    
@@ -113,7 +109,7 @@ def set_calc_status(ix, **kwargs):
     if 'sor_ratio' in kwargs:   sts.sor_ratio = kwargs['sor_ratio']
     if 'sor_err'   in kwargs:   sts.sor_err   = kwargs['sor_err']
 
-    calc.sts = sts
+    calc.setup(sts)
 
 def set_sim_node(sn, **kwargs):
     v_idc, c_idc, t_idc = [], [], []
