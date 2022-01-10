@@ -43,7 +43,7 @@ public:
     vector<int> v_idc, c_idc, t_idc, ac_idc;
     int i_vn_ac = -1, i_tn_ac = -1;
 
-    void setup(sts_){
+    void setup(CalcStatus sts_){
         sts = sts_;
         sn.clear();
         vn.clear();
