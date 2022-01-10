@@ -112,7 +112,6 @@ def set_calc_status(ix, **kwargs):
 
 def set_sim_node(sn, **kwargs):
     v_idc, c_idc, t_idc = [], [], []
-    node = {}
 
     for i, n in enumerate(sn):                                                      #sn
         node[n['name']] = i                                                         #ノード番号
