@@ -214,7 +214,6 @@ def output_calc(res, ix, opt):
                  {'df': pd.DataFrame(), 'columns': t_columns, 'fn': 'thrm_qt2.csv', 'title': '熱量2', 'unit': '[W]'}]
     
     for i, d in enumerate(dat_list):
-        print('output:', i)
         if len(d) != 0: d['df'] = pd.DataFrame(np.array(res[i]).T,  index = ix, columns = d['columns'])
 
     if opt > 0:
