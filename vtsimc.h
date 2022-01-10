@@ -45,13 +45,13 @@ public:
 
     VTsim(){
         sts = CalcStatus();
-        sn = [];
-        vn = [];
-        tn = [];
-        v_idc = [];
-        c_idc = [];
-        t_idc = [];
-        ac_idc = [];
+        sn.clear();
+        vn.clear();
+        tn.clear();
+        v_idc.clear();
+        c_idc.clear();
+        t_idc.clear();
+        ac_idc.clear();
         i_vn_ac = -1;
         i_tn_ac - -1;
     }
