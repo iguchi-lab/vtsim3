@@ -222,7 +222,7 @@ def output_calc(res, ix, opt):
                  {'df': pd.DataFrame(), 'columns': t_columns, 'fn': 'thrm_qt2.csv', 'title': '熱量2', 'unit': '[W]'}]
     
     for i, d in enumerate(dat_list):
-        if len(d['df']) != 0: d['df'] = pd.DataFrame(np.array(res[i]).T,  index = ix, columns = d['columns'])
+        if len(res[i]) != 0: d['df'] = pd.DataFrame(np.array(res[i]).T,  index = ix, columns = d['columns'])
 
     if opt > 0:
         print('Output csv files.')
