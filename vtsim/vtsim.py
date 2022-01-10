@@ -83,7 +83,7 @@ def run_calc(ix, sn, **kwargs):                                                 
     set_calc_status(ix, **kwargs)
     
     print('Set SimNode.')
-    set_sim_node(sn, **kwargs)
+    set_sim_node(sn)
     
     print('Set VentNet.')
     set_vent_net(**kwargs)
@@ -118,9 +118,9 @@ def set_calc_status(ix, **kwargs):
 
     calc.setup(sts)
 
-def set_sim_node(sn, **kwargs):
+def set_sim_node(sn):
     v_idc, c_idc, t_idc = [], [], []
-
+    node = {}
     for i, n in enumerate(sn):                                                      #sn
         node[n['name']] = i                                                         #ノード番号
         
