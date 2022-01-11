@@ -78,19 +78,22 @@ def to_list_i(v):
     else:                                   return[int(v)] * calc.sts.length
 
 def run_calc(ix, sn, **kwargs):                                                     #はじめに呼び出される関数    
+    
+    sn_c, vn_c, tn_c = [], [], []
+    
     print('Set calc status.')
     set_calc_status(ix, **kwargs)
     
     print('Set SimNode.')
-    set_sim_node(sn)
+    sn_c = set_sim_node(sn)
     
     vn = kwargs['vn']     if 'vn'  in kwargs else []
     print('Set VentNet.')
-    set_vent_net(vn)
+    vn_c = set_vent_net(vn)
 
     tn = kwargs['tn']     if 'tn'  in kwargs else []    
     print('Set ThrmNet.')
-    set_thrm_net(sn, tn)
+    sn_c, tn_c = set_thrm_net(sn, tn, sn_c)
 
     print('ready')
     print('sts     ', calc.sts)
@@ -113,7 +116,7 @@ def run_calc(ix, sn, **kwargs):                                                 
     
     opt = kwargs['output'] if 'output' in kwargs else OPT_GRAPH                     #出力フラグ
 
-    return output_calc(ix, sn, vn, tn, opt, calc.result())
+    return output_calc(ix, sn, vn, tn, opt, calc.result(), sn_c, vn_c, tn_c)
 
 def set_calc_status(ix, **kwargs):
     sts  = vt.CalcStatus()
@@ -134,6 +137,7 @@ def set_calc_status(ix, **kwargs):
 
 def set_sim_node(sn):
     v_idc, c_idc, t_idc = [], [], []
+    sn_c = []
     for i, n in enumerate(sn):                                                      #sn
         calc.set_node(n["name"], i)                                                 #ノード番号
         v_flag = n['v_flag'] if 'v_flag' in n else SN_NONE
@@ -141,6 +145,7 @@ def set_sim_node(sn):
         t_flag = n['t_flag'] if 't_flag' in n else SN_NONE                          #計算フラグ
 
         calc.sn_add(i, [v_flag, c_flag, t_flag])
+        sn_c.append(n['name'])
 
         if v_flag == SN_CALC:   v_idc.append(i)
         if c_flag == SN_CALC:   c_idc.append(i)
@@ -159,76 +164,83 @@ def set_sim_node(sn):
     calc.c_idc = c_idc
     calc.t_idc = t_idc  
 
+    return sn_c
+
 def set_vent_net(vn):
+    vn_c = []
     for i, nt in enumerate(vn):
         h1 = to_list_f(nt['h1']) if 'h1' in nt else to_list_f(0.0)                  #高さ1、行列設定不可
         h2 = to_list_f(nt['h2']) if 'h2' in nt else to_list_f(0.0)                  #高さ2、行列設定不可
         vn_type = nt['type'] if 'type' in nt else VN_FIX
 
         calc.vn_add(i, calc.node[nt['name1']], calc.node[nt['name2']], vn_type, h1, h2)
-        
+        vn_c.append(str(i) + " " + nt['name1'] + "->" + nt['name2'])
+
         if (vn_type == VN_FIX) or (vn_type == VN_AIRCON):       
-            calc.vn[i].qv = to_list_f(nt['vol'])                                       #風量固定値、行列で設定可能
+            calc.vn[i].qv = to_list_f(nt['vol'])                                    #風量固定値、行列で設定可能
         if vn_type == VN_SIMPLE:    
             calc.vn[i].alpha = to_list_f(nt['alpha'])
-            calc.vn[i].area  = to_list_f(nt['area'])                                     #単純開口、行列で設定可能
+            calc.vn[i].area  = to_list_f(nt['area'])                                #単純開口、行列で設定可能
         if vn_type == VN_GAP:           
             calc.vn[i].a     = to_list_f(nt['a'])
-            calc.vn[i].n     = to_list_f(nt['n'])                                        #隙間、行列で設定可能
+            calc.vn[i].n     = to_list_f(nt['n'])                                   #隙間、行列で設定可能
         if vn_type == VN_FAN:           
             calc.vn[i].q_max = to_list_f(nt['qmax']) 
             calc.vn[i].p_max = to_list_f(nt['pmax']) 
             calc.vn[i].q1   = to_list_f(nt['q1'])
-            calc.vn[i].p1   = to_list_f(nt['p1'])                                       #ファン、行列で設定可能
+            calc.vn[i].p1   = to_list_f(nt['p1'])                                   #ファン、行列で設定可能
         if vn_type == VN_AIRCON:
             calc.i_vn_ac = i
-        calc.vn[i].eta = to_list_f(nt['eta']) if 'eta' in nt else to_list_f(0.0)        #粉じん除去率、行列で設定可能
+        calc.vn[i].eta = to_list_f(nt['eta']) if 'eta' in nt else to_list_f(0.0)    #粉じん除去率、行列で設定可能
+    return vn_c
 
-def set_thrm_net(sn, tn):
-    for i, nt in enumerate(tn):                                                         #tn
+def set_thrm_net(sn, tn, sn_c):
+    tn_c = []
+    for i, nt in enumerate(tn):                                                     #tn
         tn_type = nt['type'] if 'type' in nt else TN_SIMPLE
 
         calc.tn_add(i, calc.node[nt['name1']], calc.node[nt['name2']], tn_type)
-        
+        tn_c.append(str(i) + " " + nt['name1'] + "->" + nt['name2'])
+
         if tn_type == TN_SIMPLE:     
-            calc.tn[i].cdtc = to_list_f(nt['cdtc'])                                     #コンダクタンス、行列設定可能
+            calc.tn[i].cdtc = to_list_f(nt['cdtc'])                                 #コンダクタンス、行列設定可能
         if tn_type == TN_AIRCON:     
             calc.tn[i].ac_mode = to_list_i(nt['ac_mode']) 
-            calc.tn[i].pre_tmp = to_list_f(nt['pre_tmp'])                               #エアコン運転モード
+            calc.tn[i].pre_tmp = to_list_f(nt['pre_tmp'])                           #エアコン運転モード
             calc.i_tn_ac = i
         if tn_type == TN_SOLAR:       
-            calc.tn[i].ms      = to_list_f(nt['ms'])                                    #日射熱取得率、行列設定可能
+            calc.tn[i].ms      = to_list_f(nt['ms'])                                #日射熱取得率、行列設定可能
         if tn_type == TN_GROUND:     
             calc.tn[i].area    = to_list_f(nt['area'])           
             calc.tn[i].rg      = to_list_f(nt['rg']) 
             calc.tn[i].phi_0   = nt['phi_0']
             calc.tn[i].cof_r   = nt['cof_r']
-            calc.tn[i].cof_phi = nt['cof_phi']                                          #地盤熱応答、行列設定不可（面積と断熱性能はOK）
+            calc.tn[i].cof_phi = nt['cof_phi']                                      #地盤熱応答、行列設定不可（面積と断熱性能はOK）
 
     print('Add Capacity.')
-    for i, n in enumerate([n for n in sn if 'capa' in n]):                                  #熱容量の設定のあるノード
-        calc.set_node(d_node(n['name']), len(sn) + i)                                       #時間遅れノードのノード番号
+    for i, n in enumerate([n for n in sn if 'capa' in n]):                                              #熱容量の設定のあるノード
+        calc.set_node(d_node(n['name']), len(sn) + i)                                                   #時間遅れノードのノード番号
+        sn_c.append(d_node(n['name']))
 
-        calc.sn_add(len(sn) + i, [SN_NONE, SN_NONE, SN_DLY])                                #計算フラグ
+        calc.sn_add(len(sn) + i, [SN_NONE, SN_NONE, SN_DLY])                                            #計算フラグ
         calc.sn[len(sn) + i].s_i = calc.node[n['name']]
         if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
-        calc.tn_add(len(tn) + i, calc.node[n['name']], calc.node[d_node(n['name'])], TN_SIMPLE)       #熱容量の設定
-        calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / calc.sts.t_step)                       #コンダクタンス（熱容量）            
+        calc.tn_add(len(tn) + i, calc.node[n['name']], calc.node[d_node(n['name'])], TN_SIMPLE)         #熱容量の設定
+        tn_c.append(str(len(tn) + i) + " " + n['name1'] + "->" + d_node(n['name']))
+        calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / calc.sts.t_step)                              #コンダクタンス（熱容量）            
 
-def output_calc(ix, sn, vn, tn, opt, res):
+    return sn_c, tn_c
+
+def output_calc(ix, sn, vn, tn, opt, res, sn_c, vn_c, tn_c):
     print('Create pd.DataFrames')
-
-    n_columns = [n['name'] for n in sn]                                                                 #出力用カラムの作成（ノード）
-    v_columns = [str(i) + " " + nt['name1'] + "->" + nt['name2'] for i, nt in enumerate(vn)]            #出力用カラムの作成（換気回路網）
-    t_columns = [str(i) + " " + nt['name1'] + "->" + nt['name2'] for i, nt in enumerate(tn)]            #出力用カラムの作成（熱回路網）
     
-    dat_list  = [{'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'vent_p.csv',   'title': '圧力',  'unit': '[Pa]'},
-                 {'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'vent_c.csv',   'title': '濃度',  'unit': '[個/L]'},
-                 {'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'them_t.csv',   'title': '温度',  'unit': '[℃]'},
-                 {'df': pd.DataFrame(), 'columns': v_columns, 'fn': 'vent_qv.csv',  'title': '風量',  'unit': '[m3/s]'},
-                 {'df': pd.DataFrame(), 'columns': v_columns, 'fn': 'thrm_qt1.csv', 'title': '熱量1', 'unit': '[W]'},
-                 {'df': pd.DataFrame(), 'columns': t_columns, 'fn': 'thrm_qt2.csv', 'title': '熱量2', 'unit': '[W]'}]
+    dat_list  = [{'df': pd.DataFrame(), 'columns': sn_c, 'fn': 'vent_p.csv',   'title': '圧力',  'unit': '[Pa]'},
+                 {'df': pd.DataFrame(), 'columns': sn_c, 'fn': 'vent_c.csv',   'title': '濃度',  'unit': '[個/L]'},
+                 {'df': pd.DataFrame(), 'columns': sn_c, 'fn': 'them_t.csv',   'title': '温度',  'unit': '[℃]'},
+                 {'df': pd.DataFrame(), 'columns': vn_c, 'fn': 'vent_qv.csv',  'title': '風量',  'unit': '[m3/s]'},
+                 {'df': pd.DataFrame(), 'columns': vn_c, 'fn': 'thrm_qt1.csv', 'title': '熱量1', 'unit': '[W]'},
+                 {'df': pd.DataFrame(), 'columns': tn_c, 'fn': 'thrm_qt2.csv', 'title': '熱量2', 'unit': '[W]'}]
     
     for i, d in enumerate(dat_list):
         if len(res[i]) != 0: d['df'] = pd.DataFrame(np.array(res[i]).T,  index = ix, columns = d['columns'])
