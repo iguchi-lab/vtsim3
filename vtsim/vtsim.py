@@ -84,11 +84,13 @@ def run_calc(ix, sn, **kwargs):                                                 
     print('Set SimNode.')
     set_sim_node(sn)
     
+    vn = kwargs['vn']     if 'vn'  in kwargs else []
     print('Set VentNet.')
-    set_vent_net(**kwargs)
-    
+    set_vent_net(vn)
+
+    tn = kwargs['tn']     if 'tn'  in kwargs else []    
     print('Set ThrmNet.')
-    set_thrm_net(sn, **kwargs)
+    set_thrm_net(sn, tn)
 
     print('Start vtsim calc.')
     s_time = time.time()
@@ -98,7 +100,7 @@ def run_calc(ix, sn, **kwargs):                                                 
     print("calc time = {0}".format(e_time * 1000) + "[ms]")
     
     opt = kwargs['output'] if 'output' in kwargs else OPT_GRAPH                     #出力フラグ
-    return output_calc(calc.result(), ix, opt)
+    return output_calc(ix, sn, vn, tn, opt, calc.result())
 
 def set_calc_status(ix, **kwargs):
     sts  = vt.CalcStatus()
@@ -145,8 +147,7 @@ def set_sim_node(sn):
     calc.c_idc = c_idc
     calc.t_idc = t_idc  
 
-def set_vent_net(**kwargs):
-    vn = kwargs['vn']     if 'vn'  in kwargs else []                                #vnの読み込み
+def set_vent_net(vn):
     for i, nt in enumerate(vn):
         h1 = to_list_f(nt['h1']) if 'h1' in nt else to_list_f(0.0)                  #高さ1、行列設定不可
         h2 = to_list_f(nt['h2']) if 'h2' in nt else to_list_f(0.0)                  #高さ2、行列設定不可
@@ -171,8 +172,7 @@ def set_vent_net(**kwargs):
             calc.i_vn_ac = i
         calc.vn[i].eta = to_list_f(nt['eta']) if 'eta' in nt else to_list_f(0.0)        #粉じん除去率、行列で設定可能
 
-def set_thrm_net(sn, **kwargs):
-    tn = kwargs['tn']     if 'tn'  in kwargs else []                                    #tnの読み込み
+def set_thrm_net(sn, tn):
     for i, nt in enumerate(tn):                                                         #tn
         tn_type = nt['type'] if 'type' in nt else TN_SIMPLE
 
@@ -204,12 +204,12 @@ def set_thrm_net(sn, **kwargs):
         calc.tn_add(len(tn) + i, calc.node[n['name']], calc.node[d_node(n['name'])], TN_SIMPLE)       #熱容量の設定
         calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / calc.sts.t_step)                       #コンダクタンス（熱容量）            
 
-def output_calc(res, ix, opt):
+def output_calc(ix, sn, vn, tn, opt, res):
     print('Create pd.DataFrames')
 
-    n_columns = [n.name for n in calc.sn]                                                         #出力用カラムの作成（ノード）
-    v_columns = [str(i) + " " + nt.name1 + "->" + nt.name2 for i, nt in enumerate(calc.vn)]       #出力用カラムの作成（換気回路網）
-    t_columns = [str(i) + " " + nt.name1 + "->" + nt.name2 for i, nt in enumerate(calc.tn)]       #出力用カラムの作成（熱回路網）
+    n_columns = [n.name for n in sn]                                                              #出力用カラムの作成（ノード）
+    v_columns = [str(i) + " " + nt.name1 + "->" + nt.name2 for i, nt in enumerate(vn)]            #出力用カラムの作成（換気回路網）
+    t_columns = [str(i) + " " + nt.name1 + "->" + nt.name2 for i, nt in enumerate(tn)]            #出力用カラムの作成（熱回路網）
     
     dat_list  = [{'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'vent_p.csv',   'title': '圧力',  'unit': '[Pa]'},
                  {'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'vent_c.csv',   'title': '濃度',  'unit': '[個/L]'},
