@@ -124,7 +124,6 @@ def set_sim_node(sn):
     v_idc, c_idc, t_idc = [], [], []
     for i, n in enumerate(sn):                                                      #sn
         calc.set_node(n["name"], i)                                                 #ノード番号
-        print(n['name'], ' = ', calc.node[n['name']])
         v_flag = n['v_flag'] if 'v_flag' in n else SN_NONE
         c_flag = n['c_flag'] if 'c_flag' in n else SN_NONE
         t_flag = n['t_flag'] if 't_flag' in n else SN_NONE                          #計算フラグ
