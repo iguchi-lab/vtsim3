@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <vector>
 #include <tuple>
+#include <map>
 
 #include "vtsimc.h"
 
