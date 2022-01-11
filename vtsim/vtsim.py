@@ -119,6 +119,11 @@ def set_calc_status(ix, **kwargs):
 
     calc.setup(sts)
 
+    print(calc.sts)
+    print(calc.sn)
+    print(calc.vn)
+    print(calc.tn)
+
 def set_sim_node(sn):
     v_idc, c_idc, t_idc = [], [], []
     for i, n in enumerate(sn):                                                      #sn
