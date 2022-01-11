@@ -121,7 +121,7 @@ def set_sim_node(sn):
     v_idc, c_idc, t_idc = [], [], []
     for i, n in enumerate(sn):                                                      #sn
         calc.node[n['name']] = i                                                  #ノード番号
-        print(n['name'], " = ", i)
+        print(n['name'], ' = ', calc.node[n['name']])
         v_flag = n['v_flag'] if 'v_flag' in n else SN_NONE
         c_flag = n['c_flag'] if 'c_flag' in n else SN_NONE
         t_flag = n['t_flag'] if 't_flag' in n else SN_NONE                          #計算フラグ
@@ -196,7 +196,7 @@ def set_thrm_net(sn, **kwargs):
     print('Add Capacity.')
     for i, n in enumerate([n for n in sn if 'capa' in n]):                                  #熱容量の設定のあるノード
         calc.node[d_node(n['name'])] = len(sn) + i                                               #時間遅れノードのノード番号
-        
+
         calc.sn_add(len(sn) + i, [SN_NONE, SN_NONE, SN_DLY])                                #計算フラグ
         calc.sn[len(sn) + i].s_i = calc.node[n['name']]
         if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
@@ -221,11 +221,11 @@ def output_calc(res, ix, opt):
     for i, d in enumerate(dat_list):
         if len(res[i]) != 0: d['df'] = pd.DataFrame(np.array(res[i]).T,  index = ix, columns = d['columns'])
 
-    if opt > 0:
+    if opt >= OPT_CSV:
         print('Output csv files.')
         for d in dat_list:      d['df'].to_csv(d['fn'], encoding = 'utf_8_sig')
 
-    if opt > 1:
+    if opt >= OPT_GRAPH:
         print('Draw Graphs.')
         fig = plt.figure(facecolor = 'w', figsize = (18, len(dat_list) * 4))
         fig.subplots_adjust(wspace = -0.1, hspace=0.9)
