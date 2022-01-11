@@ -38,6 +38,7 @@ class VTSim{
 public:
     CalcStatus sts;
     vector<Node> sn;                                        //ノード
+    map<string, int> node;
     vector<Vent_Net> vn;                                    //換気回路網
     vector<Thrm_Net> tn;                                    //熱回路網
     vector<int> v_idc, c_idc, t_idc, ac_idc;
@@ -46,6 +47,7 @@ public:
     void setup(CalcStatus sts_){
         sts = sts_;
         sn.clear();
+        node.clear();
         vn.clear();
         tn.clear();
         v_idc.clear();
