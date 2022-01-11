@@ -17,6 +17,8 @@ void calc_01(void){
     sts.length = 2;
     calc.sts = sts;
 
+    calc.set_node("test", 2);
+
     vector<double> vol(sts.length, 100.0 / 3600.0),
                    alpha(sts.length, 0.6),
                    area(sts.length, 1.0),
