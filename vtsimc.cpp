@@ -61,6 +61,7 @@ PYBIND11_MODULE(vtsimc, m){
         .def("result",            &VTSim::result,  "")
         .def_readwrite("sts",     &VTSim::sts,     "")
         .def_readwrite("sn",      &VTSim::sn,      "")
+        .def_readwrite("node",    &VTSim::node,    "")
         .def_readwrite("vn",      &VTSim::vn,      "")
         .def_readwrite("tn",      &VTSim::tn,      "")
         .def_readwrite("v_idc",   &VTSim::v_idc,   "")
