@@ -81,7 +81,6 @@ def run_calc(ix, sn, **kwargs):                                                 
     print('Set calc status.')
     set_calc_status(ix, **kwargs)
     
-    """"
     print('Set SimNode.')
     set_sim_node(sn)
     
@@ -101,10 +100,23 @@ def run_calc(ix, sn, **kwargs):                                                 
     print("calc time = {0}".format(e_time * 1000) + "[ms]")
     
     opt = kwargs['output'] if 'output' in kwargs else OPT_GRAPH                     #出力フラグ
-    """
+
     return output_calc(ix, sn, vn, tn, opt, calc.result())
 
 def set_calc_status(ix, **kwargs):
+    print('before')
+    print(calc.sts)
+    print(calc.sn)
+    print(calc.node)
+    print(calc.vn)
+    print(calc.tn)
+    print(calc.v_idc)
+    print(calc.c_idc)
+    print(calc.t_idc)
+    print(calc.ac_idc)
+    print(calc.i_vn_ac)
+    print(calc.i_tn_ac)
+
     sts  = vt.CalcStatus()
 
     sts.length = len(ix)
@@ -121,10 +133,18 @@ def set_calc_status(ix, **kwargs):
 
     calc.setup(sts)
 
+    print('after')
     print(calc.sts)
     print(calc.sn)
+    print(calc.node)
     print(calc.vn)
     print(calc.tn)
+    print(calc.v_idc)
+    print(calc.c_idc)
+    print(calc.t_idc)
+    print(calc.ac_idc)
+    print(calc.i_vn_ac)
+    print(calc.i_tn_ac)
 
 def set_sim_node(sn):
     v_idc, c_idc, t_idc = [], [], []
