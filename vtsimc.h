@@ -54,7 +54,7 @@ public:
         c_idc.clear();
         t_idc.clear();
         i_vn_ac = -1;
-        i_tn_ac - -1;
+        i_tn_ac = -1;
     }
 
     void sn_add(int i, tuple<int, int, int> flag){
