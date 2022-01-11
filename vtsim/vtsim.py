@@ -120,6 +120,18 @@ def set_calc_status(ix, **kwargs):
 
     calc.setup(sts)
 
+    print('ready')
+    print('sts     ', calc.sts)
+    print('sn      ', calc.sn)
+    print('node    ', calc.node)
+    print('vn      ', calc.vn)
+    print('tn      ', calc.tn)
+    print('v_idc   ', calc.v_idc)
+    print('c_idc   ', calc.c_idc)
+    print('t_idc   ', calc.t_idc)
+    print('i_vn_ac ', calc.i_vn_ac)
+    print('i_tn_ac ', calc.i_tn_ac)
+
 def set_sim_node(sn):
     v_idc, c_idc, t_idc = [], [], []
     for i, n in enumerate(sn):                                                      #sn
