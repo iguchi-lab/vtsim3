@@ -92,6 +92,18 @@ def run_calc(ix, sn, **kwargs):                                                 
     print('Set ThrmNet.')
     set_thrm_net(sn, tn)
 
+    print('ready')
+    print('sts     ', calc.sts)
+    print('sn      ', calc.sn)
+    print('node    ', calc.node)
+    print('vn      ', calc.vn)
+    print('tn      ', calc.tn)
+    print('v_idc   ', calc.v_idc)
+    print('c_idc   ', calc.c_idc)
+    print('t_idc   ', calc.t_idc)
+    print('i_vn_ac ', calc.i_vn_ac)
+    print('i_tn_ac ', calc.i_tn_ac)
+
     print('Start vtsim calc.')
     s_time = time.time()
     calc.calc()
@@ -119,18 +131,6 @@ def set_calc_status(ix, **kwargs):
     if 'sor_err'   in kwargs:   sts.sor_err   = kwargs['sor_err']
 
     calc.setup(sts)
-
-    print('ready')
-    print('sts     ', calc.sts)
-    print('sn      ', calc.sn)
-    print('node    ', calc.node)
-    print('vn      ', calc.vn)
-    print('tn      ', calc.tn)
-    print('v_idc   ', calc.v_idc)
-    print('c_idc   ', calc.c_idc)
-    print('t_idc   ', calc.t_idc)
-    print('i_vn_ac ', calc.i_vn_ac)
-    print('i_tn_ac ', calc.i_tn_ac)
 
 def set_sim_node(sn):
     v_idc, c_idc, t_idc = [], [], []
