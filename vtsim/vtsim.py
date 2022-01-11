@@ -45,15 +45,15 @@ AC_STOP:    int = vt.AC_STOP
 # define lambda
 ###############################################################################
 
-#node = lambda name, v_flag, c_flag, t_flag: {'name':   name, 
-#                                             'v_flag': v_flag, 'c_flag': c_flag, 't_flag': t_flag}      #ノードの設定
-#net  = lambda name1, name2, tp:             {'name1': name1, 'name2': name2, 'type': tp}                #ネットワークの設定
+node = lambda name, v_flag, c_flag, t_flag: {'name':   name, 
+                                             'v_flag': v_flag, 'c_flag': c_flag, 't_flag': t_flag}      #ノードの設定
+net  = lambda name1, name2, tp:             {'name1': name1, 'name2': name2, 'type': tp}                #ネットワークの設定
 
 r_df = lambda fn:                           pd.read_csv(fn, index_col = 0, 
                                                         parse_dates = True).fillna(method = 'bfill')\
                                                                            .fillna(method = 'ffill')     #csvファイルの読み込み
-#nc   = lambda id, v:                        np.array([v] * len(id))                                     #idの長さ分の値value
-#nd   = lambda df, cl:                       np.array(df[cl])                                            #dfの列clを設定
+nc   = lambda id, v:                        np.array([v] * len(id))                                     #idの長さ分の値value
+nd   = lambda df, cl:                       np.array(df[cl])                                            #dfの列clを設定
 ix   = lambda length:                       pd.date_range(datetime(2021, 1, 1, 0, 0, 0), 
                                                           datetime(2021, 1, 1, 0, 0, 0) + timedelta(seconds = length), 
                                                           freq='1s')                                    #長さlength、1s毎の時刻
