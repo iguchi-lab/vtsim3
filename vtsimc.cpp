@@ -55,7 +55,7 @@ PYBIND11_MODULE(vtsimc, m){
         .def(py::init<>())
         .def("setup",             &VTSim::setup,     "")
         .def("sn_add",            &VTSim::sn_add,    "")
-        .def("set_node",          &VTSim::set_node), "")
+        .def("set_node",          &VTSim::set_node,  "")
         .def("vn_add",            &VTSim::vn_add,    "")
         .def("tn_add",            &VTSim::tn_add,    "")
         .def("calc",              &VTSim::calc,      "")
