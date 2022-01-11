@@ -52,8 +52,8 @@ AC_STOP:    int = vt.AC_STOP
 r_df = lambda fn:                           pd.read_csv(fn, index_col = 0, 
                                                         parse_dates = True).fillna(method = 'bfill')\
                                                                            .fillna(method = 'ffill')     #csvファイルの読み込み
-nc   = lambda id, v:                        np.array([v] * len(id))                                     #idの長さ分の値value
-nd   = lambda df, cl:                       np.array(df[cl])                                            #dfの列clを設定
+#nc   = lambda id, v:                        np.array([v] * len(id))                                     #idの長さ分の値value
+#nd   = lambda df, cl:                       np.array(df[cl])                                            #dfの列clを設定
 ix   = lambda length:                       pd.date_range(datetime(2021, 1, 1, 0, 0, 0), 
                                                           datetime(2021, 1, 1, 0, 0, 0) + timedelta(seconds = length), 
                                                           freq='1s')                                    #長さlength、1s毎の時刻
@@ -207,7 +207,7 @@ def set_thrm_net(sn, tn):
 
     print('Add Capacity.')
     for i, n in enumerate([n for n in sn if 'capa' in n]):                                  #熱容量の設定のあるノード
-        calc.node[d_node(n['name'])] = len(sn) + i                                               #時間遅れノードのノード番号
+        calc.set_node(d_node(n['name']), len(sn) + i)                                       #時間遅れノードのノード番号
 
         calc.sn_add(len(sn) + i, [SN_NONE, SN_NONE, SN_DLY])                                #計算フラグ
         calc.sn[len(sn) + i].s_i = calc.node[n['name']]
