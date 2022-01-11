@@ -41,7 +41,7 @@ public:
     map<string, int> node;
     vector<Vent_Net> vn;                                    //換気回路網
     vector<Thrm_Net> tn;                                    //熱回路網
-    vector<int> v_idc, c_idc, t_idc, ac_idc;
+    vector<int> v_idc, c_idc, t_idc;
     int i_vn_ac = -1, i_tn_ac = -1;
 
     void setup(CalcStatus sts_){
@@ -53,7 +53,6 @@ public:
         v_idc.clear();
         c_idc.clear();
         t_idc.clear();
-        ac_idc.clear();
         i_vn_ac = -1;
         i_tn_ac - -1;
     }
