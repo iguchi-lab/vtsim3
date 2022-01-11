@@ -17,8 +17,6 @@ void calc_01(void){
     sts.length = 2;
     calc.sts = sts;
 
-    calc.set_node("test", 2);
-
     vector<double> vol(sts.length, 100.0 / 3600.0),
                    alpha(sts.length, 0.6),
                    area(sts.length, 1.0),
@@ -42,14 +40,13 @@ void calc_01(void){
 
     calc.calc();
 }
-/*
+
 void calc_02(void){
     CalcStatus sts;
-    InputData inp;
     VTSim calc;
 
     sts.length = 2;
-    calc.set_calc_status(sts);
+    calc.sts = sts;
 
     vector<double> t1(sts.length, 20.0),              
                    t2(sts.length,  0.0),
@@ -63,42 +60,49 @@ void calc_02(void){
                    h(sts.length, 0.0);
     vector<int>    ac_mode(sts.length, AC_COOLING);
 
-    inp.nodes         = {{SN_NONE, SN_NONE, SN_CALC},                                                     //0: AC-out
-                         {SN_NONE, SN_NONE, SN_CALC},                                                     //1: Room1
-                         {SN_NONE, SN_NONE, SN_CALC},                                                     //2: Room2
-                         {SN_NONE, SN_NONE, SN_FIX},                                                      //3: AC-in
-                         {SN_NONE, SN_NONE, SN_FIX},                                                      //4: Outside
-                         {SN_NONE, SN_NONE, SN_NONE},                                                     //5: solar
-                         {SN_NONE, SN_NONE, SN_NONE}};                                                    //6: heater  
+    calc.sn_add(0, {SN_NONE, SN_NONE, SN_CALC});                                                     //0: AC-out
+    calc.sn_add(1, {SN_NONE, SN_NONE, SN_CALC});                                                     //1: Room1
+    calc.sn_add(2, {SN_NONE, SN_NONE, SN_CALC});                                                     //2: Room2
+    calc.sn_add(3, {SN_NONE, SN_NONE, SN_FIX});                                                      //3: AC-in
+    calc.sn_add(4, {SN_NONE, SN_NONE, SN_FIX});                                                      //4: Outside
+    calc.sn_add(5, {SN_NONE, SN_NONE, SN_NONE});                                                     //5: solar
+    calc.sn_add(6, {SN_NONE, SN_NONE, SN_NONE});                                                     //6: heater  
 
-    inp.v_nets        = {{0, 1, VN_FIX,    h, h}, 
-                         {0, 2, VN_FIX,    h, h},
-                         {1, 3, VN_FIX,    h, h}, 
-                         {2, 3, VN_FIX,    h, h},
-                         {3, 0, VN_FIX,    h, h}};
-    inp.t_nets        = {{1, 4, TN_SIMPLE}, 
-                         {2, 4, TN_SIMPLE}, 
-                         {3, 0, TN_AIRCON},
-                         {2, 5, TN_SOLAR},
-                         {2, 6, TN_HEATER}};
-    inp.sn_T_set      = {{3, t1},
-                         {4, t2}};
-    inp.sn_h_sr_set   = {{5, h_sr}};
-    inp.sn_h_inp_set  = {{6, h_inp}};
-    inp.vn_fix_set    = {{0, vol2},
-                         {1, vol2},
-                         {2, vol2},
-                         {3, vol2},
-                         {4, vol1}};
-    inp.tn_simple_set = {{0, cdtc1},
-                         {1, cdtc2}};
-    inp.tn_aircon_set = {{2, ac_mode, t1}};
-    inp.tn_solar_set  = {{3, ms}};
+    calc.vn_add(0, 0, 1, VN_FIX,    h, h); 
+    calc.vn_add(1, 0, 2, VN_FIX,    h, h);
+    calc.vn_add(2, 1, 3, VN_FIX,    h, h);
+    calc.vn_add(3, 2, 3, VN_FIX,    h, h);
+    calc.vn_add(4, 3, 0, VN_FIX,    h, h);
+    
+    calc.tn_add(0, 1, 4, TN_SIMPLE); 
+    calc.tn_add(1, 2, 4, TN_SIMPLE); 
+    calc.tn_add(2, 3, 0, TN_AIRCON);
+    calc.tn_add(3, 2, 5, TN_SOLAR);
+    calc.tn_add(4, 2, 6, TN_HEATER);
 
-    calc.set_inp(inp);
+    calc.sn[3].t = t1;
+    calc.sn[4].t = t2;
+
+    calc.sn[5].h_sr  = h_sr;
+    calc.sn[6].h_inp = h_inp;
+    
+    calc.vn[0].qv = vol2;
+    calc.vn[1].qv = vol2;
+    calc.vn[2].qv = vol2;
+    calc.vn[3].qv = vol2;
+    calc.vn[4].qv = vol2;
+    
+    calc.tn[0].cdtc = cdtc1;
+    calc.tn[1].cdtc = cdtc2;
+
+    calc.tn[2].ac_mode = ac_mode;
+    calc.tn[2].pre_tmp = t1;
+
+    calc.tn[3].ms = ms;
+
     calc.calc();
 }
-
+/*
 void calc_03(void){
     CalcStatus sts;
     InputData inp;
@@ -213,14 +217,14 @@ void calc_03(void){
     calc.set_inp(inp);
     calc.calc();
 }
-
+*/
 int get_xyz(int x, int y, int z){
     return x * 15 + y * 5 + z;
 }
 
+
 void calc_04(void){
     CalcStatus sts;
-    InputData inp;
     VTSim calc;
 
     int X = 3, Y = 3, Z = 5;
@@ -233,7 +237,7 @@ void calc_04(void){
     sts.t_step    = 0.1;
     sts.sor_ratio = 0.8;
     sts.sor_err   = 1.0e-6;
-    calc.set_calc_status(sts);
+    calc.sts = sts;
 
     vector<double> Ti(sts.length, 20.0), 
                    To(sts.length, 6.0), 
@@ -243,25 +247,25 @@ void calc_04(void){
     for(int x = 0; x < X; x++){
         for(int y = 0; y < Y; y++){
             for(int z = 0; z < Z; z++){
-                inp.nodes.push_back({SN_CALC, SN_NONE, SN_CALC});
-                inp.sn_T_set.push_back({get_xyz(x, y, z), Ti});
+                calc.sn_add(get_xyz(x, y, z), {SN_CALC, SN_NONE, SN_CALC});
+                calc.sn[get_xyz(x, y, z)].t = Ti;
             }
         }
     }
 
-    inp.nodes.push_back({SN_NONE, SN_NONE, SN_FIX});
-    inp.sn_T_set.push_back({45, To});
-    inp.nodes.push_back({SN_NONE, SN_NONE, SN_FIX});
-    inp.sn_T_set.push_back({46, Ti});
-    inp.nodes.push_back({SN_NONE, SN_NONE, SN_NONE});
-    inp.sn_h_inp_set.push_back({47, H_inp});
+    calc.sn_add(45, {SN_NONE, SN_NONE, SN_FIX});
+    calc.sn[45].t = To;
+    calc.sn_add(46, {SN_NONE, SN_NONE, SN_FIX});
+    calc.sn[46].t = Ti;
+    calc.sn_add(47, {SN_NONE, SN_NONE, SN_NONE});
+    calc.sn[47].h_inp = H_inp;
 
     for(int x = 0; x < X; x++){
         for(int y = 0; y < Y; y++){
             for(int z = 0; z < Z; z++){
-                inp.nodes.push_back({SN_NONE, SN_NONE, SN_DLY});
-                inp.sn_T_set.push_back({get_xyz(x, y, z) + 48, Ti});
-                inp.sn_capa_set.push_back({get_xyz(x, y, z) + 48, get_xyz(x, y, z)});
+                calc.sn_add(get_xyz(x, y, z) + 48, {SN_NONE, SN_NONE, SN_DLY});
+                calc.sn[get_xyz(x, y, z) + 48].t = Ti;
+                calc.sn[get_xyz(x, y, z) + 48].s_i = get_xyz(x, y, z);
             }
         }
     }
@@ -272,70 +276,73 @@ void calc_04(void){
             for(int z = 0; z < Z; z++){
                 if(x != X - 1){
                     vector<double> h(sts.length, hcz[z]);
-                    inp.v_nets.push_back({get_xyz(x, y, z), get_xyz(x + 1, y, z), VN_SIMPLE, h, h});
+                    calc.vn_add(v_n, get_xyz(x, y, z), get_xyz(x + 1, y, z), VN_SIMPLE, h, h);
                     double area = cy[y] * cz[z];
-                    inp.vn_simple_set.push_back({v_n, alpha, {area, area, area, area}});
+                    calc.vn[v_n].alpha = alpha;
+                    calc.vn[v_n].area = {area, area, area, area};
                     v_n++;
                 }
                 if(y != Y - 1){
                     vector<double> h(sts.length, hcz[z]);   
-                    inp.v_nets.push_back({get_xyz(x, y, z), get_xyz(x, y + 1, z), VN_SIMPLE, h, h});
+                    calc.vn_add(v_n, get_xyz(x, y, z), get_xyz(x, y + 1, z), VN_SIMPLE, h, h);
                     double area = cx[x] * cz[z];
-                    inp.vn_simple_set.push_back({v_n, alpha, {area, area, area, area}});
+                    calc.vn[v_n].alpha = alpha;
+                    calc.vn[v_n].area = {area, area, area, area};
                     v_n++;
                 }
                 if(z != Z - 1){
                     vector<double> h(sts.length, htz[z]);   
-                    inp.v_nets.push_back({get_xyz(x, y, z), get_xyz(x, y, z + 1), VN_SIMPLE, h, h});
+                    calc.vn_add(v_n, get_xyz(x, y, z), get_xyz(x, y, z + 1), VN_SIMPLE, h, h);
                     double area = cx[x] * cy[y];
-                    inp.vn_simple_set.push_back({v_n, alpha, {area, area, area, area}});
+                    calc.vn[v_n].alpha = alpha;
+                    calc.vn[v_n].area = {area, area, area, area};
                     v_n++;
                 }
                 if(z == 0 || z == Z - 1){  
-                    inp.t_nets.push_back({get_xyz(x, y, z), 45, TN_SIMPLE});
+                    calc.tn_add(t_n, get_xyz(x, y, z), 45, TN_SIMPLE);
                     double c = cdtc[0];
-                    inp.tn_simple_set.push_back({t_n, {c, c, c, c}});
+                    calc.tn[t_n].cdtc = {c, c, c, c};
                     t_n++;
                 }
                 if(y == 0 || y == Y - 1){   
-                    inp.t_nets.push_back({get_xyz(x, y, z), 45, TN_SIMPLE});
+                    calc.tn_add(t_n, get_xyz(x, y, z), 45, TN_SIMPLE);
                     double c = cdtc[0];
-                    inp.tn_simple_set.push_back({t_n, {0, 0, 0, 0}});
+                    calc.tn[t_n].cdtc = {c, c, c, c};
                     t_n++;
                 }
                 if(x == 0){
                     if(y == 1 && z < 4){
-                        inp.t_nets.push_back({get_xyz(x, y, z), 54, TN_SIMPLE});
+                        calc.tn_add(t_n, get_xyz(x, y, z), 54, TN_SIMPLE);
                         double c = cdtc[5];
-                        inp.tn_simple_set.push_back({t_n, {c, c, c, c}});
+                        calc.tn[t_n].cdtc = {c, c, c, c};
                         t_n++;
                     }
                     else{
-                        inp.t_nets.push_back({get_xyz(x, y, z), 45, TN_SIMPLE});
+                        calc.tn_add(t_n, get_xyz(x, y, z), 45, TN_SIMPLE);
                         double c = cdtc[0];
-                        inp.tn_simple_set.push_back({t_n, {c, c, c, c}});
+                        calc.tn[t_n].cdtc = {c, c, c, c};
                         t_n++;
                     }
                 }
                 if(x == X - 1){   
-                    inp.t_nets.push_back({get_xyz(x, y, z), 46, TN_SIMPLE});
+                    calc.tn_add(t_n, get_xyz(x, y, z), 46, TN_SIMPLE);
                     double c = cdtc[0];
-                    inp.tn_simple_set.push_back({t_n, {c, c, c, c}});
+                    calc.tn[t_n].cdtc = {c, c, c, c};
                     t_n++;
                 }
-                inp.t_nets.push_back({get_xyz(x, y, z), get_xyz(x, y, z) + 48, TN_SIMPLE});
+                calc.tn_add(t_n, get_xyz(x, y, z), get_xyz(x, y, z) + 48, TN_SIMPLE);
                 double c = cx[x] * cy[y] * cz[z] * 1.205 * 1006 / sts.t_step;
-                inp.tn_simple_set.push_back({t_n, {c, c, c, c}});
+                calc.tn[t_n].cdtc = {c, c, c, c};
                 t_n++;                
             }
         }
     }
-    inp.t_nets.push_back({get_xyz(2, 1, 0), 47, TN_HEATER});
+    calc.tn_add(t_n, get_xyz(2, 1, 0), 47, TN_HEATER);
 
-    calc.set_inp(inp);
     calc.calc();
 }
 
+/*
 void calc_05(void){
     CalcStatus sts;
     InputData inp;
@@ -548,13 +555,15 @@ void calc_06(void){
 int main(void){
     cout << endl << "calc 1" << endl;
     calc_01();
-    /*
     cout << endl << "calc 2" << endl;
     calc_02();
+    /*
     cout << endl << "calc 3" << endl;
     calc_03();
+    */
     cout << endl << "calc 4" << endl;
     calc_04();
+    /*
     cout << endl << "calc 5" << endl;
     calc_05();
     cout << endl << "calc 6" << endl;
