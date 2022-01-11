@@ -207,9 +207,9 @@ def set_thrm_net(sn, tn):
 def output_calc(ix, sn, vn, tn, opt, res):
     print('Create pd.DataFrames')
 
-    n_columns = [n.name for n in sn]                                                              #出力用カラムの作成（ノード）
-    v_columns = [str(i) + " " + nt.name1 + "->" + nt.name2 for i, nt in enumerate(vn)]            #出力用カラムの作成（換気回路網）
-    t_columns = [str(i) + " " + nt.name1 + "->" + nt.name2 for i, nt in enumerate(tn)]            #出力用カラムの作成（熱回路網）
+    n_columns = [n['name'] for n in sn]                                                                 #出力用カラムの作成（ノード）
+    v_columns = [str(i) + " " + nt['name1'] + "->" + nt['name2'] for i, nt in enumerate(vn)]            #出力用カラムの作成（換気回路網）
+    t_columns = [str(i) + " " + nt['name1'] + "->" + nt['name2'] for i, nt in enumerate(tn)]            #出力用カラムの作成（熱回路網）
     
     dat_list  = [{'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'vent_p.csv',   'title': '圧力',  'unit': '[Pa]'},
                  {'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'vent_c.csv',   'title': '濃度',  'unit': '[個/L]'},
