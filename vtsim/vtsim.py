@@ -227,7 +227,7 @@ def set_thrm_net(sn, tn, sn_c):
         if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
         calc.tn_add(len(tn) + i, calc.node[n['name']], calc.node[d_node(n['name'])], TN_SIMPLE)         #熱容量の設定
-        tn_c.append(str(len(tn) + i) + " " + n['name1'] + "->" + d_node(n['name']))
+        tn_c.append(str(len(tn) + i) + " " + n['name'] + "->" + d_node(n['name']))
         calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / calc.sts.t_step)                              #コンダクタンス（熱容量）            
 
     return sn_c, tn_c
