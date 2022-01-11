@@ -113,7 +113,6 @@ def set_calc_status(ix, **kwargs):
     print(calc.v_idc)
     print(calc.c_idc)
     print(calc.t_idc)
-    print(calc.ac_idc)
     print(calc.i_vn_ac)
     print(calc.i_tn_ac)
 
@@ -142,7 +141,6 @@ def set_calc_status(ix, **kwargs):
     print(calc.v_idc)
     print(calc.c_idc)
     print(calc.t_idc)
-    print(calc.ac_idc)
     print(calc.i_vn_ac)
     print(calc.i_tn_ac)
 
