@@ -62,6 +62,10 @@ public:
         sn.push_back(Node(sts.length, i, flag));
     }
 
+    void set_node(string name, int i){
+        node[name] = i;
+    }
+
     void vn_add(int i, int i1, int i2, int vn_type, vector<double> h1, vector<double> h2){
         vn.push_back(Vent_Net(sts.length, i, i1, i2, vn_type, h1, h2));
     }
