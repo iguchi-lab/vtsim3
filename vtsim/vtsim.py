@@ -81,6 +81,7 @@ def run_calc(ix, sn, **kwargs):                                                 
     print('Set calc status.')
     set_calc_status(ix, **kwargs)
     
+    """"
     print('Set SimNode.')
     set_sim_node(sn)
     
@@ -100,6 +101,7 @@ def run_calc(ix, sn, **kwargs):                                                 
     print("calc time = {0}".format(e_time * 1000) + "[ms]")
     
     opt = kwargs['output'] if 'output' in kwargs else OPT_GRAPH                     #出力フラグ
+    """
     return output_calc(ix, sn, vn, tn, opt, calc.result())
 
 def set_calc_status(ix, **kwargs):
