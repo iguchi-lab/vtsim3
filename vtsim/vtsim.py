@@ -60,7 +60,6 @@ ix   = lambda length:                       pd.date_range(datetime(2021, 1, 1, 0
 d_node  = lambda name:                      name + '_c'                                                 #遅延ノードの名前作成
 
 calc = vt.VTSim()
-node = {}
 
 ###############################################################################
 # define function
@@ -120,10 +119,8 @@ def set_calc_status(ix, **kwargs):
 
 def set_sim_node(sn):
     v_idc, c_idc, t_idc = [], [], []
-    global node 
-    node = {}
     for i, n in enumerate(sn):                                                      #sn
-        node[n['name']] = i                                                  #ノード番号
+        calc.node[n['name']] = i                                                  #ノード番号
         print(n['name'], " = ", i)
         v_flag = n['v_flag'] if 'v_flag' in n else SN_NONE
         c_flag = n['c_flag'] if 'c_flag' in n else SN_NONE
@@ -155,7 +152,7 @@ def set_vent_net(**kwargs):
         h2 = to_list_f(nt['h2']) if 'h2' in nt else to_list_f(0.0)                  #高さ2、行列設定不可
         vn_type = nt['type'] if 'type' in nt else VN_FIX
 
-        calc.vn_add(i, node[nt['name1']], node[nt['name2']], vn_type, h1, h2)
+        calc.vn_add(i, calc.node[nt['name1']], calc.node[nt['name2']], vn_type, h1, h2)
         
         if (vn_type == VN_FIX) or (vn_type == VN_AIRCON):       
             calc.vn[i].qv = to_list_f(nt['vol'])                                       #風量固定値、行列で設定可能
@@ -179,7 +176,7 @@ def set_thrm_net(sn, **kwargs):
     for i, nt in enumerate(tn):                                                         #tn
         tn_type = nt['type'] if 'type' in nt else TN_SIMPLE
 
-        calc.tn_add(i, node[nt['name1']], node[nt['name2']], tn_type)
+        calc.tn_add(i, calc.node[nt['name1']], calc.node[nt['name2']], tn_type)
         
         if tn_type == TN_SIMPLE:     
             calc.tn[i].cdtc = to_list_f(nt['cdtc'])                                     #コンダクタンス、行列設定可能
@@ -198,22 +195,21 @@ def set_thrm_net(sn, **kwargs):
 
     print('Add Capacity.')
     for i, n in enumerate([n for n in sn if 'capa' in n]):                                  #熱容量の設定のあるノード
-        node[d_node(n['name'])] = len(sn) + i                                               #時間遅れノードのノード番号
+        calc.node[d_node(n['name'])] = len(sn) + i                                               #時間遅れノードのノード番号
         
         calc.sn_add(len(sn) + i, [SN_NONE, SN_NONE, SN_DLY])                                #計算フラグ
-        calc.sn[len(sn) + i].s_i = node[n['name']]
+        calc.sn[len(sn) + i].s_i = calc.node[n['name']]
         if 't' in n:    calc.sn[len(sn) + i].t = to_list_f(n['t'])
 
-        calc.tn_add(len(tn) + i, node[n['name']], node[d_node(n['name'])], TN_SIMPLE)       #熱容量の設定
+        calc.tn_add(len(tn) + i, calc.node[n['name']], calc.node[d_node(n['name'])], TN_SIMPLE)       #熱容量の設定
         calc.tn[len(tn) + i].cdtc = to_list_f(n['capa'] / calc.sts.t_step)                       #コンダクタンス（熱容量）            
 
 def output_calc(res, ix, opt):
     print('Create pd.DataFrames')
 
-    node_swap = {v: k for k, v in node.items()}
-    n_columns = [node_swap[i] for i in range(len(calc.sn))]                                                                    #出力用カラムの作成（ノード）
-    v_columns = [str(i) + " " + node_swap[calc.vn[i].i1] + "->" + node_swap[calc.vn[i].i2] for i in range(len(calc.vn))]       #出力用カラムの作成（換気回路網）
-    t_columns = [str(i) + " " + node_swap[calc.tn[i].i1] + "->" + node_swap[calc.tn[i].i2] for i in range(len(calc.tn))]       #出力用カラムの作成（熱回路網）
+    n_columns = [n.name for n in calc.sn]                                                         #出力用カラムの作成（ノード）
+    v_columns = [str(i) + " " + nt.name1 + "->" + nt.name2 for i, nt in enumerate(calc.vn)]       #出力用カラムの作成（換気回路網）
+    t_columns = [str(i) + " " + nt.name1 + "->" + nt.name2 for i, nt in enumerate(calc.tn)]       #出力用カラムの作成（熱回路網）
     
     dat_list  = [{'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'vent_p.csv',   'title': '圧力',  'unit': '[Pa]'},
                  {'df': pd.DataFrame(), 'columns': n_columns, 'fn': 'vent_c.csv',   'title': '濃度',  'unit': '[個/L]'},
