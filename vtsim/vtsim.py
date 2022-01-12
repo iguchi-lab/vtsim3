@@ -116,7 +116,7 @@ def run_calc(ix, sn, **kwargs):                                                 
     
     opt = kwargs['output'] if 'output' in kwargs else OPT_GRAPH                     #出力フラグ
 
-    return output_calc(ix, sn, vn, tn, opt, calc.result(), sn_c, vn_c, tn_c)
+    return output_calc(ix, opt, calc.result(), sn_c, vn_c, tn_c)
 
 def set_calc_status(ix, **kwargs):
     sts  = vt.CalcStatus()
@@ -136,7 +136,6 @@ def set_calc_status(ix, **kwargs):
     calc.setup(sts)
 
 def set_sim_node(sn):
-    v_idc, c_idc, t_idc = [], [], []
     sn_c = []
     for i, n in enumerate(sn):                                                      #sn
         calc.set_node(n["name"], i)                                                 #ノード番号
@@ -147,10 +146,6 @@ def set_sim_node(sn):
         calc.sn_add(i, [v_flag, c_flag, t_flag])
         sn_c.append(n['name'])
 
-        if v_flag == SN_CALC:   v_idc.append(i)
-        if c_flag == SN_CALC:   c_idc.append(i)
-        if t_flag == SN_CALC:   t_idc.append(i)
-
         if 'p'     in n:    calc.sn[i].p     = to_list_f(n['p'])                    #圧力、行列で設定可能
         if 'c'     in n:    calc.sn[i].c     = to_list_f(n['c'])                    #濃度、行列で設定可能
         if 't'     in n:    calc.sn[i].t     = to_list_f(n['t'])                    #温度、行列で設定可能
@@ -159,10 +154,6 @@ def set_sim_node(sn):
         if 'v'     in n:    calc.sn[i].v     = to_list_f(n['v'])                    #気積、行列で設定可能
         if 'm'     in n:    calc.sn[i].m     = to_list_f(n['m'])                    #発生量、行列で設定可能
         if 'beta'  in n:    calc.sn[i].beta  = to_list_f(n['beta'])                 #濃度減少率、行列で設定可能
-
-    calc.v_idc = v_idc
-    calc.c_idc = c_idc
-    calc.t_idc = t_idc  
 
     return sn_c
 
@@ -232,7 +223,7 @@ def set_thrm_net(sn, tn, sn_c):
 
     return sn_c, tn_c
 
-def output_calc(ix, sn, vn, tn, opt, res, sn_c, vn_c, tn_c):
+def output_calc(ix, opt, res, sn_c, vn_c, tn_c):
     print('Create pd.DataFrames')
     
     dat_list  = [{'df': pd.DataFrame(), 'columns': sn_c, 'fn': 'vent_p.csv',   'title': '圧力',  'unit': '[Pa]'},
