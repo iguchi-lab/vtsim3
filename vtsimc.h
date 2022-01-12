@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 
-#define DEBUG_ON
+//#define DEBUG_ON
 
 #ifdef  DEBUG_ON
 #define LOG_PRINT(...)     ofs << __FILE__ << " (" << __LINE__ << ") " << __func__ << ":" << __VA_ARGS__
@@ -59,6 +59,9 @@ public:
 
     void sn_add(int i, tuple<int, int, int> flag){
         sn.push_back(Node(sts.length, i, flag));
+        if(get<0>(flag) == SN_CALC)     v_idc.push_back(i);
+        if(get<1>(flag) == SN_CALC)     c_idc.push_back(i);
+        if(get<2>(flag) == SN_CALC)     t_idc.push_back(i);
     }
 
     void set_node(string name, int i){
@@ -93,7 +96,7 @@ public:
         }
     }
 
-    vector<double> qv_sum(vector<double> p, long ts){
+    vector<double> qv_sum(vector<double> p, long ts, int flag){
         vector<double> qvsum(sn.size(), 0.0);                                                                             //風量収支の初期化                                 
         for(int i = 0; i < vn.size(); i++){
             double rgh1 = get_rho(sn[vn[i].i1].t[ts]) * G * vn[i].h1[ts];
@@ -102,6 +105,9 @@ public:
             qvsum[vn[i].i1] -= qv;                                                                                        //風量収支の計算
             qvsum[vn[i].i2] += qv;                                                                                        //風量収支の計算      
         }
+
+        for(int i = 0; i << sn.size(); i++)
+            if(flag == 0)   LOG_PRINT("i = " << i << " : " << qvsum[i] << endl);
         return qvsum;
     }
 
@@ -110,27 +116,29 @@ public:
         vector<vector<double>>  a(v_idc.size(), vector<double>(v_idc.size()));
         vector<double>          b(v_idc.size()), dp(v_idc.size());
         double                  rmse;
-
+        int                     itr = 0;
+        
         for(int i = 0; i < sn.size(); i++)    p0[sn[i].i] = sn[i].p[ts];                                                //圧力の初期化       
         do{
             rmse = 0.0;
-            qvsum_0 = qv_sum(p0, ts);
+            qvsum_0 = qv_sum(p0, ts, 0);
             
             for(int j = 0; j < v_idc.size(); j++){
                 p0[v_idc[j]] += sts.step_p;                                                                             //ダミー圧力の作成       
-                qvsum_d = qv_sum(p0, ts);                                                                               //ダ三－風量収支の計算
+                qvsum_d = qv_sum(p0, ts, 1);                                                                               //ダ三－風量収支の計算
                 for(int i = 0; i < v_idc.size(); i++)  a[i][j] = (qvsum_d[v_idc[i]] - qvsum_0[v_idc[i]]) / sts.step_p;  //aの計算
                 b[j] = -qvsum_0[v_idc[j]];
                 p0[v_idc[j]] -= sts.step_p; 
             }
 
-            if(sts.solve == SOLVE_SOR)  dp = SOR(a, b, v_idc.size(), sts.sor_ratio, sts.sor_err);                                   //SOR法による計算     
+            if(sts.solve == SOLVE_SOR)  dp = SOR(a, b, v_idc.size(), sts.sor_ratio, sts.sor_err);                       //SOR法による計算     
             else                        dp = LU(a, b, v_idc.size()); 
 
             for(int i = 0; i < v_idc.size(); i++)   p0[v_idc[i]] += dp[i];                                              //圧力の更新
-            qvsum_0 = qv_sum(p0, ts);    
+            qvsum_0 = qv_sum(p0, ts, 2);    
             for(int i = 0; i < v_idc.size(); i++)   rmse += pow(qvsum_0[v_idc[i]], 2.0) / v_idc.size();
-
+            LOG_PRINT(itr << ": ts = " << ts << ": rmse = " << sqrt(rmse) << endl);
+            itr++;
         }while(sts.vent_err < sqrt(rmse));
         for(int i = 0; i < v_idc.size(); i++)   sn[v_idc[i]].p[ts] = p0[v_idc[i]];                                      //圧力の計算                                                               
         return rmse;
@@ -145,6 +153,7 @@ public:
         }
 
         for(int i = 0; i < tn.size(); i++){                                                                             //貫流、日射、発熱による熱移動
+            //LOG_PRINT("i = " << i << endl);
             switch(tn[i].tn_type){
                 case TN_SIMPLE:
                 case TN_GROUND:
@@ -237,6 +246,7 @@ public:
     }
 
     void calc_qv(long ts1, long ts2){
+        LOG_PRINT("ts1 = " << ts1 << "<<<<----" << "ts2 = " <<  ts2 << endl);
         for(int i = 0; i < vn.size(); i++){    
             double rgh1 = get_rho(sn[vn[i].i1].t[ts2]) * G * vn[i].h1[ts2];
             double rgh2 = get_rho(sn[vn[i].i2].t[ts2]) * G * vn[i].h2[ts2];
@@ -245,6 +255,7 @@ public:
     }
 
     void calc_qt(long ts1, long ts2){
+        LOG_PRINT("ts1 = " << ts1 << " <<<<---- " << "ts2 = " << ts2 << endl);
         for(int i = 0; i < tn.size(); i++){    
             switch(tn[i].tn_type){
                 case TN_SIMPLE: 
@@ -264,7 +275,11 @@ public:
         vector<double>  pre_p(sn.size(), 0.0), pre_t(sn.size(), 0.0);
         double          delta_p, delta_t; 
 
-        LOG_PRINT("start calc");     
+        LOG_PRINT("******************************************************************************Start calc!" << endl;);     
+
+        LOG_PRINT("t_idc.size() = " << t_idc.size() << endl);
+        LOG_PRINT("c_idc.size() = " << c_idc.size() << endl);
+        LOG_PRINT("v_idc.size() = " << v_idc.size() << endl);
 
         for(long ts = 1; ts < sts.length; ts++){
             if(v_idc.size() > 0){
@@ -339,6 +354,7 @@ public:
                 LOG_CONTENTS(endl << endl);
             }
         }
+        LOG_PRINT("******************************************************************************Finish calc!" << endl << endl);
         return 0;
     }
 
