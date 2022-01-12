@@ -234,17 +234,17 @@ void calc_04(void){
 
     sts.solve     = SOLVE_SOR;
     sts.length    = 5;
-    sts.t_step    = 0.1;
+    sts.t_step    = 0.01;
 
     sts.step_p    = 1.0e-6;
-    sts.vent_err  = 1.0e-2;
+    sts.vent_err  = 1.0e-3;
     
     sts.step_t    = 1.0e-6;
-    sts.thrm_err  = 1.0e-2;
+    sts.thrm_err  = 1.0e-6;
 
     sts.conv_err  = 1.0e+5;
     sts.sor_ratio = 0.8;
-    sts.sor_err   = 1.0e-1;
+    sts.sor_err   = 1.0e-3;
     calc.sts = sts;
 
     vector<double> Ti(sts.length, 20.0), 
@@ -561,11 +561,11 @@ void calc_06(void){
 }
 */
 int main(void){
+    /*
     cout << endl << "calc 1" << endl;
     calc_01();
     cout << endl << "calc 2" << endl;
     calc_02();
-    /*
     cout << endl << "calc 3" << endl;
     calc_03();
     */
