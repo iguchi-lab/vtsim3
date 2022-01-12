@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 
-//#define DEBUG_ON
+#define DEBUG_ON
 
 #ifdef  DEBUG_ON
 #define LOG_PRINT(...)     ofs << __FILE__ << " (" << __LINE__ << ") " << __func__ << ":" << __VA_ARGS__
@@ -153,7 +153,6 @@ public:
         }
 
         for(int i = 0; i < tn.size(); i++){                                                                             //貫流、日射、発熱による熱移動
-            //LOG_PRINT("i = " << i << endl);
             switch(tn[i].tn_type){
                 case TN_SIMPLE:
                 case TN_GROUND:
@@ -238,6 +237,7 @@ public:
                                         break;
                 }       
             }
+            LOG_PRINT(itr << ": ts = " << ts << ": rmse = " << sqrt(rmse) << endl);
             itr++;
         }while(sts.thrm_err < sqrt(rmse));
 
@@ -246,7 +246,7 @@ public:
     }
 
     void calc_qv(long ts1, long ts2){
-        LOG_PRINT("ts1 = " << ts1 << "<<<<----" << "ts2 = " <<  ts2 << endl);
+        //LOG_PRINT("ts1 = " << ts1 << " <<<<---- " << "ts2 = " <<  ts2 << endl);
         for(int i = 0; i < vn.size(); i++){    
             double rgh1 = get_rho(sn[vn[i].i1].t[ts2]) * G * vn[i].h1[ts2];
             double rgh2 = get_rho(sn[vn[i].i2].t[ts2]) * G * vn[i].h2[ts2];
@@ -255,7 +255,7 @@ public:
     }
 
     void calc_qt(long ts1, long ts2){
-        LOG_PRINT("ts1 = " << ts1 << " <<<<---- " << "ts2 = " << ts2 << endl);
+        //LOG_PRINT("ts1 = " << ts1 << " <<<<---- " << "ts2 = " << ts2 << endl);
         for(int i = 0; i < tn.size(); i++){    
             switch(tn[i].tn_type){
                 case TN_SIMPLE: 
@@ -306,9 +306,7 @@ public:
                     if(get<0>(sn[i].flag) == SN_CALC)   pre_p[i] = sn[i].p[ts];
                     if(get<2>(sn[i].flag) == SN_CALC)   pre_t[i] = sn[i].t[ts];
                 }
-                LOG_PRINT("ts = " << ts << " calc_vent" << endl);
                 calc_vent(ts);
-                LOG_PRINT("ts = " << ts << " calc_thrm" << endl);
                 calc_thrm(ts);
                 
                 for(int i = 0; i < sn.size(); i++){
@@ -323,7 +321,7 @@ public:
                 calc_qv(ts, ts);
                 LOG_CONTENTS(endl << "p ");
                 for(int i = 0; i < sn.size(); i++)    LOG_CONTENTS(sn[i].i << ": " << sn[i].p[ts] << "Pa, ");
-                LOG_CONTENTS("qv ");
+                LOG_CONTENTS(endl << "qv ");
                 for(int i = 0; i < vn.size(); i++)    LOG_CONTENTS(vn[i].i << ": " << vn[i].qv[ts] * 3600 << "m3/h, ");
                 LOG_CONTENTS(endl << endl);    
             }
