@@ -222,7 +222,6 @@ int get_xyz(int x, int y, int z){
     return x * 15 + y * 5 + z;
 }
 
-
 void calc_04(void){
     CalcStatus sts;
     VTSim calc;
@@ -233,8 +232,16 @@ void calc_04(void){
     double htz[5]  = {0.48, 0.96, 1.44, 1.92};
     double cdtc[6] = {0.4, 0.5, 0.94, 1.88, 3.49, 5.59};
 
-    sts.length    = 4;
+    sts.length    = 2;
     sts.t_step    = 0.1;
+
+    sts.step_p    = 1.0e-6;
+    sts.vent_err  = 1.0e-1;
+    
+    sts.step_t    = 1.0e-6;
+    sts.thrm_err  = 1.0e-1;
+
+    sts.conv_err  = 1.0e-3;
     sts.sor_ratio = 0.8;
     sts.sor_err   = 1.0e-6;
     calc.sts = sts;
