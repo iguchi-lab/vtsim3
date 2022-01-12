@@ -275,7 +275,7 @@ public:
         vector<double>  pre_p(sn.size(), 0.0), pre_t(sn.size(), 0.0);
         double          delta_p, delta_t; 
 
-        LOG_PRINT("******************************************************************************Start calc!" << endl;);     
+        LOG_PRINT("******************************************************************************Start calc!" << endl);     
 
         LOG_PRINT("t_idc.size() = " << t_idc.size() << endl);
         LOG_PRINT("c_idc.size() = " << c_idc.size() << endl);
