@@ -277,6 +277,28 @@ public:
 
         LOG_PRINT("******************************************************************************Start calc!" << endl);     
 
+        LOG_PRINT("length:     " << sts.length << endl);
+        LOG_PRINT("sts-t_step: " << sts.t_step << endl);
+        LOG_PRINT("sts-solve:  " << sts.solve << endl);
+        LOG_PRINT("step_p:     " << sts.step_p << endl);
+        LOG_PRINT("vent_err:   " << sts.vent_err << endl);
+        LOG_PRINT("step_t:     " << sts.step_t << endl);
+        LOG_PRINT("thrm_err:   " << sts.thrm_err << endl);
+        LOG_PRINT("sor_ratio:  " << sts.sor_ratio << endl);
+        LOG_PRINT("sor_err:    " << sts.sor_err << endl);
+        
+        for(int i = 0; i < sn.size(); i++)
+            LOG_PRINT("sn[" << i << "] = (" << get<0>(sn[i].flag) << "," << get<1>(sn[i].flag)  << "," << get<2>(sn[i].flag) << ")" << endl);
+
+        for(int i = 0; i < vn.size(); i++)
+            LOG_PRINT("vn[" << i << "] = " << vn[i].vn_type << " (" << vn[i].i1 << "," << vn[i].i2 << ")" << endl);
+
+        for(int i = 0; i < tn.size(); i++)
+            LOG_PRINT("tn[" << i << "] = " << tn[i].tn_type << " (" << tn[i].i1 << "," << tn[i].i2 << ")" << endl);
+
+        LOG_PRINT("i_vn_ac = " << i_vn_ac << endl);
+        LOG_PRINT("i_tn_ac = " << i_tn_ac << endl);
+        
         LOG_PRINT("t_idc.size() = " << t_idc.size() << endl);
         LOG_PRINT("c_idc.size() = " << c_idc.size() << endl);
         LOG_PRINT("v_idc.size() = " << v_idc.size() << endl);
