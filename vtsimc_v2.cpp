@@ -232,17 +232,15 @@ void calc_04(void){
     double htz[5]  = {0.48, 0.96, 1.44, 1.92};
     double cdtc[6] = {0.4, 0.5, 0.94, 1.88, 3.49, 5.59};
 
-    sts.solve     = SOLVE_SOR;
-    sts.length    = 5;
-    sts.t_step    = 0.01;
-
+    sts.solve  = SOLVE_SOR;
+    sts.length = 10;
+    sts.t_step = 0.01;
+    sts.t_step    = 0.1;
     sts.step_p    = 1.0e-6;
     sts.vent_err  = 1.0e-3;
-    
     sts.step_t    = 1.0e-6;
     sts.thrm_err  = 1.0e-6;
-
-    sts.conv_err  = 1.0e+5;
+    sts.conv_err  = 1.0e-6;
     sts.sor_ratio = 0.8;
     sts.sor_err   = 1.0e-3;
     calc.sts = sts;
@@ -272,7 +270,7 @@ void calc_04(void){
         for(int y = 0; y < Y; y++){
             for(int z = 0; z < Z; z++){
                 calc.sn_add(get_xyz(x, y, z) + 48, {SN_NONE, SN_NONE, SN_DLY});
-                calc.sn[get_xyz(x, y, z) + 48].t = Ti;
+                calc.sn[get_xyz(x, y, z) + 48].t =Ti;
                 calc.sn[get_xyz(x, y, z) + 48].s_i = get_xyz(x, y, z);
             }
         }
@@ -285,62 +283,62 @@ void calc_04(void){
                 if(x != X - 1){
                     vector<double> h(sts.length, hcz[z]);
                     calc.vn_add(v_n, get_xyz(x, y, z), get_xyz(x + 1, y, z), VN_SIMPLE, h, h);
-                    double area = cy[y] * cz[z];
+                    vector<double> area(sts.length, cy[y] * cz[z]);
                     calc.vn[v_n].alpha = alpha;
-                    calc.vn[v_n].area = {area, area, area, area};
+                    calc.vn[v_n].area  = area;
                     v_n++;
                 }
                 if(y != Y - 1){
                     vector<double> h(sts.length, hcz[z]);   
                     calc.vn_add(v_n, get_xyz(x, y, z), get_xyz(x, y + 1, z), VN_SIMPLE, h, h);
-                    double area = cx[x] * cz[z];
+                    vector<double> area(sts.length, cx[x] * cz[z]);
                     calc.vn[v_n].alpha = alpha;
-                    calc.vn[v_n].area = {area, area, area, area};
+                    calc.vn[v_n].area  = area;
                     v_n++;
                 }
                 if(z != Z - 1){
                     vector<double> h(sts.length, htz[z]);   
                     calc.vn_add(v_n, get_xyz(x, y, z), get_xyz(x, y, z + 1), VN_SIMPLE, h, h);
-                    double area = cx[x] * cy[y];
+                    vector<double> area(sts.length, cx[x] * cy[y]);
                     calc.vn[v_n].alpha = alpha;
-                    calc.vn[v_n].area = {area, area, area, area};
+                    calc.vn[v_n].area  = area;
                     v_n++;
                 }
                 if(z == 0 || z == Z - 1){  
                     calc.tn_add(t_n, get_xyz(x, y, z), 45, TN_SIMPLE);
-                    double c = cdtc[0];
-                    calc.tn[t_n].cdtc = {c, c, c, c};
+                    vector<double> c(sts.length, cdtc[0] * cx[x] * cy[y]);
+                    calc.tn[t_n].cdtc = c;
                     t_n++;
                 }
                 if(y == 0 || y == Y - 1){   
                     calc.tn_add(t_n, get_xyz(x, y, z), 45, TN_SIMPLE);
-                    double c = cdtc[0];
-                    calc.tn[t_n].cdtc = {c, c, c, c};
+                    vector<double> c(sts.length, cdtc[0] * cx[x] * cz[z]);
+                    calc.tn[t_n].cdtc = c;
                     t_n++;
                 }
                 if(x == 0){
                     if(y == 1 && z < 4){
-                        calc.tn_add(t_n, get_xyz(x, y, z), 54, TN_SIMPLE);
-                        double c = cdtc[5];
-                        calc.tn[t_n].cdtc = {c, c, c, c};
+                        calc.tn_add(t_n, get_xyz(x, y, z), 45, TN_SIMPLE);
+                        vector<double> c(sts.length, cdtc[5] * cy[y] * cz[z]);
+                        calc.tn[t_n].cdtc = c;
                         t_n++;
                     }
                     else{
                         calc.tn_add(t_n, get_xyz(x, y, z), 45, TN_SIMPLE);
-                        double c = cdtc[0];
-                        calc.tn[t_n].cdtc = {c, c, c, c};
+                        vector<double> c(sts.length, cdtc[0] * cy[y] * cz[z]);
+                        calc.tn[t_n].cdtc = c;
                         t_n++;
                     }
                 }
                 if(x == X - 1){   
                     calc.tn_add(t_n, get_xyz(x, y, z), 46, TN_SIMPLE);
-                    double c = cdtc[0];
-                    calc.tn[t_n].cdtc = {c, c, c, c};
+                    vector<double> c(sts.length, cdtc[0] * cy[y] * cz[z]);
+                    calc.tn[t_n].cdtc = c;
                     t_n++;
                 }
                 calc.tn_add(t_n, get_xyz(x, y, z), get_xyz(x, y, z) + 48, TN_SIMPLE);
-                double c = cx[x] * cy[y] * cz[z] * 1.205 * 1006 / sts.t_step;
-                calc.tn[t_n].cdtc = {c, c, c, c};
+                vector<double> c(sts.length, cx[x] * cy[y] * cz[z] * 1.205 * 1006 / sts.t_step);
+                calc.tn[t_n].cdtc = c;
                 t_n++;                
             }
         }
