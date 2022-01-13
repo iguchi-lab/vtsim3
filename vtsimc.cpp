@@ -16,6 +16,9 @@ using namespace::std;
 namespace py = pybind11;
 
 PYBIND11_MODULE(vtsimc, m){
+    m.attr("SOLVE_LU")   = SOLVE_LU;
+    m.attr("SOLVE_SOR")  = SOLVE_SOR;
+    
     m.attr("SN_NONE")    = SN_NONE;
     m.attr("SN_CALC")    = SN_CALC;
     m.attr("SN_FIX")     = SN_FIX;
