@@ -286,22 +286,56 @@ public:
         LOG_PRINT("thrm_err:   " << sts.thrm_err << endl);
         LOG_PRINT("sor_ratio:  " << sts.sor_ratio << endl);
         LOG_PRINT("sor_err:    " << sts.sor_err << endl);
-        
-        for(int i = 0; i < sn.size(); i++)
-            LOG_PRINT("sn[" << i << "] = (" << get<0>(sn[i].flag) << "," << get<1>(sn[i].flag)  << "," << get<2>(sn[i].flag) << ")" << endl);
+        LOG_CONTENTS(endl);
 
-        for(int i = 0; i < vn.size(); i++)
-            LOG_PRINT("vn[" << i << "] = " << vn[i].vn_type << " (" << vn[i].i1 << "," << vn[i].i2 << ")" << endl);
+        for(int i = 0; i < sn.size(); i++){
+            LOG_PRINT("sn[" << i << "] ="); 
+            LOG_CONTENTS(get<0>(sn[i].flag) << "," << get<1>(sn[i].flag)  << "," << get<2>(sn[i].flag) << ") ");
+            LOG_CONTENTS("i=" << sn[i].i << " ,s_i=" << sn[i].s_i << ", p[0]=" << sn[i].p[0] << ", c[0]" << sn[i].c[0] << ", t[0]" << sn[i].t[0]);
+            if(sn[i].m.size()     != 0) LOG_CONTENTS(", m[0]"       << sn[i].m[0]);
+            if(sn[i].h_sr.size()  != 0) LOG_CONTENTS(", h_sr[0]="   << sn[i].h_sr[0]);
+            if(sn[i].h_inp.size() != 0) LOG_CONTENTS(", h_inp[0]="  << sn[i].h_inp[0]);
+            if(sn[i].v.size()     != 0) LOG_CONTENTS(", v[0]="      << sn[i].v[0]);
+            if(sn[i].beta.size()  != 0) LOG_CONTENTS(", beta[0]="   << sn[i].beta[0]);
+            LOG_CONTENTS(endl);
+        }
+        for(int i = 0; i < vn.size(); i++){
+            LOG_PRINT("vn[" << i << "] = " << vn[i].vn_type << " (" << vn[i].i1 << "," << vn[i].i2  << ") " << vn[i].h1[0] << " - " << vn[i].h2[0]);
+            LOG_CONTENTS(",qv[0]=" << vn[i].qv[0] << ",qt[0]=" << vn[i].qt[0]); 
+            if(vn[i].alpha.size() != 0) LOG_CONTENTS(", alpha[0]=" << vn[i].alpha[0]);
+            if(vn[i].area.size()  != 0) LOG_CONTENTS(", area[0]="  << vn[i].area[0]);
+            if(vn[i].a.size()     != 0) LOG_CONTENTS(", a[0]="     << vn[i].a[0]);
+            if(vn[i].n.size()     != 0) LOG_CONTENTS(", n[0]="     << vn[i].n[0]);
+            if(vn[i].eta.size()   != 0) LOG_CONTENTS(", eta[0]="   << vn[i].eta[0]);
+            if(vn[i].q_max.size() != 0) LOG_CONTENTS(", p_max[0]=" << vn[i].q_max[0]);
+            if(vn[i].p_max.size() != 0) LOG_CONTENTS(", q_max[0]=" << vn[i].p_max[0]);
+            if(vn[i].q1.size()    != 0) LOG_CONTENTS(", q1[0]="    << vn[i].q1[0]);
+            if(vn[i].p1.size()    != 0) LOG_CONTENTS(", p1[0]="    << vn[i].p1[0]);
+            LOG_CONTENTS(endl);
+        }
 
-        for(int i = 0; i < tn.size(); i++)
-            LOG_PRINT("tn[" << i << "] = " << tn[i].tn_type << " (" << tn[i].i1 << "," << tn[i].i2 << ")" << endl);
+        for(int i = 0; i < tn.size(); i++){
+            LOG_PRINT("tn[" << i << "] = " << tn[i].tn_type << " (" << tn[i].i1 << "," << tn[i].i2 << ")");
+            LOG_CONTENTS(",qt[0]=" << tn[i].qt[0]);
+            if(tn[i].cdtc.size()      != 0) LOG_CONTENTS(", cdtc[0]="      << tn[i].cdtc[0]);
+            if(tn[i].ms.size()        != 0) LOG_CONTENTS(", ms[0]="        << tn[i].ms[0]);
+            if(tn[i].area.size()      != 0) LOG_CONTENTS(", area[0]="      << tn[i].area[0]);
+            if(tn[i].rg.size()        != 0) LOG_CONTENTS(", rg[0]="        << tn[i].rg[0]);
+            if(tn[i].cof_r.size()     != 0) LOG_CONTENTS(", cof_r[0]="     << tn[i].cof_r[0]);
+            if(tn[i].cof_phi.size()   != 0) LOG_CONTENTS(", cof_phi[0]="   << tn[i].cof_phi[0]);
+            if(tn[i].t_dash_gs.size() != 0) LOG_CONTENTS(", t_dash_gs[0]=" << tn[i].t_dash_gs[0]);
+            if(tn[i].aircon_on.size() != 0) LOG_CONTENTS(", aircon_on[0]=" << tn[i].aircon_on[0]);
+            if(tn[i].ac_mode.size()   != 0) LOG_CONTENTS(", alpha[0]="     << tn[i].ac_mode[0]);
+            if(tn[i].pre_tmp.size()   != 0) LOG_CONTENTS(", alpha[0]="     << tn[i].pre_tmp[0]);
+            LOG_CONTENTS(endl);
+        }
 
         LOG_PRINT("i_vn_ac = " << i_vn_ac << endl);
         LOG_PRINT("i_tn_ac = " << i_tn_ac << endl);
-        
         LOG_PRINT("t_idc.size() = " << t_idc.size() << endl);
         LOG_PRINT("c_idc.size() = " << c_idc.size() << endl);
-        LOG_PRINT("v_idc.size() = " << v_idc.size() << endl);
+        LOG_PRINT("v_idc.size() = " << v_idc.size() << endl); 
+        LOG_CONTENTS(endl);
 
         for(long ts = 1; ts < sts.length; ts++){
             if(v_idc.size() > 0){
@@ -341,22 +375,22 @@ public:
             
             if(v_idc.size() > 0){
                 calc_qv(ts, ts);
-                LOG_CONTENTS(endl << "p ");
+                LOG_CONTENTS("p ");
                 for(int i = 0; i < sn.size(); i++)    LOG_CONTENTS(sn[i].i << ": " << sn[i].p[ts] << "Pa, ");
                 LOG_CONTENTS(endl << "qv ");
                 for(int i = 0; i < vn.size(); i++)    LOG_CONTENTS(vn[i].i << ": " << vn[i].qv[ts] * 3600 << "m3/h, ");
-                LOG_CONTENTS(endl << endl);    
+                LOG_CONTENTS(endl);    
             }
 
             if(t_idc.size()> 0){
                 calc_qt(ts, ts);
-                LOG_CONTENTS(endl << "t ");
+                LOG_CONTENTS("t ");
                 for(int i = 0; i < sn.size(); i++)    LOG_CONTENTS(sn[i].i << ": " << sn[i].t[ts] << "deg, ");
                 LOG_CONTENTS(endl << "qt1 ");
                 for(int i = 0; i < vn.size(); i++)    LOG_CONTENTS(vn[i].i << ": " << vn[i].qt[ts] << "W, ");
                 LOG_CONTENTS(endl << "qt2 ");
                 for(int i = 0; i < tn.size(); i++)    LOG_CONTENTS(tn[i].i << ": " << tn[i].qt[ts] << "W, ");
-                LOG_CONTENTS(endl << endl);
+                LOG_CONTENTS(endl);
             }
 
             if(c_idc.size() > 0){
@@ -371,8 +405,9 @@ public:
                         sn[vn[i].i1].c[ts] += vn[i].qv[ts] * (sn[vn[i].i2].c[ts] * (1 - vn[i].eta[ts]) - sn[vn[i].i1].c[ts]) * sts.t_step / sn[vn[i].i1].v[ts];
                 }
                 for(int i = 0; i < sn.size(); i++)    LOG_CONTENTS("c" << sn[i].i << ": " << sn[i].c[ts] << "num/L, ");
-                LOG_CONTENTS(endl << endl);
+                LOG_CONTENTS(endl);
             }
+            LOG_CONTENTS(endl);
         }
         LOG_PRINT("******************************************************************************Finish calc!" << endl << endl);
         return 0;
