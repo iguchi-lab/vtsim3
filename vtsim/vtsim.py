@@ -15,9 +15,12 @@ import vtsimc as vt
 # define const
 ###############################################################################
 
-OPT_DF:    int  = 0              #DataFrameを出力
-OPT_CSV:   int  = 1              #上記に加え、csvファイルを出力
-OPT_GRAPH: int  = 2              #上記に加えグラフを描画
+SOLVE_LU:   int = vt.SOLVE_LU
+SOLVE_SOR:  int = vt.SOLVE_SOR
+
+OPT_DF:     int  = 0              #DataFrameを出力
+OPT_CSV:    int  = 1              #上記に加え、csvファイルを出力
+OPT_GRAPH:  int  = 2              #上記に加えグラフを描画
 
 SN_NONE:    int = vt.SN_NONE
 SN_CALC:    int = vt.SN_CALC
