@@ -16,11 +16,8 @@ public:
         p.assign(length, 0.0);
         c.assign(length, 0.0);
         t.assign(length, 20.0);
-        m.assign(length, 0.0);
-        h_sr.assign(length, 0.0);
-        h_inp.assign(length, 0.0);
-        v.assign(length, 0.0);
-        beta.assign(length, 0.0);
+        if(get<1>(flag) == SN_CALC)   m.assign(length, 0.0);
+        if(get<2>(flag) == SN_CALC)   h_inp.assign(length, 0.0);
     }
 
 };
