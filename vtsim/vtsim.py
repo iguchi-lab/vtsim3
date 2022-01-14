@@ -64,6 +64,13 @@ d_node  = lambda name:                      name + '_c'                         
 
 calc = vt.VTSim()
 
+df_p   = pd.DataFrame()
+df_c   = pd.DataFrame()
+df_t   = pd.DataFrame()
+df_qv  = pd.DataFrame()
+df_qt1 = pd.DataFrame()
+df_qt2 = pd.DataFrame()
+
 ###############################################################################
 # define function
 ###############################################################################
@@ -256,5 +263,13 @@ def output_calc(ix, opt, res, sn_c, vn_c, tn_c):
                      loc = 'lower right', borderaxespad = 0, facecolor = 'w', edgecolor = 'k')
             a.set_title(d['title'], loc='left')
             a.set_ylabel(d['unit'])
+
+    global df_p, df_c, df_t, df_qv, df_qt1, df_qt2
+    df_p   = dat_list[0]['df']
+    df_c   = dat_list[1]['df']
+    df_t   = dat_list[2]['df'] 
+    df_qv  = dat_list[3]['df']
+    df_qt1 = dat_list[4]['df']
+    df_qt2 = dat_list[5]['df']
 
     return dat_list[0]['df'], dat_list[1]['df'], dat_list[2]['df'], dat_list[3]['df'], dat_list[4]['df'], dat_list[5]['df']
