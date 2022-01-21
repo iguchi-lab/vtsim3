@@ -3,7 +3,7 @@
 ---
 ## 1.はじめに
 
-  vtsimは、建築環境工学・建築設備を学ぶ大学生、研究者向けに開発された温熱計算プログラムで下記の特徴があります。
+  vtsimは、建築環境工学・建築設備を学ぶ大学生、研究者向けに開発された温熱計算プログラムで下記の特徴がある。
 
 *   ブラウザ上（Google Clab）で動作する。環境設定が不要。
 *   自由度の高いプログラム言語pythonで記述。
@@ -20,10 +20,11 @@
 !pip install git+https://github.com/iguchi-lab/vtsim3
 from vtsim import vtsim as vt
 ```
-  あわせて下記も実行しておくことを推奨する。
+  あわせて下記も実行しておくことを便利である。
 
   ※matplotlibは、グラフをの描画に必要。japanize-matplotlibで、日本語にも対応できる。
-  ※numpyとpandasは、行列などを扱う際にあると便利である。
+
+  ※numpyとpandasは、行列などを扱う際に必要。
 
 ```
 !pip install japanize-matplotlib
@@ -39,9 +40,12 @@ import pandas as pd
 
   vtsimは、下記のモジュールで構成される。
 
-*   vtsim------------vtsim本体の計算機能
-*   archenvlib-------各種物理定数の他、湿り空気、太陽位置、直散分離、快適性などを計算
-*   fan_sts----------送風ファンのPQ特性
-*   cof_ground-------地盤の応答係数
+*   vtsim
+    -vtsim本体の計算機能
+*   archenvlib
+    -各種物理定数の他、湿り空気、太陽位置、直散分離、快適性などを計算
+*   fan_sts
+    -送風ファンのPQ特性
+*   cof_ground-地盤の応答係数
 
 ---
