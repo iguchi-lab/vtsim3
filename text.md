@@ -40,12 +40,13 @@ import pandas as pd
 
   vtsimは、下記のモジュールで構成される。
 
-*   vtsim
-    -vtsim本体の計算機能
-*   archenvlib
-    -各種物理定数の他、湿り空気、太陽位置、直散分離、快適性などを計算
-*   fan_sts
-    -送風ファンのPQ特性
-*   cof_ground-地盤の応答係数
+-vtsim
+  -vtsim本体の計算機能
+-archenvlib
+  -各種物理定数の他、湿り空気、太陽位置、直散分離、快適性などを計算
+-fan_sts
+  -送風ファンのPQ特性
+-cof_ground
+  -地盤の応答係数
 
 ---
