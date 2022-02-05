@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 
-//#define DEBUG_ON
+#define DEBUG_ON
 
 #ifdef  DEBUG_ON
 #define LOG_PRINT(...)     ofs << __FILE__ << " (" << __LINE__ << ") " << __func__ << ":" << __VA_ARGS__
@@ -79,7 +79,7 @@ public:
     void change_sn_t_flag(int i, int flag_){
         get<2>(sn[i].flag) = flag_;
         t_idc.clear();
-        for(int i = 0; i < sn.size(); i++)   
+        for(unsigned int i = 0; i < sn.size(); i++)   
             if(get<2>(sn[i].flag) == SN_CALC)     t_idc.push_back(sn[i].i);
     }
 
@@ -98,7 +98,7 @@ public:
 
     vector<double> qv_sum(vector<double> p, long ts, int flag){
         vector<double> qvsum(sn.size(), 0.0);                                                                             //風量収支の初期化                                 
-        for(int i = 0; i < vn.size(); i++){
+        for(unsigned int i = 0; i < vn.size(); i++){
             double rgh1 = get_rho(sn[vn[i].i1].t[ts]) * G * vn[i].h1[ts];
             double rgh2 = get_rho(sn[vn[i].i2].t[ts]) * G * vn[i].h2[ts];
             double qv   = vn[i].get_qv((p[vn[i].i1] - rgh1) - (p[vn[i].i2] - rgh2), ts);
@@ -106,7 +106,7 @@ public:
             qvsum[vn[i].i2] += qv;                                                                                        //風量収支の計算      
         }
 
-        for(int i = 0; i << sn.size(); i++)
+        for(unsigned int i = 0; i << sn.size(); i++)
             if(flag == 0)   LOG_PRINT("i = " << i << " : " << qvsum[i] << endl);
         return qvsum;
     }
@@ -118,15 +118,15 @@ public:
         double                  rmse;
         int                     itr = 0;
         
-        for(int i = 0; i < sn.size(); i++)    p0[sn[i].i] = sn[i].p[ts];                                                //圧力の初期化       
+        for(unsigned int i = 0; i < sn.size(); i++)    p0[sn[i].i] = sn[i].p[ts];                                                //圧力の初期化       
         do{
             rmse = 0.0;
             qvsum_0 = qv_sum(p0, ts, 0);
             
-            for(int j = 0; j < v_idc.size(); j++){
+            for(unsigned int j = 0; j < v_idc.size(); j++){
                 p0[v_idc[j]] += sts.step_p;                                                                             //ダミー圧力の作成       
                 qvsum_d = qv_sum(p0, ts, 1);                                                                               //ダ三－風量収支の計算
-                for(int i = 0; i < v_idc.size(); i++)  a[i][j] = (qvsum_d[v_idc[i]] - qvsum_0[v_idc[i]]) / sts.step_p;  //aの計算
+                for(unsigned int i = 0; i < v_idc.size(); i++)  a[i][j] = (qvsum_d[v_idc[i]] - qvsum_0[v_idc[i]]) / sts.step_p;  //aの計算
                 b[j] = -qvsum_0[v_idc[j]];
                 p0[v_idc[j]] -= sts.step_p; 
             }
@@ -134,25 +134,25 @@ public:
             if(sts.solve == SOLVE_SOR)  dp = SOR(a, b, v_idc.size(), sts.sor_ratio, sts.sor_err);                       //SOR法による計算     
             else                        dp = LU(a, b, v_idc.size()); 
 
-            for(int i = 0; i < v_idc.size(); i++)   p0[v_idc[i]] += dp[i];                                              //圧力の更新
+            for(unsigned int i = 0; i < v_idc.size(); i++)   p0[v_idc[i]] += dp[i];                                              //圧力の更新
             qvsum_0 = qv_sum(p0, ts, 2);    
-            for(int i = 0; i < v_idc.size(); i++)   rmse += pow(qvsum_0[v_idc[i]], 2.0) / v_idc.size();
+            for(unsigned int i = 0; i < v_idc.size(); i++)   rmse += pow(qvsum_0[v_idc[i]], 2.0) / v_idc.size();
             LOG_PRINT(itr << ": ts = " << ts << ": rmse = " << sqrt(rmse) << endl);
             itr++;
         }while(sts.vent_err < sqrt(rmse));
-        for(int i = 0; i < v_idc.size(); i++)   sn[v_idc[i]].p[ts] = p0[v_idc[i]];                                      //圧力の計算                                                               
+        for(unsigned int i = 0; i < v_idc.size(); i++)   sn[v_idc[i]].p[ts] = p0[v_idc[i]];                                      //圧力の計算                                                               
         return rmse;
     }
 
     vector<double> qt_sum(vector<double> t, long ts){
         vector<double> qtsum(sn.size(), 0.0);           
        
-        for(int i = 0; i < vn.size(); i++){                                                                             //移流に伴う熱移動
+        for(unsigned int i = 0; i < vn.size(); i++){                                                                             //移流に伴う熱移動
             if(vn[i].qv[ts] > 0)            qtsum[vn[i].i2] += vn[i].get_qt(t[vn[i].i1] - t[vn[i].i2], ts);
             else                            qtsum[vn[i].i1] += vn[i].get_qt(t[vn[i].i1] - t[vn[i].i2], ts);
         }
 
-        for(int i = 0; i < tn.size(); i++){                                                                             //貫流、日射、発熱による熱移動
+        for(unsigned int i = 0; i < tn.size(); i++){                                                                             //貫流、日射、発熱による熱移動
             switch(tn[i].tn_type){
                 case TN_SIMPLE:
                 case TN_GROUND:
@@ -182,7 +182,7 @@ public:
         double                  rmse;        
         int                     itr = 0;
 
-        for(int i = 0; i < sn.size(); i++)    t0[sn[i].i] = sn[i].t[ts];                                                //温度の初期化
+        for(unsigned int i = 0; i < sn.size(); i++)    t0[sn[i].i] = sn[i].t[ts];                                                //温度の初期化
         
         do{
             if(i_tn_ac != -1){
@@ -203,10 +203,10 @@ public:
             rmse = 0.0;
             qtsum_0 = qt_sum(t0, ts);                                                                                   //熱量収支の計算
 
-            for(int j = 0; j < t_idc.size(); j++){
+            for(unsigned int j = 0; j < t_idc.size(); j++){
                 t0[t_idc[j]] += sts.step_t;                                                                             //ダミー温度の作成
                 qtsum_d = qt_sum(t0, ts);                                                                               //ダミー熱量の計算
-                for(int i = 0; i < t_idc.size(); i++)  a[i][j] = (qtsum_d[t_idc[i]] - qtsum_0[t_idc[i]]) / sts.step_t;  //aの計算
+                for(unsigned int i = 0; i < t_idc.size(); i++)  a[i][j] = (qtsum_d[t_idc[i]] - qtsum_0[t_idc[i]]) / sts.step_t;  //aの計算
                 b[j] = -qtsum_0[t_idc[j]];                                                                              //bの計算
                 t0[t_idc[j]] -= sts.step_t;                                                                             //ダミー温度を戻す
             }
@@ -214,9 +214,9 @@ public:
             if(sts.solve == SOLVE_SOR)  dt = SOR(a, b, t_idc.size(), sts.sor_ratio, sts.sor_err);                                   //SOR法による計算
             else                        dt = LU(a, b, t_idc.size());
 
-            for(int i = 0; i < t_idc.size(); i++)   t0[t_idc[i]] += dt[i];                                              //温度の更新
+            for(unsigned int i = 0; i < t_idc.size(); i++)   t0[t_idc[i]] += dt[i];                                              //温度の更新
             qtsum_0 = qt_sum(t0, ts);
-            for(int i = 0; i < t_idc.size(); i++)   rmse += pow(qtsum_0[t_idc[i]], 2.0) / t_idc.size(); 
+            for(unsigned int i = 0; i < t_idc.size(); i++)   rmse += pow(qtsum_0[t_idc[i]], 2.0) / t_idc.size(); 
 
             if(i_tn_ac != -1){
                 switch(tn[i_tn_ac].ac_mode[ts]){
@@ -241,13 +241,13 @@ public:
             itr++;
         }while(sts.thrm_err < sqrt(rmse));
 
-        for(int i = 0; i < t_idc.size(); i++)   sn[t_idc[i]].t[ts] = t0[t_idc[i]];                                          //温度の計算
+        for(unsigned int i = 0; i < t_idc.size(); i++)   sn[t_idc[i]].t[ts] = t0[t_idc[i]];                                          //温度の計算
         return rmse;
     }
 
     void calc_qv(long ts1, long ts2){
         //LOG_PRINT("ts1 = " << ts1 << " <<<<---- " << "ts2 = " <<  ts2 << endl);
-        for(int i = 0; i < vn.size(); i++){    
+        for(unsigned int i = 0; i < vn.size(); i++){    
             double rgh1 = get_rho(sn[vn[i].i1].t[ts2]) * G * vn[i].h1[ts2];
             double rgh2 = get_rho(sn[vn[i].i2].t[ts2]) * G * vn[i].h2[ts2];
             vn[i].qv[ts1] = vn[i].get_qv((sn[vn[i].i1].p[ts2] - rgh1) - (sn[vn[i].i2].p[ts2] - rgh2), ts2);                 //風量の計算
@@ -256,7 +256,7 @@ public:
 
     void calc_qt(long ts1, long ts2){
         //LOG_PRINT("ts1 = " << ts1 << " <<<<---- " << "ts2 = " << ts2 << endl);
-        for(int i = 0; i < tn.size(); i++){    
+        for(unsigned int i = 0; i < tn.size(); i++){    
             switch(tn[i].tn_type){
                 case TN_SIMPLE: 
                 case TN_GROUND:         tn[i].qt[ts1] =   tn[i].get_qt(sn[tn[i].i1].t[ts2] - sn[tn[i].i2].t[ts2], ts2);
@@ -267,7 +267,7 @@ public:
                                         break;
             }
         }
-        for(int i = 0; i < vn.size(); i++)
+        for(unsigned int i = 0; i < vn.size(); i++)
             vn[i].qt[ts1] = vn[i].get_qt(sn[vn[i].i1].t[ts2] - sn[vn[i].i2].t[ts2], ts2);                                   //熱量の計算
     }
 
@@ -288,7 +288,7 @@ public:
         LOG_PRINT("sor_err:    " << sts.sor_err << endl);
         LOG_CONTENTS(endl);
 
-        for(int i = 0; i < sn.size(); i++){
+        for(unsigned int i = 0; i < sn.size(); i++){
             LOG_PRINT("sn[" << i << "] ="); 
             LOG_CONTENTS(get<0>(sn[i].flag) << "," << get<1>(sn[i].flag)  << "," << get<2>(sn[i].flag) << ") ");
             LOG_CONTENTS("i=" << sn[i].i << " ,s_i=" << sn[i].s_i << ", p[0]=" << sn[i].p[0] << ", c[0]" << sn[i].c[0] << ", t[0]" << sn[i].t[0]);
@@ -299,7 +299,7 @@ public:
             if(sn[i].beta.size()  != 0) LOG_CONTENTS(", beta[0]="   << sn[i].beta[0]);
             LOG_CONTENTS(endl);
         }
-        for(int i = 0; i < vn.size(); i++){
+        for(unsigned int i = 0; i < vn.size(); i++){
             LOG_PRINT("vn[" << i << "] = " << vn[i].vn_type << " (" << vn[i].i1 << "," << vn[i].i2  << ") " << vn[i].h1[0] << " - " << vn[i].h2[0]);
             LOG_CONTENTS(",qv[0]=" << vn[i].qv[0] << ",qt[0]=" << vn[i].qt[0]); 
             if(vn[i].alpha.size() != 0) LOG_CONTENTS(", alpha[0]=" << vn[i].alpha[0]);
@@ -314,7 +314,7 @@ public:
             LOG_CONTENTS(endl);
         }
 
-        for(int i = 0; i < tn.size(); i++){
+        for(unsigned int i = 0; i < tn.size(); i++){
             LOG_PRINT("tn[" << i << "] = " << tn[i].tn_type << " (" << tn[i].i1 << "," << tn[i].i2 << ")");
             LOG_CONTENTS(",qt[0]=" << tn[i].qt[0]);
             if(tn[i].cdtc.size()      != 0) LOG_CONTENTS(", cdtc[0]="      << tn[i].cdtc[0]);
@@ -339,18 +339,18 @@ public:
 
         for(long ts = 1; ts < sts.length; ts++){
             if(v_idc.size() > 0){
-                for(int i = 0; i < sn.size(); i++)
+                for(unsigned int i = 0; i < sn.size(); i++)
                     if(get<0>(sn[i].flag) == SN_CALC)   sn[i].p[ts] = sn[i].p[ts - 1];
                 calc_qv(ts, ts - 1);
             }
 
             if(t_idc.size() > 0){    
-                for(int i = 0; i < sn.size(); i++){
+                for(unsigned int i = 0; i < sn.size(); i++){
                     if(get<2>(sn[i].flag) == SN_CALC)   sn[i].t[ts] = sn[i].t[ts - 1];
                     if(get<2>(sn[i].flag) == SN_DLY)    sn[i].t[ts] = sn[sn[i].s_i].t[ts - 1];
                 }
                 calc_qt(ts, ts - 1);
-                for(int i = 0; i < tn.size(); i++)
+                for(unsigned int i = 0; i < tn.size(); i++)
                     if(tn[i].tn_type == TN_GROUND)      tn[i].refresh(sn[tn[i].i1].t[ts], sn[tn[i].i2].t[ts], ts);   //地盤のリフレッシュ
             }
 
@@ -358,14 +358,14 @@ public:
                 delta_p = 0.0;
                 delta_t = 0.0;
 
-                for(int i = 0; i < sn.size(); i++){
+                for(unsigned int i = 0; i < sn.size(); i++){
                     if(get<0>(sn[i].flag) == SN_CALC)   pre_p[i] = sn[i].p[ts];
                     if(get<2>(sn[i].flag) == SN_CALC)   pre_t[i] = sn[i].t[ts];
                 }
                 calc_vent(ts);
                 calc_thrm(ts);
                 
-                for(int i = 0; i < sn.size(); i++){
+                for(unsigned int i = 0; i < sn.size(); i++){
                     if(get<0>(sn[i].flag) == SN_CALC)   delta_p += pow(sn[i].p[ts] - pre_p[i], 2.0) / v_idc.size();
                     if(get<2>(sn[i].flag) == SN_CALC)   delta_t += pow(sn[i].t[ts] - pre_t[i], 2.0) / t_idc.size();
                 }
@@ -376,35 +376,35 @@ public:
             if(v_idc.size() > 0){
                 calc_qv(ts, ts);
                 LOG_CONTENTS("p ");
-                for(int i = 0; i < sn.size(); i++)    LOG_CONTENTS(sn[i].i << ": " << sn[i].p[ts] << "Pa, ");
+                for(unsigned int i = 0; i < sn.size(); i++)    LOG_CONTENTS(sn[i].i << ": " << sn[i].p[ts] << "Pa, ");
                 LOG_CONTENTS(endl << "qv ");
-                for(int i = 0; i < vn.size(); i++)    LOG_CONTENTS(vn[i].i << ": " << vn[i].qv[ts] * 3600 << "m3/h, ");
+                for(unsigned int i = 0; i < vn.size(); i++)    LOG_CONTENTS(vn[i].i << ": " << vn[i].qv[ts] * 3600 << "m3/h, ");
                 LOG_CONTENTS(endl);    
             }
 
             if(t_idc.size()> 0){
                 calc_qt(ts, ts);
                 LOG_CONTENTS("t ");
-                for(int i = 0; i < sn.size(); i++)    LOG_CONTENTS(sn[i].i << ": " << sn[i].t[ts] << "deg, ");
+                for(unsigned int i = 0; i < sn.size(); i++)    LOG_CONTENTS(sn[i].i << ": " << sn[i].t[ts] << "deg, ");
                 LOG_CONTENTS(endl << "qt1 ");
-                for(int i = 0; i < vn.size(); i++)    LOG_CONTENTS(vn[i].i << ": " << vn[i].qt[ts] << "W, ");
+                for(unsigned int i = 0; i < vn.size(); i++)    LOG_CONTENTS(vn[i].i << ": " << vn[i].qt[ts] << "W, ");
                 LOG_CONTENTS(endl << "qt2 ");
-                for(int i = 0; i < tn.size(); i++)    LOG_CONTENTS(tn[i].i << ": " << tn[i].qt[ts] << "W, ");
+                for(unsigned int i = 0; i < tn.size(); i++)    LOG_CONTENTS(tn[i].i << ": " << tn[i].qt[ts] << "W, ");
                 LOG_CONTENTS(endl);
             }
 
             if(c_idc.size() > 0){
-                for(int i = 0; i < c_idc.size(); i++){
+                for(unsigned int i = 0; i < c_idc.size(); i++){
                     sn[c_idc[i]].c[ts] =  sn[c_idc[i]].c[ts - 1] * exp(-sn[c_idc[i]].beta[ts] * sts.t_step);
                     sn[c_idc[i]].c[ts] += sn[c_idc[i]].m[ts] / (sn[c_idc[i]].beta[ts] * sn[c_idc[i]].v[ts]) * (1 - exp(-sn[c_idc[i]].beta[ts] * sts.t_step));
                 }
-                for(int i = 0; i < vn.size(); i++){
+                for(unsigned int i = 0; i < vn.size(); i++){
                     if(vn[i].qv[ts] > 0 && get<1>(sn[vn[i].i2].flag) == SN_CALC)    
                         sn[vn[i].i2].c[ts] += vn[i].qv[ts] * (sn[vn[i].i1].c[ts] * (1 - vn[i].eta[ts]) - sn[vn[i].i2].c[ts]) * sts.t_step / sn[vn[i].i2].v[ts];
                     if(vn[i].qv[ts] < 0 && get<1>(sn[vn[i].i1].flag) == SN_CALC)    
                         sn[vn[i].i1].c[ts] += vn[i].qv[ts] * (sn[vn[i].i2].c[ts] * (1 - vn[i].eta[ts]) - sn[vn[i].i1].c[ts]) * sts.t_step / sn[vn[i].i1].v[ts];
                 }
-                for(int i = 0; i < sn.size(); i++)    LOG_CONTENTS("c" << sn[i].i << ": " << sn[i].c[ts] << "num/L, ");
+                for(unsigned int i = 0; i < sn.size(); i++)    LOG_CONTENTS("c" << sn[i].i << ": " << sn[i].c[ts] << "num/L, ");
                 LOG_CONTENTS(endl);
             }
             LOG_CONTENTS(endl);
